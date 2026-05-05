@@ -1,0 +1,45 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="FGF_Finanzas.Site" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>FGF Finanzas</title>
+
+    <asp:ContentPlaceHolder ID="head" runat="server">
+
+    </asp:ContentPlaceHolder>
+    <link href="Content/Estilos.css" rel="stylesheet" />
+
+</head>
+<body>
+    <form id="form1" runat="server">
+        <nav class="custom-nav">
+          <div class="nav-container">
+            <div class="nav-brand">FGF Finanzas</div>
+            <ul class="nav-menu">
+              <li><a href="/Login.aspx">Iniciar Sesión</a></li>
+              <li><a href="/Registrarse.aspx">Registrarse</a></li>
+            </ul>
+            <!-- Icono para móvil -->
+            <div class="nav-toggle" id="mobile-menu">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        </nav>
+        <div class="container body-content">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server">
+
+            </asp:ContentPlaceHolder>
+            <hr />
+            
+        </div>
+        <footer>
+            <p>&copy; <%: DateTime.Now.Year %> - FGF Finanzas</p>
+        </footer>
+    </form>
+</body>
+</html>
