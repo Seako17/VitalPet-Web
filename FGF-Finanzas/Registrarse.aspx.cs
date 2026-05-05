@@ -23,10 +23,10 @@ namespace FGF_Finanzas
             if (!Page.IsValid) return;
             try
             {
-                var nombre = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Nombre.Text.ToLower());
-                var apellido = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Apellido.Text.ToLower());
+                var nombre = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Nombre.Text.ToLower()).Trim();
+                var apellido = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Apellido.Text.ToLower()).Trim();
 
-                bllUsuario.ValidarUsuario(DniUsuario.Text, UserName.Text, nombre, apellido, Password.Text, ConfirmPassword.Text);
+                bllUsuario.ValidarUsuario(DniUsuario.Text, UserName.Text.Trim(), nombre, apellido, Password.Text, ConfirmPassword.Text);
                 BEUsuario usuario = new BEUsuario(DniUsuario.Text, nombre, apellido, UserName.Text.Trim(), Password.Text);
                 bllUsuario.AgregarUsuario(usuario);
                 Response.Redirect("~/Login.aspx");

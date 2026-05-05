@@ -2,7 +2,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
    
     <link href="Content/Estilos.css" rel="stylesheet" />
-    <script src="Scripts/Nuevos_js/script.js" type="text/javascript"></script>
+    <script src="Scripts/scripts.js" type="text/javascript"></script>
 
     <h2><%: Title %>.</h2>
 
