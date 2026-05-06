@@ -48,10 +48,6 @@
                         </div>
                     </div>
                 </div>
-                <p>
-                    <asp:HyperLink runat="server" ID="RegisterHyperLink" ViewStateMode="Disabled">Registrarse</asp:HyperLink>
-                    si no tiene una cuenta local.
-                </p>
             </section>
         </div>
     </div>

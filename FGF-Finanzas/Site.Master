@@ -17,10 +17,15 @@
     <form id="form1" runat="server">
         <nav class="custom-nav">
           <div class="nav-container">
-            <div class="nav-brand">FGF Finanzas</div>
             <ul class="nav-menu">
+              <li><a href="/Default.aspx">FGF Finanzas</a></li>
               <li><a href="/Login.aspx">Iniciar Sesión</a></li>
               <li><a href="/Registrarse.aspx">Registrarse</a></li>
+                <%if (Request.Cookies["UserSessionFGF"] != null)
+                { %>
+                    <li> <asp:Button runat="server" OnClick="LogoutBtn_Click" ID="LogoutBtn" Text="Cerrar Sesión"/> </li>
+                <% } %>
+              
             </ul>
             <!-- Icono para móvil -->
             <div class="nav-toggle" id="mobile-menu">

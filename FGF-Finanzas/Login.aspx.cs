@@ -20,6 +20,17 @@ namespace FGF_Finanzas
         {
             try
             {
+                if (RememberMe.Checked)
+                {
+                    HttpCookie usuarioCookie = new HttpCookie("UserSessionFGF");
+                    usuarioCookie.Value = UserName.Text;
+                    usuarioCookie.Expires = DateTime.Now.AddDays(30);
+
+                    usuarioCookie.HttpOnly = true;
+
+                    Response.Cookies.Add(usuarioCookie);
+                }
+
                 bllUsuario.IniciarSesion(UserName.Text, Password.Text);
                 Response.Redirect("~/");
             }

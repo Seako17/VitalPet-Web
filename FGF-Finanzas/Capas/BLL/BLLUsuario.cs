@@ -7,6 +7,7 @@ using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
+using System.Web.Security;
 using System.Web.SessionState;
 
 namespace FGF_Finanzas.Capas.BLL
@@ -33,7 +34,7 @@ namespace FGF_Finanzas.Capas.BLL
             if (string.IsNullOrWhiteSpace(usuario)) throw new Exception("El campo de Usuario es obligatorio.");
 
             if (!Regex.IsMatch(contraseña, @"^\w{8,20}$")) throw new Exception("Su contraseña debe tener entre 8 y 20 caracteres.");
-            if (!Regex.IsMatch(contraseña, @"^(?=.*[A-Za-z])(?=.*\d)\S+$")) throw new Exception("Su contraseña debe contener al menos un numero y un caracter.");
+            if (!Regex.IsMatch(contraseña, @"^(?=.[A-Za-z])(?=.\d)(?=.*[^A-Za-z0-9])$")) throw new Exception("Su contraseña debe contener al menos un numero y un caracter.");
             if (contraseña != confirmacion) throw new Exception("La contraseña y la contraseña de confirmación no coinciden.");
 
             DataTable dt = ObtenerUsuarios();

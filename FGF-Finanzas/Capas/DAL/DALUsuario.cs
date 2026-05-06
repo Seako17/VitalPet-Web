@@ -25,7 +25,7 @@ namespace FGF_Finanzas.Capas.DAL
         public void AgregarUsuario(BEUsuario usuario)
         {
             DataTable dt = ObtenerUsuarios();
-            dt.Rows.Add(new object[] { usuario.DNI, usuario.Nombre, usuario.Apellido, usuario.Usuario, usuario.Contraseña });
+            dt.Rows.Add(new object[] { usuario.DNI, usuario.Nombre, usuario.Apellido, usuario.Usuario, usuario.Contraseña, usuario.Intento, usuario.Bloqueado });
 
             SqlDataAdapter adapter = new SqlDataAdapter("Select * from Usuario", _conexion);
 
