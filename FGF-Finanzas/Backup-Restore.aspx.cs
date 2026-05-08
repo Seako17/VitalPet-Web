@@ -43,6 +43,8 @@ namespace FGF_Finanzas
                     HttpContext.Current.ApplicationInstance.CompleteRequest();
                     File.Delete(rutaFisicaServidor);
                     Response.End();
+
+                    lblMensaje.Text = "Backup creado con exito.";
                 }
             }
             catch (Exception ex)
