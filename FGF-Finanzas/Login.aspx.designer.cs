@@ -60,6 +60,24 @@ namespace FGF_Finanzas
         protected global::System.Web.UI.WebControls.Label lblError;
 
         /// <summary>
+        /// Control checkBoxContraseña.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox checkBoxContraseña;
+
+        /// <summary>
+        /// Control checkBoxLbl.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label checkBoxLbl;
+
+        /// <summary>
         /// Control RememberMe.
         /// </summary>
         /// <remarks>

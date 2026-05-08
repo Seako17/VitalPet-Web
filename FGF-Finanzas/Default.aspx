@@ -2,24 +2,7 @@
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
     <main>
-        <% 
-        HttpCookie cookie = Request.Cookies["UserSessionFGF"];
-        if (cookie != null) 
-        { 
-    %>
-        <p>Bienvenido de nuevo, <%: cookie.Value %></p>
-    <% 
-        }
-        else if(FGF_Finanzas.Capas.Servicios.SessionManager.Instancia != null)
-        {
-            %>
-            <p>Bienvenido <%=FGF_Finanzas.Capas.Servicios.SessionManager.Instancia.Usuario.Usuario.ToString() %></p>
-        <% }
-        else
-        {
-    %>
-        <p>Bienvenido.</p>
-    <% } %>
+        <asp:Label ID="lblBienvenida" runat="server"></asp:Label>
     </main>
 
 </asp:Content>

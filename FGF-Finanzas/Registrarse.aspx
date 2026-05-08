@@ -1,8 +1,11 @@
 ﻿<%@ Page Title="Registrarse" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Registrarse.aspx.cs" Inherits="FGF_Finanzas.Registrarse" %>
+
+<asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
+
+</asp:Content>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-   
-    <link href="Content/Estilos.css" rel="stylesheet" />
-    <script src="Scripts/scripts.js" type="text/javascript"></script>
+
 
     <h2><%: Title %>.</h2>
 
@@ -41,7 +44,7 @@
         <div class="form-group">
             <asp:Label runat="server" AssociatedControlID="Password" CssClass="col-md-2 control-label">Contraseña</asp:Label>
             <div class="col-md-10">
-                <asp:TextBox runat="server" ID="Password" TextMode="Password" CssClass="form-control" />
+                <asp:TextBox runat="server" ID="Password" TextMode="Password" CssClass="form-control" ClientIDMode="Static" />
             </div>
         </div>
 
