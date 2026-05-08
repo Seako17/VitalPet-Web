@@ -9,10 +9,11 @@
         <br />
         <br />
         <hr />
-        <br />
         <asp:FileUpload ID="fileRestore" runat="server" />
         <br />
-        <asp:Button ID="btnRestore" runat="server" Text="Restaurar desde backup" />
+        
+        <br />
+        <asp:Button ID="btnRestore" runat="server" Text="Restaurar desde backup" OnClick="btnRestore_Click" />
         <br />
         <br />
         <asp:Label ID="lblMensaje" runat="server"></asp:Label>

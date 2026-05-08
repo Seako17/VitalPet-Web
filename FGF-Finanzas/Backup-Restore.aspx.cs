@@ -53,5 +53,39 @@ namespace FGF_Finanzas
                 lblMensaje.ForeColor = System.Drawing.Color.Red;
             }
         }
+
+        protected void btnRestore_Click(object sender, EventArgs e)
+        {
+            if (fileRestore.HasFile)
+            {
+                string rutaTemp = string.Empty;
+                try
+                {
+                    string nombreArchivo = fileRestore.FileName.Trim();
+                    string carpetaTemp = Server.MapPath("~/TempBackups/");
+                    rutaTemp = Path.Combine(carpetaTemp, nombreArchivo);
+
+                    fileRestore.SaveAs(rutaTemp);
+
+                    _bllBackupRestore.HacerRestore(rutaTemp);
+                    lblMensaje.Text = "Backup restaurado con exito.";
+                    lblMensaje.ForeColor= System.Drawing.Color.Green;
+                }
+                catch (Exception ex)
+                {
+                    lblMensaje.Text = $"ERROR {ex.Message}";
+                    lblMensaje.ForeColor= System.Drawing.Color.Red;
+                }
+                finally
+                {
+                    if (File.Exists(rutaTemp)) File.Delete(rutaTemp);
+                }
+            }
+            else
+            {
+                lblMensaje.Text = "Debe seleccionar un archivo .bak en su computadora primero.";
+                lblMensaje.ForeColor = System.Drawing.Color.Orange;
+            }
+        }
     }
 }

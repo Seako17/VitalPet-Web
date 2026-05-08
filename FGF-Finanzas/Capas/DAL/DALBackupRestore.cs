@@ -5,10 +5,11 @@ namespace FGF_Finanzas.Capas.DAL
 {
     public class DALBackupRestore : DALAbstracta
     {
+        private readonly string _conexionMaster = ConfigurationManager.ConnectionStrings["MasterDbConn"].ConnectionString;
         public void RealizarBackup(string rutaServidor)
         {
-            _conexion = ConfigurationManager.ConnectionStrings["MasterDbConn"].ConnectionString;
-            using (SqlConnection con = new SqlConnection(_conexion))
+
+            using (SqlConnection con = new SqlConnection(_conexionMaster))
             {
                 string query = $"BACKUP DATABASE [FGF-BDD] TO DISK='{rutaServidor}' WITH FORMAT, INIT;";
 
@@ -20,7 +21,31 @@ namespace FGF_Finanzas.Capas.DAL
                 }
             }
         }
+
+        public void RestaurarBDD(string rutaArchivo)
+        {
+            using (SqlConnection con = new SqlConnection(_conexionMaster))
+            {
+
+                con.Open();
+                using (SqlCommand setMaster = new SqlCommand("USE master", con))
+                {
+                    setMaster.ExecuteNonQuery();
+                }
+                using (SqlCommand setSingleUser = new SqlCommand("ALTER DATABASE [FGF-BDD] SET SINGLE_USER WITH ROLLBACK IMMEDIATE", con))
+                {
+                    setSingleUser.ExecuteNonQuery();
+                }
+                using (SqlCommand cmd = new SqlCommand($"RESTORE DATABASE [FGF-BDD] FROM DISK='{rutaArchivo}' WITH REPLACE", con))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                using (SqlCommand setMultiUser = new SqlCommand("ALTER DATABASE [FGF-BDD] SET MULTI_USER", con))
+                {
+                    setMultiUser.ExecuteNonQuery();
+                }
+            }
+        }
     }
 
 }
-

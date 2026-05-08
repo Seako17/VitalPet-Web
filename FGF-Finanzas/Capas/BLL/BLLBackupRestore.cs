@@ -25,5 +25,11 @@ namespace FGF_Finanzas.Capas.BLL
             return rutaServidor;
 
         }
+
+        public void HacerRestore(string rutaArchivo)
+        {
+            if (!System.IO.File.Exists(rutaArchivo)) throw new Exception("El archivo no se subio correctamente.");
+            _dalBackupRestore.RestaurarBDD(rutaArchivo);
+        }
     }
 }
