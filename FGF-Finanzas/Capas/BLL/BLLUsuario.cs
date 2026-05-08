@@ -33,8 +33,10 @@ namespace FGF_Finanzas.Capas.BLL
 
             if (string.IsNullOrWhiteSpace(usuario)) throw new Exception("El campo de Usuario es obligatorio.");
 
-            if (!Regex.IsMatch(contraseña, @"^\w{8,20}$")) throw new Exception("Su contraseña debe tener entre 8 y 20 caracteres.");
-            if (!Regex.IsMatch(contraseña, @"^(?=.[A-Za-z])(?=.\d)(?=.*[^A-Za-z0-9])$")) throw new Exception("Su contraseña debe contener al menos un numero y un caracter.");
+            if (!Regex.IsMatch(contraseña, @"^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,20}$"))
+            {
+                throw new Exception("La contraseña debe tener entre 8 y 20 caracteres, incluir letras, números y un carácter especial.");
+            }
             if (contraseña != confirmacion) throw new Exception("La contraseña y la contraseña de confirmación no coinciden.");
 
             DataTable dt = ObtenerUsuarios();
