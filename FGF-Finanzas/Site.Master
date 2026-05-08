@@ -25,7 +25,7 @@
                 { %>
                     <li> <asp:Button runat="server" OnClick="LogoutBtn_Click" ID="LogoutBtn" Text="Cerrar Sesión"/> </li>
                 <% } %>
-              
+              <li><a href="Backup-Restore.aspx">Backup/Restore</a> </li>
             </ul>
             <!-- Icono para móvil -->
             <div class="nav-toggle" id="mobile-menu">

@@ -67,6 +67,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Backup-Restore.aspx" />
     <Content Include="Content\Estilos.css" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
@@ -76,9 +77,18 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Backup-Restore.aspx.cs">
+      <DependentUpon>Backup-Restore.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Backup-Restore.aspx.designer.cs">
+      <DependentUpon>Backup-Restore.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Capas\BE\BEUsuario.cs" />
+    <Compile Include="Capas\BLL\BLLBackupRestore.cs" />
     <Compile Include="Capas\BLL\BLLUsuario.cs" />
     <Compile Include="Capas\DAL\DALAbstracta.cs" />
+    <Compile Include="Capas\DAL\DALBackupRestore.cs" />
     <Compile Include="Capas\DAL\DALUsuario.cs" />
     <Compile Include="Capas\Servicios\Encriptacion.cs" />
     <Compile Include="Capas\Servicios\SessionManager.cs" />
@@ -128,6 +138,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+    <Folder Include="TempBackups\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
