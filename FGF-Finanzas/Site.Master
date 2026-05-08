@@ -7,8 +7,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>FGF Finanzas</title>
 
-    <asp:ContentPlaceHolder ID="head" runat="server">
+    <link href="Content/Estilos.css" rel="stylesheet" />
+    <script src='<%= ResolveUrl("~/Scripts/scripts.js?v=" + DateTime.Now.Ticks) %>' type="text/javascript"></script>
 
+    <asp:ContentPlaceHolder ID="head" runat="server">
+        
     </asp:ContentPlaceHolder>
     <link href="Content/Estilos.css" rel="stylesheet" />
 
