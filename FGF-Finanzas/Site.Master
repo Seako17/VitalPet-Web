@@ -21,7 +21,7 @@
               <li><a href="/Default.aspx">FGF Finanzas</a></li>
               <li><a href="/Login.aspx">Iniciar Sesión</a></li>
               <li><a href="/Registrarse.aspx">Registrarse</a></li>
-                <%if (Request.Cookies["UserSessionFGF"] != null)
+                <%if (FGF_Finanzas.Capas.Servicios.SessionManager.Instancia != null)
                 { %>
                     <li> <asp:Button runat="server" OnClick="LogoutBtn_Click" ID="LogoutBtn" Text="Cerrar Sesión"/> </li>
                 <% } %>

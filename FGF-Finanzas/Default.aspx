@@ -9,9 +9,14 @@
     %>
         <p>Bienvenido de nuevo, <%: cookie.Value %></p>
     <% 
-        } 
-        else 
-        { 
+        }
+        else if(FGF_Finanzas.Capas.Servicios.SessionManager.Instancia != null)
+        {
+            %>
+            <p>Bienvenido <%=FGF_Finanzas.Capas.Servicios.SessionManager.Instancia.Usuario.Usuario.ToString() %></p>
+        <% }
+        else
+        {
     %>
         <p>Bienvenido.</p>
     <% } %>
