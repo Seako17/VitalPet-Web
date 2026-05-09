@@ -44,6 +44,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -77,8 +78,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Capas\BE\BEUsuario.cs" />
+    <Compile Include="Capas\BE\BEDigitoVerificador.cs" />
+    <Compile Include="Capas\BLL\BLLDigitoVerificador.cs" />
     <Compile Include="Capas\BLL\BLLUsuario.cs" />
     <Compile Include="Capas\DAL\DALAbstracta.cs" />
+    <Compile Include="Capas\DAL\DALDigitoVerificador.cs" />
     <Compile Include="Capas\DAL\DALUsuario.cs" />
     <Compile Include="Capas\Servicios\Encriptacion.cs" />
     <Compile Include="Capas\Servicios\SessionManager.cs" />
