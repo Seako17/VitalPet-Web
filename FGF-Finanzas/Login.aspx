@@ -1,12 +1,12 @@
 ﻿<%@ Page Title="Iniciar Sesión" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Login.aspx.cs" Inherits="FGF_Finanzas.Login" %>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
-
+    <link rel="stylesheet" href="Content/Estilos.css" />
 </asp:Content>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
-    
+
 
     <h2><%: Title %>.</h2>
 
@@ -39,10 +39,10 @@
                             <br />
                         </div>
                         <div class="col-md-10">
-                            <asp:CheckBox ID="checkBoxContraseña" runat="server" 
-    onclick="mostrarContraseña(this);" 
-    CssClass="checkbox" 
-    ClientIDMode="Static" />
+                            <asp:CheckBox ID="checkBoxContraseña" runat="server"
+                                onclick="mostrarContraseña(this);"
+                                CssClass="checkbox"
+                                ClientIDMode="Static" />
                             <asp:Label ID="checkBoxLbl" runat="server" AssociatedControlID="checkBoxContraseña" CssClass="col-md-2 control-label">Mostrar contraseña</asp:Label>
                         </div>
                     </div>
