@@ -1,68 +1,99 @@
-﻿/* Reset general */
-* {
+﻿* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-}
-
-/* Barra de Navegación */
-.custom-nav {
-    background-color: #212529;
-    height: 56px;
     display: flex;
-    align-items: center;
-    color: white;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: sans-serif;
 }
 
-.nav-container {
-    width: 90%;
+#form1 {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+header {
+    display: flex;
+    flex-direction: row;
+    background-color: #81C4DE;
+    height: 60px;
+    width: 100%;
+    z-index: 1000;
+}
+
+.body-content {
+    flex: 1;
+    padding: 40px 20px;
     max-width: 1200px;
+    width: 100%;
     margin: 0 auto;
+}
+
+.navbar {
     display: flex;
-    align-items: center;
-    justify-content: flex-start;
+    width: 100%;
+    
 }
 
-.nav-brand {
-    font-size: 1.25rem;
-    font-weight: 500;
-    margin-right: 20px;
-    cursor: pointer;
-}
-
-.nav-menu {
-    list-style: none;
-    display: flex;
-    gap: 15px;
-}
-
-    .nav-menu li a {
-        color: rgba(255, 255, 255, 0.65); 
-        text-decoration: none;
-        font-size: 0.95rem;
-        transition: color 0.2s ease;
+    .navbar-logo {
+        display: flex;
+        width: 25%;
+        align-items:center;
+        justify-content: center;
+        gap: 20px;
     }
 
-        .nav-menu li a:hover {
-            color: #ffffff;
-        }
+.logoVitalPet {
+    display: flex;
+    height: 100%;
+    width: auto;
+    object-fit: cover;
+    justify-self: flex-start;
+}
+
+
+.navbar-menu{
+    display: flex;
+    flex:1;
+    text-decoration: none;
+    list-style-type: none;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #0F1647;
+    font-size: 16px;
+    font-family: sans-serif;
+}
+.btn-logout {
+    border: none;
+    background-color: #81C4DE;
+    color: #0F1647;
+    font-size: 16px;
+    font-family: sans-serif;
+    cursor: pointer;
+}
 
 .nav-toggle {
     display: none;
     flex-direction: column;
     cursor: pointer;
 }
-
-    .nav-toggle span {
-        width: 25px;
-        height: 2px;
-        background-color: white;
-        margin: 4px 0;
-    }
+.nav-toggle span {
+    width: 25px;
+    height: 2px;
+    background-color: white;
+    margin: 4px 0;
+}
 
 @media (max-width: 768px) {
     .nav-container {

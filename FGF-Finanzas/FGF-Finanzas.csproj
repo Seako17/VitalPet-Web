@@ -69,6 +69,11 @@
   <ItemGroup>
     <Content Include="BitacoraEventos.aspx" />
     <Content Include="Content\Estilos.css" />
+    <Content Include="Content\Login\ojoAbierto.png" />
+    <Content Include="Content\Login\ojoCerrado.png" />
+    <Content Include="Content\Login\LoginStyles.css" />
+    <Content Include="Content\logoVitalPet.png" />
+    <Content Include="Content\RegistrarStyles.css" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Login.aspx" />
