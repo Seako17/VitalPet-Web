@@ -12,7 +12,6 @@
 
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
-
 </head>
 <body>
     <form id="form1" runat="server">
@@ -20,7 +19,7 @@
             <nav class="navbar">
 
                 <div class="navbar-logo">
-                    <img src="Content/logoVitalPet.png" class="logoVitalPet" />
+                    <img src="Content/logoVitalPet.png" class="logoVitalPet" alt="Logo" />
                     <a href="/Default.aspx">VitalPet</a>
                 </div>
 
@@ -29,9 +28,9 @@
                     <li><a href="/Registrarse.aspx">Registrarse</a></li>
                     <% if (FGF_Finanzas.Capas.Servicios.SessionManager.Instancia != null)
                         { %>
+                    <li><a href="BitacoraEventos.aspx">Bitácora de Eventos</a></li>
                     <li>
-                        <asp:Button runat="server" OnClick="LogoutBtn_Click" ID="LogoutBtn" Text="Cerrar Sesión" class="btn-logout" />
-                    </li>
+                        <asp:Button runat="server" OnClick="LogoutBtn_Click" ID="LogoutBtn" Text="Cerrar Sesión" class="btn-logout" /></li>
                     <% } %>
                 </ul>
 
@@ -48,10 +47,10 @@
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
             </asp:ContentPlaceHolder>
             <hr />
-
         </div>
+
         <footer>
-            <p>&copy; <%: DateTime.Now.Year %> - FGF Finanzas</p>
+            <p>&copy; <%: DateTime.Now.Year %> - Vital Pet</p>
         </footer>
     </form>
 </body>

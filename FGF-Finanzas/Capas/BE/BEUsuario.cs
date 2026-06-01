@@ -11,6 +11,7 @@ namespace FGF_Finanzas.Capas.BE
         public string DNI { get; set; }
         public string Nombre { get; set; }
         public string Apellido { get; set; }
+        public string Mail { get; set; }
         public string Usuario { get; set; }
         public string Contraseña { get; set; }
         public int Intento { get; set; }
@@ -19,7 +20,7 @@ namespace FGF_Finanzas.Capas.BE
         {
 
         }
-        public BEUsuario(string dni, string nombre, string apellido, string username, string password)
+        public BEUsuario(string dni, string nombre, string apellido, string username, string password, string mail)
         {
             DNI = dni;
             Nombre = nombre;
@@ -28,6 +29,7 @@ namespace FGF_Finanzas.Capas.BE
             Contraseña = password;
             Intento = 0;
             Bloqueado = false;
+            Mail = mail;
         }
 
         public BEUsuario(DataRow dr)
@@ -39,6 +41,7 @@ namespace FGF_Finanzas.Capas.BE
             Contraseña = dr[4].ToString();
             Intento = int.Parse(dr[5].ToString());
             Bloqueado = Convert.ToBoolean(dr[6]);
+            Mail = dr[7].ToString();
         }
     }
 }

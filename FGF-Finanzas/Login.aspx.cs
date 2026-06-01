@@ -20,9 +20,10 @@ namespace FGF_Finanzas
         {
             try
             {
+                HttpCookie usuarioCookie = null;
                 if (RememberMe.Checked)
                 {
-                    HttpCookie usuarioCookie = new HttpCookie("UserSessionFGF");
+                    usuarioCookie = new HttpCookie("UserSessionFGF");
                     usuarioCookie.Value = UserName.Text;
                     usuarioCookie.Expires = DateTime.Now.AddDays(30);
 
@@ -30,7 +31,6 @@ namespace FGF_Finanzas
 
                     Response.Cookies.Add(usuarioCookie);
                 }
-
                 bllUsuario.IniciarSesion(UserName.Text, Password.Text);
                 Response.Redirect("~/");
             }
