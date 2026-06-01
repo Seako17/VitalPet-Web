@@ -1,66 +1,45 @@
 ﻿<%@ Page Title="Iniciar Sesión" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Login.aspx.cs" Inherits="FGF_Finanzas.Login" %>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
-
+    <link href="Content/Login/LoginStyles.css" rel="stylesheet" />
+    
 </asp:Content>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
-    
+    <div class="login-container">
+        <h2>¡Bienvenido!</h2>
 
-    <h2><%: Title %>.</h2>
+        <asp:PlaceHolder runat="server" ID="ErrorMessage" Visible="false">
+            <p class="text-danger">
+                <asp:Literal runat="server" ID="FailureText" />
+            </p>
+        </asp:PlaceHolder>
 
-    <div class="row">
-        <div class="col-md-8">
-            <section id="loginForm">
-                <div class="form-horizontal">
-                    <hr />
-                    <asp:PlaceHolder runat="server" ID="ErrorMessage" Visible="false">
-                        <p class="text-danger">
-                            <asp:Literal runat="server" ID="FailureText" />
-                        </p>
-                    </asp:PlaceHolder>
-                    <div class="form-group">
-                        <asp:Label runat="server" AssociatedControlID="UserName" CssClass="col-md-2 control-label">Nombre de usuario</asp:Label>
-                        <div class="col-md-10">
-                            <asp:TextBox runat="server" ID="UserName" CssClass="form-control" />
-                            <asp:RequiredFieldValidator runat="server" ControlToValidate="UserName"
-                                CssClass="text-danger" ErrorMessage="El campo de nombre de usuario es obligatorio." />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <asp:Label runat="server" AssociatedControlID="Password" CssClass="col-md-2 control-label">Contraseña</asp:Label>
-                        <div class="col-md-10">
-                            <asp:TextBox runat="server" ID="Password" TextMode="Password" CssClass="form-control" ClientIDMode="Static" />
-                            <asp:RequiredFieldValidator runat="server" ControlToValidate="Password" CssClass="text-danger" ErrorMessage="El campo de contraseña es obligatorio." />
-                        </div>
-                        <div class="col-md-10">
-                            <asp:Label runat="server" ID="lblError" CssClass="text-danger" />
-                            <br />
-                        </div>
-                        <div class="col-md-10">
-                            <asp:CheckBox ID="checkBoxContraseña" runat="server" 
-    onclick="mostrarContraseña(this);" 
-    CssClass="checkbox" 
-    ClientIDMode="Static" />
-                            <asp:Label ID="checkBoxLbl" runat="server" AssociatedControlID="checkBoxContraseña" CssClass="col-md-2 control-label">Mostrar contraseña</asp:Label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <div class="checkbox">
-                                <asp:CheckBox runat="server" ID="RememberMe" />
-                                <asp:Label runat="server" AssociatedControlID="RememberMe">¿Recordar cuenta?</asp:Label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <asp:Button class="boton" runat="server" OnClick="LogIn" Text="Iniciar sesión" />
-                        </div>
-                    </div>
-                </div>
-            </section>
+        <div class="input-group">
+            <asp:TextBox runat="server" ID="UserName" CssClass="form-input" Placeholder="Usuario" />
+            <asp:RequiredFieldValidator runat="server" ControlToValidate="UserName"
+                CssClass="validation-error" ErrorMessage="El campo de nombre de usuario es obligatorio." Display="Dynamic" />
+        </div>
+
+        <div class="input-group">
+            <div class="password">
+                <asp:TextBox runat="server" ID="Password" TextMode="Password" CssClass="form-input" Placeholder="Contraseña" ClientIDMode="Static" />
+                <button type="button" id="togglePassword" class="mostrarContraseña" onclick="togglePasswordIcon()"></button>
+            </div>
+            <asp:RequiredFieldValidator runat="server" ControlToValidate="Password"
+                CssClass="validation-error" ErrorMessage="El campo de contraseña es obligatorio." Display="Dynamic" />
+            <asp:Label runat="server" ID="lblError" CssClass="validation-error" />
+        </div>
+
+        <div class="remember-group">
+            <asp:CheckBox runat="server" ID="RememberMe" ClientIDMode="Static" />
+            <label for="RememberMe">Recordar cuenta</label>
+        </div>
+
+        <div class="action-group">
+            <asp:Button class="btn-submit" runat="server" OnClick="LogIn" Text="Iniciar sesión" />
         </div>
     </div>
+
 </asp:Content>

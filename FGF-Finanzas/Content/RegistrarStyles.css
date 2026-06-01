@@ -1,0 +1,125 @@
+﻿.barra-titulo {
+    background-color: #81C4DE;
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+    margin-bottom: 30px;
+}
+
+    .barra-titulo h1 {
+        color: #ffffff;
+        font-size: 32px;
+        font-weight: 400;
+        font-family: 'Segoe UI', Arial, sans-serif;
+    }
+
+.contenedor-registro {
+    background-color: #c8b39a;
+    width: 100%;
+    max-width: 550px;
+    margin: 0 auto 50px auto;
+    padding: 30px 40px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+    .contenedor-registro h2 {
+        color: #ffffff;
+        font-size: 24px;
+        font-weight: bold;
+        letter-spacing: 1px;
+        margin-bottom: 5px;
+    }
+
+.linea-subrayado {
+    border: none;
+    height: 2px;
+    background-color: #ffffff;
+    width: 40%;
+    margin: 0 auto 25px auto;
+}
+
+.formulario-datos {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.input-group {
+    width: 100%;
+    position: relative;
+}
+
+.entrada-formulario {
+    width: 100%;
+    padding: 12px 20px;
+    background-color: #ffffff;
+    border: 2px solid transparent;
+    border-radius: 25px;
+    font-size: 15px;
+    color: #2f3640;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+    .entrada-formulario::placeholder {
+        color: #95a5a6;
+    }
+
+    .entrada-formulario:last-of-type{
+        margin-bottom: 15px;
+    }
+
+
+.password {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+    .password .form-input {
+        padding-right: 50px;
+    }
+
+.lblError{
+    color: #bb0000;
+    font-family: sans-serif;
+}
+
+.mostrarContraseña {
+    position: absolute;
+    right: 18px;
+    width: 24px;
+    height: 24px;
+    background-color: transparent;
+    background-image: url('Login/ojoCerrado.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    transition: transform 0.1s ease;
+}
+
+    .mostrarContraseña:active {
+        transform: scale(0.9);
+    }
+
+    .mostrarContraseña.eye-open {
+        background-image: url('Login/ojoAbierto.png');
+    }
+
+.botones{
+    display: flex;
+    justify-content: space-around;
+}
+    .botones .boton {
+        font-size: 15px;
+        width: 120px;
+        height: 40px;
+        border-radius: 15px;
+        border: none;
+        cursor: pointer;
+    }

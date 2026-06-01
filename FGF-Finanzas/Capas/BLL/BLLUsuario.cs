@@ -15,9 +15,11 @@ namespace FGF_Finanzas.Capas.BLL
     public class BLLUsuario
     {
         DALUsuario dalUsuario;
+        BLLEvento bllEvento;
         public BLLUsuario()
         {
             dalUsuario = new DALUsuario();
+            bllEvento = new BLLEvento();
         }
 
         public void ValidarUsuario(string dni, string usuario, string nombre, string apellido, string contraseña, string confirmacion)
@@ -63,6 +65,7 @@ namespace FGF_Finanzas.Capas.BLL
             string encriptado = Encriptacion.Encriptar(usuario.Contraseña);
             usuario.Contraseña = encriptado;
             dalUsuario.AgregarUsuario(usuario);
+            bllEvento.AgregarEvento(new BEEvento(usuario, DateTime.Now, "Usuarios", "Registrar Usuario", 4));
         }
 
         public void IniciarSesion(string usuario, string contraseña)
@@ -104,9 +107,8 @@ namespace FGF_Finanzas.Capas.BLL
                 SessionManager.Login(user);
 
                 //SessionManager.Idioma = user.Idioma_516MF;
-
-                //Evento_516MF evento = Evento_516MF.GenerarEvento(_bllEvento.UltimoEvento_516MF(), 1, "Usuarios", "Login");
-                //_bllEvento.GuardarEvento_516MF(evento);
+                
+                bllEvento.AgregarEvento(new BEEvento(SessionManager.Instancia.Usuario,DateTime.Now,"Usuarios","Iniciar Sesión",5));
             }
         }
     }

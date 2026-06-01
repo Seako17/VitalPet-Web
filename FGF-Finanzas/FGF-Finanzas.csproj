@@ -68,7 +68,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Backup-Restore.aspx" />
+    <Content Include="BitacoraEventos.aspx" />
     <Content Include="Content\Estilos.css" />
+    <Content Include="Content\EventosStyles.css" />
+    <Content Include="Content\Login\ojoAbierto.png" />
+    <Content Include="Content\Login\ojoCerrado.png" />
+    <Content Include="Content\Login\LoginStyles.css" />
+    <Content Include="Content\logoVitalPet.png" />
+    <Content Include="Content\RegistrarStyles.css" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Login.aspx" />
@@ -81,14 +88,30 @@
       <DependentUpon>Backup-Restore.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+
     <Compile Include="Backup-Restore.aspx.designer.cs">
       <DependentUpon>Backup-Restore.aspx</DependentUpon>
     </Compile>
+
+    <Compile Include="BitacoraEventos.aspx.cs">
+      <DependentUpon>BitacoraEventos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+
+    <Compile Include="BitacoraEventos.aspx.designer.cs">
+      <DependentUpon>BitacoraEventos.aspx</DependentUpon>
+    </Compile>
+
+    <Compile Include="Capas\BE\BEEvento.cs" />
     <Compile Include="Capas\BE\BEUsuario.cs" />
+
     <Compile Include="Capas\BLL\BLLBackupRestore.cs" />
+    <Compile Include="Capas\BLL\BLLEvento.cs" />
     <Compile Include="Capas\BLL\BLLUsuario.cs" />
+
     <Compile Include="Capas\DAL\DALAbstracta.cs" />
     <Compile Include="Capas\DAL\DALBackupRestore.cs" />
+    <Compile Include="Capas\DAL\DALEvento.cs" />
     <Compile Include="Capas\DAL\DALUsuario.cs" />
     <Compile Include="Capas\Servicios\Encriptacion.cs" />
     <Compile Include="Capas\Servicios\SessionManager.cs" />

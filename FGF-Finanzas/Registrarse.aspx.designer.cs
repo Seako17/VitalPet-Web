@@ -42,6 +42,15 @@ namespace FGF_Finanzas
         protected global::System.Web.UI.WebControls.TextBox Apellido;
 
         /// <summary>
+        /// Control Email.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox Email;
+
+        /// <summary>
         /// Control UserName.
         /// </summary>
         /// <remarks>
@@ -78,21 +87,21 @@ namespace FGF_Finanzas
         protected global::System.Web.UI.WebControls.Label lblError;
 
         /// <summary>
-        /// Control checkBoxContraseña.
+        /// Control BtnCancelar.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox checkBoxContraseña;
+        protected global::System.Web.UI.WebControls.Button BtnCancelar;
 
         /// <summary>
-        /// Control checkBoxLbl.
+        /// Control BtnRegistrar.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label checkBoxLbl;
+        protected global::System.Web.UI.WebControls.Button BtnRegistrar;
     }
 }

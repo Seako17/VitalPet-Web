@@ -4,49 +4,53 @@
 
 <html>
 <head runat="server">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>FGF Finanzas</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>VitalPet</title>
 
     <link href="Content/Estilos.css" rel="stylesheet" />
     <script src='<%= ResolveUrl("~/Scripts/scripts.js?v=" + DateTime.Now.Ticks) %>' type="text/javascript"></script>
 
     <asp:ContentPlaceHolder ID="head" runat="server">
-        
     </asp:ContentPlaceHolder>
-    <link href="Content/Estilos.css" rel="stylesheet" />
-
 </head>
 <body>
     <form id="form1" runat="server">
-        <nav class="custom-nav">
-          <div class="nav-container">
-            <ul class="nav-menu">
-              <li><a href="/Default.aspx">FGF Finanzas</a></li>
-              <li><a href="/Login.aspx">Iniciar Sesión</a></li>
-              <li><a href="/Registrarse.aspx">Registrarse</a></li>
-                <%if (FGF_Finanzas.Capas.Servicios.SessionManager.Instancia != null)
-                { %>
-                    <li> <asp:Button runat="server" OnClick="LogoutBtn_Click" ID="LogoutBtn" Text="Cerrar Sesión"/> </li>
-                <% } %>
-              <li><a href="Backup-Restore.aspx">Backup/Restore</a> </li>
-            </ul>
-            <!-- Icono para móvil -->
-            <div class="nav-toggle" id="mobile-menu">
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-          </div>
-        </nav>
+        <header>
+            <nav class="navbar">
+
+                <div class="navbar-logo">
+                    <img src="Content/logoVitalPet.png" class="logoVitalPet" alt="Logo" />
+                    <a href="/Default.aspx">VitalPet</a>
+                </div>
+
+                <ul class="navbar-menu" id="nav-menu">
+                    <li><a href="/Login.aspx">Iniciar sesión</a></li>
+                    <li><a href="/Registrarse.aspx">Registrarse</a></li>
+                    <% if (FGF_Finanzas.Capas.Servicios.SessionManager.Instancia != null)
+                        { %>
+                    <li><a href="BitacoraEventos.aspx">Bitácora de Eventos</a></li>
+                    <li><a href="Backup-Restore.aspx">Backup/Restore</a> </li>
+                    <li>
+                        <asp:Button runat="server" OnClick="LogoutBtn_Click" ID="LogoutBtn" Text="Cerrar Sesión" class="btn-logout" CausesValidation="false" /></li>
+                    <% } %>
+                </ul>
+
+                <div class="nav-toggle" id="mobile-menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+
+            </nav>
+        </header>
         <div class="container body-content">
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
-
             </asp:ContentPlaceHolder>
             <hr />
-            
         </div>
+
         <footer>
-            <p>&copy; <%: DateTime.Now.Year %> - FGF Finanzas</p>
+            <p>&copy; <%: DateTime.Now.Year %> - Vital Pet</p>
         </footer>
     </form>
 </body>

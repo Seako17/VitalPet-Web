@@ -1,79 +1,124 @@
-﻿/* Reset general */
-* {
+﻿* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-}
-
-/* Barra de Navegación */
-.custom-nav {
-    background-color: #212529;
-    height: 56px;
     display: flex;
-    align-items: center;
-    color: white;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: sans-serif;
 }
 
-.nav-container {
-    width: 90%;
+#form1 {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+header {
+    background-color: #81C4DE;
+    width: 100%;
+    z-index: 1000;
+}
+
+.body-content {
+    flex: 1;
+    padding: 40px 20px;
     max-width: 1200px;
+    width: 100%;
     margin: 0 auto;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    height: 60px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.navbar-logo {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    gap: 10px;
 }
 
-.nav-brand {
-    font-size: 1.25rem;
-    font-weight: 500;
-    margin-right: 20px;
-    cursor: pointer;
+.logoVitalPet {
+    height: 40px;
+    width: auto;
 }
 
-.nav-menu {
-    list-style: none;
+.navbar-menu {
     display: flex;
-    gap: 15px;
+    list-style-type: none;
+    align-items: center;
+    gap: 20px;
 }
 
-    .nav-menu li a {
-        color: rgba(255, 255, 255, 0.65); 
-        text-decoration: none;
-        font-size: 0.95rem;
-        transition: color 0.2s ease;
-    }
+a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #0F1647;
+    font-size: 16px;
+}
 
-        .nav-menu li a:hover {
-            color: #ffffff;
-        }
+.btn-logout {
+    border: none;
+    background: transparent;
+    color: #0F1647;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
+}
 
 .nav-toggle {
     display: none;
     flex-direction: column;
+    justify-content: space-between;
+    width: 25px;
+    height: 18px;
     cursor: pointer;
 }
 
     .nav-toggle span {
-        width: 25px;
-        height: 2px;
-        background-color: white;
-        margin: 4px 0;
+        width: 100%;
+        height: 3px;
+        background-color: #0F1647;
+        transition: all 0.3s ease;
     }
+footer{
+    text-align:center;
+}
 
 @media (max-width: 768px) {
-    .nav-container {
-        justify-content: space-between;
-    }
-
-    .nav-menu {
+    .navbar-menu {
         display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px; 
+        left: 0;
+        width: 100%;
+        background-color: #81C4DE; 
+        padding: 20px;
+        gap: 20px;
+        text-align: center;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 999;
     }
+        .navbar-menu.active {
+            display: flex;
+        }
 
+        .navbar-menu li {
+            width: 100%;
+        }
     .nav-toggle {
         display: flex;
     }
+
 }
