@@ -19,10 +19,16 @@ namespace FGF_Finanzas.Capas.BLL
         {
             BLLUsuario bllUsuario = new BLLUsuario();
             DataTable eventos = dalEvento.ObtenerEventos();
+            var listaUsuarios = bllUsuario.ObtenerUsuarios().AsEnumerable().ToList();
             foreach (var item in eventos.AsEnumerable())
             {
-                item["DNI"] = bllUsuario.ObtenerUsuarios().AsEnumerable().Where(u => u["DNI"].ToString() == item["DNI"].ToString()).Select(u => u["usuario"].ToString()).FirstOrDefault();
+                item["DNI"] = listaUsuarios
+                .Where(u => u["DNI"].ToString() == item["DNI"].ToString())
+                .Select(u => u["usuario"].ToString())
+                .FirstOrDefault();
             }
+            DataView dv = eventos.DefaultView;
+            dv.Sort = "fechaHora DESC";
             return eventos;
         }
         public void AgregarEvento(BEEvento evento)
@@ -68,19 +74,20 @@ namespace FGF_Finanzas.Capas.BLL
             }
 
             DataTable resultado = query.Any()
-                ? query.CopyToDataTable()
-                : eventos.Clone();
-
+            ? query.OrderByDescending(e => Convert.ToDateTime(e["fechaHora"])).CopyToDataTable()
+            : eventos.Clone();
+            var listaUsuarios = bllUsuario.ObtenerUsuarios().AsEnumerable().ToList();
             foreach (var item in resultado.AsEnumerable())
             {
-                item["DNI"] = bllUsuario.ObtenerUsuarios()
-                    .AsEnumerable()
-                    .Where(u => u["DNI"].ToString() == item["DNI"].ToString())
-                    .Select(u => u["usuario"].ToString())
-                    .FirstOrDefault();
+                item["DNI"] = listaUsuarios
+            .Where(u => u["DNI"].ToString() == item["DNI"].ToString())
+            .Select(u => u["usuario"].ToString())
+            .FirstOrDefault();
             }
 
-            return resultado;
+
+
+            return resultado    ;
         }
     }
 }

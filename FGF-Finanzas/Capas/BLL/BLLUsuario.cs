@@ -65,6 +65,7 @@ namespace FGF_Finanzas.Capas.BLL
             string encriptado = Encriptacion.Encriptar(usuario.Contraseña);
             usuario.Contraseña = encriptado;
             dalUsuario.AgregarUsuario(usuario);
+            bllEvento.AgregarEvento(new BEEvento(usuario, DateTime.Now, "Usuarios", "Registrar Usuario", 4));
         }
 
         public void IniciarSesion(string usuario, string contraseña)

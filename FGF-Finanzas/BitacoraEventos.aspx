@@ -45,6 +45,7 @@
                 <select id="eventoFiltro" runat="server">
                     <option value="">Evento</option>
                     <option value="Iniciar Sesión">Iniciar Sesión</option>
+                    <option value="Registrar Usuario">Registrar Usuario</option>
                     <option value="Cerrar Sesión">Cerrar Sesión</option>
                 </select>
                 <select id="criticidadFiltro" runat="server">

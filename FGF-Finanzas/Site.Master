@@ -30,7 +30,7 @@
                         { %>
                     <li><a href="BitacoraEventos.aspx">Bitácora de Eventos</a></li>
                     <li>
-                        <asp:Button runat="server" OnClick="LogoutBtn_Click" ID="LogoutBtn" Text="Cerrar Sesión" class="btn-logout" /></li>
+                        <asp:Button runat="server" OnClick="LogoutBtn_Click" ID="LogoutBtn" Text="Cerrar Sesión" class="btn-logout" CausesValidation="false" /></li>
                     <% } %>
                 </ul>
 
