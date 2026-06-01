@@ -74,5 +74,15 @@ namespace FGF_Finanzas
             cargarGrilla(bllEvento.ObtenerEventosFiltrados(usuario, fecha, modulo, evento, criticidad)); 
 
         }
+
+        protected void btnLimpiar_Click(object sender, EventArgs e)
+        {
+            nombreUsuario.Text = string.Empty;
+            fechaFiltro.Value = string.Empty;
+            moduloFiltro.SelectedIndex = 0;
+            eventoFiltro.SelectedIndex = 0;
+            criticidadFiltro.SelectedIndex = 0;
+            conFecha.Checked = false;
+        }
     }
 }

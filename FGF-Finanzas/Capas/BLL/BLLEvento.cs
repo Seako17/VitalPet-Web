@@ -11,14 +11,13 @@ namespace FGF_Finanzas.Capas.BLL
     public class BLLEvento
     {
         DALEvento dalEvento;
-        BLLUsuario bllUsuario;
         public BLLEvento()
         {
             dalEvento = new DALEvento();
-            bllUsuario = new BLLUsuario();
         }
         public DataTable ObtenerEventos()
         {
+            BLLUsuario bllUsuario = new BLLUsuario();
             DataTable eventos = dalEvento.ObtenerEventos();
             foreach (var item in eventos.AsEnumerable())
             {
@@ -32,6 +31,7 @@ namespace FGF_Finanzas.Capas.BLL
         }
         public DataTable ObtenerEventosFiltrados(string usuario, DateTime fechaHora, string modulo, string evento, int criticidad)
         {
+            BLLUsuario bllUsuario = new BLLUsuario();
             DataTable eventos = dalEvento.ObtenerEventos();
 
             IEnumerable<DataRow> query = eventos.AsEnumerable();
@@ -49,7 +49,7 @@ namespace FGF_Finanzas.Capas.BLL
 
             if (fechaHora != DateTime.MinValue)
             {
-                query = query.Where(e => Convert.ToDateTime(e["fechaHora"]) == fechaHora);
+                query = query.Where(e => Convert.ToDateTime(e["fechaHora"]).Date == fechaHora.Date);
             }
 
             if (!string.IsNullOrEmpty(modulo))

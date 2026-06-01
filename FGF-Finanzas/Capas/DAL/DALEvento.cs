@@ -22,7 +22,7 @@ namespace FGF_Finanzas.Capas.DAL
         public void AgregarEvento(BEEvento evento)
         {
             DataTable dt = ObtenerEventos();
-            dt.Rows.Add(new object[] { evento.usuario.DNI, evento.fechaHora, evento.modulo, evento.evento, evento.criticidad });
+            dt.Rows.Add(new object[] { 1,evento.usuario.DNI, evento.fechaHora, evento.modulo, evento.evento, evento.criticidad });
 
             SqlDataAdapter adapter = new SqlDataAdapter("Select * from Evento", _conexion);
 
