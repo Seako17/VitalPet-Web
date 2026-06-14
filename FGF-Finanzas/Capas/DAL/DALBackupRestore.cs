@@ -24,25 +24,22 @@ namespace FGF_Finanzas.Capas.DAL
 
         public void RestaurarBDD(string rutaArchivo)
         {
+            // Construimos todo el script en un único bloque de ejecución transaccional
+            string query = @"
+                USE master;
+                ALTER DATABASE [FGF-BDD] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+                RESTORE DATABASE [FGF-BDD] FROM DISK = @ruta WITH REPLACE;
+                ALTER DATABASE [FGF-BDD] SET MULTI_USER;";
+
             using (SqlConnection con = new SqlConnection(_conexionMaster))
             {
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@ruta", rutaArchivo);
 
-                con.Open();
-                using (SqlCommand setMaster = new SqlCommand("USE master", con))
-                {
-                    setMaster.ExecuteNonQuery();
-                }
-                using (SqlCommand setSingleUser = new SqlCommand("ALTER DATABASE [FGF-BDD] SET SINGLE_USER WITH ROLLBACK IMMEDIATE", con))
-                {
-                    setSingleUser.ExecuteNonQuery();
-                }
-                using (SqlCommand cmd = new SqlCommand($"RESTORE DATABASE [FGF-BDD] FROM DISK='{rutaArchivo}' WITH REPLACE", con))
-                {
+                    cmd.CommandTimeout = 120;
+                    con.Open();
                     cmd.ExecuteNonQuery();
-                }
-                using (SqlCommand setMultiUser = new SqlCommand("ALTER DATABASE [FGF-BDD] SET MULTI_USER", con))
-                {
-                    setMultiUser.ExecuteNonQuery();
                 }
             }
         }

@@ -32,3 +32,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+
+function updateFileName(input) {
+    var fileName = input.files[0] ? input.files[0].name : "";
+    document.getElementById("fileNameLabel").innerText = fileName;
+}

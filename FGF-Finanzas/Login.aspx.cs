@@ -21,6 +21,7 @@ namespace FGF_Finanzas
             try
             {
                 HttpCookie usuarioCookie = null;
+                bllUsuario.IniciarSesion(UserName.Text, Password.Text);
                 if (RememberMe.Checked)
                 {
                     usuarioCookie = new HttpCookie("UserSessionFGF");
@@ -31,7 +32,6 @@ namespace FGF_Finanzas
 
                     Response.Cookies.Add(usuarioCookie);
                 }
-                bllUsuario.IniciarSesion(UserName.Text, Password.Text);
                 Response.Redirect("~/");
             }
             catch (Exception ex)
