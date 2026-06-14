@@ -28,7 +28,7 @@
                     <li><a href="/Registrarse.aspx">Registrarse</a></li>
                     <% if (FGF_Finanzas.Capas.Servicios.SessionManager.Instancia != null)
                         { %>
-                    <li><a href="BitacoraEventos.aspx">Bitácora de Eventos</a></li>
+                    <li><a href="BitacoraEventos.aspx">Administrador</a></li>
                     <li>
                         <asp:Button runat="server" OnClick="LogoutBtn_Click" ID="LogoutBtn" Text="Cerrar Sesión" class="btn-logout" CausesValidation="false" /></li>
                     <% } %>
@@ -42,7 +42,6 @@
 
             </nav>
         </header>
-
         <div class="container body-content">
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
             </asp:ContentPlaceHolder>

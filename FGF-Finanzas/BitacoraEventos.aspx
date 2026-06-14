@@ -16,7 +16,7 @@
                 <li class="active">Bitácora eventos</li>
                 <li>Gestión Perfiles</li>
                 <li>Gestión Familias</li>
-                <li>BackUp / Restore</li>
+                <li><a href="Backup-Restore.aspx">Backup/Restore</a></li>
             </ul>
         </aside>
         <div class="eventos__container">
