@@ -1,0 +1,256 @@
+﻿body {
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+.barra-titulo {
+    background-color: #81C4DE;
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+    margin-bottom: 30px;
+}
+
+    .barra-titulo h2 {
+        color: #ffffff;
+        font-size: 32px;
+        font-weight: 400;
+        margin: 0;
+    }
+
+.main-layout {
+    display: flex;
+    align-items: stretch;
+    gap: 20px;
+    padding: 0 20px;
+    max-width: 1200px;
+    margin: 20px auto;
+    box-sizing: border-box;
+}
+
+.sidebar {
+    width: 220px;
+    background-color: #d2bc9e;
+    padding: 20px;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+
+    .sidebar h3 {
+        margin-top: 0;
+        color: #fff;
+    }
+
+    .sidebar ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .sidebar li {
+        padding: 12px 0;
+        cursor: pointer;
+        color: #eee;
+        border-bottom: 1px solid #c9b497;
+        transition: font-weight 0.1s ease;
+    }
+
+        .sidebar li.active {
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .sidebar li:hover {
+            color: #fff;
+            font-weight: bold;
+        }
+
+    .sidebar ul li a {
+        color: inherit;
+        text-decoration: none !important;
+        display: inline-block;
+        width: 100%;
+        font-weight: normal !important;
+    }
+
+    .sidebar ul li:hover a,
+    .sidebar ul li.active a {
+        color: #fff !important;
+        font-weight: bold !important;
+    }
+
+
+.gestion-usuarios__container {
+    flex-grow: 1;
+    background-color: #cbbaa1; 
+    padding: 25px;
+    border-radius: 15px;
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    position: relative;
+}
+
+  
+    .gestion-usuarios__container h3 {
+        width: 100%;
+        margin-top: 0;
+        color: #fff;
+        text-decoration: underline;
+        font-size: 24px;
+    }
+
+.area-datos {
+    flex: 1;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.gestion-usuarios__container table[id*="dgvUsuarios"] {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+}
+
+    .gestion-usuarios__container table[id*="dgvUsuarios"] th {
+        background-color: #8c7b64; 
+        color: #fff;
+        padding: 8px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .gestion-usuarios__container table[id*="dgvUsuarios"] td {
+        padding: 8px;
+        text-align: center;
+        border: none;
+    }
+
+.filtro-activos {
+    display: inline-flex;
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding: 2px;
+    width: fit-content;
+}
+
+  
+    .filtro-activos input[type="radio"] {
+        display: none;
+    }
+
+
+    .filtro-activos label {
+        display: inline-block;
+        padding: 6px 20px;
+        font-size: 14px;
+        font-weight: bold;
+        color: #8c7b64; 
+        cursor: pointer;
+        border-radius: 18px;
+        transition: all 0.2s ease;
+        margin: 0;
+    }
+
+    
+    .filtro-activos input[type="radio"]:checked + label {
+        background-color: #b1a18c; 
+        color: #ffffff; 
+    }
+
+
+    .filtro-activos label:hover {
+        background-color: #f0f0f0;
+    }
+
+    .filtro-activos input[type="radio"]:checked + label:hover {
+        background-color: #b1a18c; 
+    }
+
+.formulario-inputs {
+    width: 100%;
+    max-width: 400px; 
+}
+
+    .formulario-inputs td {
+        padding: 5px 0;
+    }
+
+    .formulario-inputs label {
+        color: #fff;
+        font-weight: 500;
+    }
+
+    .formulario-inputs input[type="text"],
+    .formulario-inputs select {
+        width: 100%;
+        padding: 6px;
+        border-radius: 20px; 
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+
+.botones-operaciones {
+    width: 160px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    justify-content: flex-start;
+    padding-top: 10px;
+}
+
+    .botones-operaciones input[type="submit"] {
+        background-color: #fff;
+        color: #000;
+        border: none;
+        padding: 10px;
+        font-weight: bold;
+        border-radius: 20px;
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        transition: background 0.2s;
+    }
+
+        .botones-operaciones input[type="submit"]:hover {
+            background-color: #f0f0f0;
+        }
+
+.fila-intermedia {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    width: 100%;
+    margin: 10px 0;
+}
+
+
+.campo-modo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+    .campo-modo label {
+        color: #fff;
+        font-weight: 500;
+    }
+
+    .campo-modo input[type="text"] {
+        width: 150px;
+        padding: 6px;
+        border-radius: 20px;
+        border: 1px solid #ccc;
+        background-color: #e0e0e0; 
+        text-align: center;
+    }
+
+.gestion-usuarios__container table[id*="dgvUsuarios"] td[colspan] {
+    background-color: #fff;
+    color: #666;
+    font-style: italic;
+    padding: 20px;
+    text-align: center;
+}
