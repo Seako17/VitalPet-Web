@@ -123,15 +123,6 @@ namespace FGF_Finanzas
         protected global::System.Web.UI.WebControls.Button btnModificar;
 
         /// <summary>
-        /// Control btnActDes.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnActDes;
-
-        /// <summary>
         /// Control btnAplicar.
         /// </summary>
         /// <remarks>

@@ -82,20 +82,23 @@
 
 .gestion-usuarios__container {
     flex-grow: 1;
-    background-color: #cbbaa1; 
+    background-color: #cbbaa1;
     padding: 25px;
     border-radius: 15px;
     box-sizing: border-box;
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: row; 
     gap: 20px;
     position: relative;
+    align-items: flex-start;
 }
 
-  
+
     .gestion-usuarios__container h3 {
-        width: 100%;
-        margin-top: 0;
+        position: absolute;
+        top: 25px;
+        left: 25px;
+        margin: 0;
         color: #fff;
         text-decoration: underline;
         font-size: 24px;
@@ -103,11 +106,23 @@
 
 .area-datos {
     flex: 1;
-    min-width: 300px;
+    min-width: 0; 
     display: flex;
     flex-direction: column;
     gap: 15px;
+    margin-top: 45px; 
 }
+
+.tabla-usuarios {
+    width: 100%;
+    overflow-x: auto; 
+    border-radius: 4px;
+}
+
+    .fila-seleccionada {
+        background-color: #81C4DE !important;
+        color: #ffffff !important;
+    }
 
 .gestion-usuarios__container table[id*="dgvUsuarios"] {
     width: 100%;
@@ -172,7 +187,21 @@
 
 .formulario-inputs {
     width: 100%;
-    max-width: 400px; 
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between; 
+    align-items: flex-start;
+    gap: 30px; 
+}
+
+.botones-operaciones {
+    width: 160px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    justify-content: flex-start;
+    padding-top: 0; 
+    flex-shrink: 0;
 }
 
     .formulario-inputs td {
@@ -193,14 +222,7 @@
         box-sizing: border-box;
     }
 
-.botones-operaciones {
-    width: 160px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    justify-content: flex-start;
-    padding-top: 10px;
-}
+
 
     .botones-operaciones input[type="submit"] {
         background-color: #fff;
@@ -216,6 +238,13 @@
 
         .botones-operaciones input[type="submit"]:hover {
             background-color: #f0f0f0;
+        }
+        
+        .botones-operaciones input[type="submit"]:disabled {
+            background-color: #e0e0e0 !important; 
+            color: #999999 !important; 
+            cursor: not-allowed; 
+            box-shadow: none; 
         }
 
 .fila-intermedia {
