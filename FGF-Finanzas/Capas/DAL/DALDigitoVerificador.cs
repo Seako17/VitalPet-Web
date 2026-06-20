@@ -91,14 +91,14 @@ namespace FGF_Finanzas.Capas.DAL
         {
             using (SqlConnection con = new SqlConnection(_conexion))
             {
-                string consulta = "SELECT COUNT(*) FROM DigitoVerificador_327LG WHERE NombreTabla = @nombre";
+                string consulta = "SELECT COUNT(*) FROM DigitoVerificador WHERE NombreTabla = @nombre";
                 SqlCommand cmd = new SqlCommand(consulta, con);
                 cmd.Parameters.AddWithValue("@nombre", dv.NombreTabla);
                 con.Open();
                 int existe = (int)cmd.ExecuteScalar();
                 if (existe > 0)
                 {
-                    string queryUpdate = @"UPDATE DigitoVerificador_327LG SET DigitoHorizontal_327LG = @horizontal, DigitoVertical_327LG = @vertical WHERE NombreTabla = @nombre";
+                    string queryUpdate = @"UPDATE DigitoVerificador SET DigitoHorizontal = @horizontal, DigitoVertical = @vertical WHERE NombreTabla = @nombre";
 
                     cmd = new SqlCommand(queryUpdate, con);
                     cmd.Parameters.AddWithValue("@horizontal", dv.DV_Horizontal);
@@ -116,15 +116,15 @@ namespace FGF_Finanzas.Capas.DAL
 
             using (SqlConnection con = new SqlConnection(_conexion))
             {
-                SqlCommand cmd = new SqlCommand("SELECT * FROM DigitoVerificador_327LG", con);
+                SqlCommand cmd = new SqlCommand("SELECT * FROM DigitoVerificador", con);
                 con.Open();
 
                 SqlDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
                 {
-                    BEDigitoVerificador dv = new BEDigitoVerificador(reader["NombreTabla"].ToString(), reader["DigitoHorizontal_327LG"].ToString()
-                        , reader["DigitoVertical_327LG"].ToString());
+                    BEDigitoVerificador dv = new BEDigitoVerificador(reader["NombreTabla"].ToString(), reader["DigitoHorizontal"].ToString()
+                        , reader["DigitoVertical"].ToString());
 
                     lista.Add(dv);
                 }

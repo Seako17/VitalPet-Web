@@ -40,6 +40,16 @@ namespace FGF_Finanzas
                         SessionManager.Login(usuario);
                     }
                 }
+
+                BLLDigitoVerificador bllDV = new BLLDigitoVerificador();
+                var lista = bllDV.CompararDigito();
+                if (lista.Count > 0)
+                {
+                    //if (SessionManager.Instancia.Usuario.Rol == "Admin")
+                    //{
+                    //    Response.Redirect("SolucionDV");
+                    //}
+                }
             }
         }
 
