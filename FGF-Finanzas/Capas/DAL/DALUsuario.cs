@@ -25,7 +25,7 @@ namespace FGF_Finanzas.Capas.DAL
         public void AgregarUsuario(BEUsuario usuario)
         {
             DataTable dt = ObtenerUsuarios();
-            dt.Rows.Add(new object[] { usuario.DNI, usuario.Nombre, usuario.Apellido, usuario.Usuario, usuario.Contraseña, usuario.Intento, usuario.Bloqueado, usuario.Mail });
+            dt.Rows.Add(new object[] { usuario.DNI, usuario.Nombre, usuario.Apellido, usuario.Usuario, usuario.Contraseña, usuario.Intento, usuario.Bloqueado, usuario.Mail, usuario.Rol });
 
             SqlDataAdapter adapter = new SqlDataAdapter("Select * from Usuario", _conexion);
 
@@ -44,7 +44,7 @@ namespace FGF_Finanzas.Capas.DAL
                 con.Open();
                 string query = @"UPDATE Usuario
                          SET contraseña = @Contraseña, intento = @Intento, nombre = @Nombre, apellido = @Apellido,
-                            bloqueado = @Bloqueado, usuario = @Usuario, mail = @Mail WHERE DNI = @Dni";
+                            bloqueado = @Bloqueado, usuario = @Usuario, mail = @Mail, rol = @Rol WHERE DNI = @Dni";
 
                 cmd = new SqlCommand(query, con);
                 cmd.Parameters.AddWithValue("@Dni", usuario.DNI);
@@ -55,6 +55,7 @@ namespace FGF_Finanzas.Capas.DAL
                 cmd.Parameters.AddWithValue("@Contraseña", usuario.Contraseña);
                 cmd.Parameters.AddWithValue("@Bloqueado", usuario.Bloqueado);
                 cmd.Parameters.AddWithValue("@Mail", usuario.Mail);
+                cmd.Parameters.AddWithValue("@Rol", usuario.Rol);
 
 
                 cmd.ExecuteNonQuery();
