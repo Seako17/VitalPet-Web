@@ -25,8 +25,11 @@ namespace FGF_Finanzas
                 if(usuario != null)
                 {
                     SessionManager.Login(usuario);
-                    lblBienvenida.Text += $" {cookie.Value.ToString()}";
                 }
+            }
+            if(SessionManager.IsLogged())
+            {
+                lblBienvenida.Text += $" {SessionManager.Instancia.Usuario.Usuario.ToString()}";
             }
         }
     }

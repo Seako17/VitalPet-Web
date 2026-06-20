@@ -1,0 +1,118 @@
+﻿.login-container {
+    width: 100%;
+    max-width: 360px;
+    margin: 60px auto;
+    text-align: center;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+    .login-container h2 {
+        font-size: 34px;
+        font-weight: 700;
+        color: #1e272e;
+        margin-bottom: 35px;
+        letter-spacing: -0.5px;
+    }
+
+.input-group {
+    margin-bottom: 18px;
+    position: relative;
+    text-align: left;
+}
+
+.form-input {
+    width: 100%;
+    padding: 14px 20px;
+    background-color: #dcdde1;
+    border: 2px solid transparent;
+    border-radius: 14px; 
+    font-size: 16px;
+    color: #2f3640;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+    .form-input::placeholder {
+        color: #7f8c8d;
+    }
+
+    .form-input:focus {
+        background-color: #dcdde1;
+        border-color: #2998ff; 
+        box-shadow: 0 0 0 1px #2998ff;
+    }
+
+.password {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+    .password .form-input {
+        padding-right: 50px;
+    }
+.mostrarContraseña {
+    position: absolute;
+    right: 18px;
+    width: 24px;
+    height: 24px;
+    background-color: transparent;
+
+    background-image: url('ojoCerrado.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+
+    border: none;
+    cursor: pointer;
+    outline: none;
+    transition: transform 0.1s ease;
+}
+
+    .mostrarContraseña:active {
+        transform: scale(0.9);
+    }
+
+    .mostrarContraseña.eye-open {
+        background-image: url('ojoAbierto.png');
+    }
+
+.remember-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 20px 0;
+    font-size: 15px;
+    color: #000000;
+}
+
+    .remember-group input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+    }
+
+
+.btn-submit {
+    background-color: #dcdde1;
+    color: #000000;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    padding: 12px 36px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    display: inline-block;
+}
+
+    .btn-submit:hover {
+        background-color: #b2bec3;
+    }
+
+.validation-error {
+    color: #e74c3c;
+    font-size: 13px;
+    margin-top: 5px;
+    display: block;
+}

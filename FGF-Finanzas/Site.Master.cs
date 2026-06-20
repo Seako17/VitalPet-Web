@@ -45,6 +45,8 @@ namespace FGF_Finanzas
 
         protected void LogoutBtn_Click(object sender, EventArgs e)
         {
+            BLLEvento bLLEvento = new BLLEvento();
+            bLLEvento.AgregarEvento(new BEEvento(SessionManager.Instancia.Usuario, DateTime.Now, "Usuarios", "Cerrar Sesión", 5));
             SessionManager.LogOut();
 
             Session.Clear();
