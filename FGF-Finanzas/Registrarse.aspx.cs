@@ -27,7 +27,7 @@ namespace FGF_Finanzas
                 var apellido = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Apellido.Text.ToLower()).Trim();
 
                 bllUsuario.ValidarUsuario(DniUsuario.Text, UserName.Text.Trim(), nombre, apellido, Password.Text, ConfirmPassword.Text);
-                BEUsuario usuario = new BEUsuario(DniUsuario.Text, nombre, apellido, UserName.Text.Trim(), Password.Text, Email.Text);
+                BEUsuario usuario = new BEUsuario(DniUsuario.Text, nombre, apellido, UserName.Text.Trim(), Password.Text, Email.Text, "Cliente");
                 bllUsuario.AgregarUsuario(usuario);
                 Response.Redirect("~/Login.aspx");
             }
