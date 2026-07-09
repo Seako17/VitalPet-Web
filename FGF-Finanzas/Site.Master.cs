@@ -18,6 +18,9 @@ namespace FGF_Finanzas
         BLLUsuario bllUsuario = new BLLUsuario(); BEUsuario usuario;
         protected void Page_Load(object sender, EventArgs e)
         {
+            Admin.Visible = false;
+            WebMaster.Visible = false;
+            Cliente.Visible = false;
             if (SessionManager.IsLogged())
             {
                 HttpCookie cookie = Request.Cookies["UserSessionFGF"];
@@ -40,6 +43,18 @@ namespace FGF_Finanzas
                         SessionManager.Login(usuario);
                     }
                 }
+                if (SessionManager.Instancia.Usuario.Rol=="Admin")
+                {
+                    Admin.Visible = true;
+                }
+                if(SessionManager.Instancia.Usuario.Rol=="Web Master")
+                {
+                    WebMaster.Visible = true;
+                }
+                if(SessionManager.Instancia.Usuario.Rol=="Cliente")
+                {
+                    Cliente.Visible = true;
+                }
             }
         }
 
@@ -58,7 +73,7 @@ namespace FGF_Finanzas
                 myCookie.Expires = DateTime.Now.AddDays(-1d);
                 Response.Cookies.Add(myCookie);
             }
-
+            FormsAuthentication.SignOut();
             Response.Redirect("~/Default.aspx");
         }
     }

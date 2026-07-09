@@ -26,9 +26,11 @@
                 <ul class="navbar-menu" id="nav-menu">
                     <li><a href="/Login.aspx">Iniciar sesión</a></li>
                     <li><a href="/Registrarse.aspx">Registrarse</a></li>
+                    <li id="Admin" runat="server"><a href="BitacoraEventos.aspx">Administrador</a></li>
+                    <li id="Cliente" runat="server"><a href="#">Cliente</a></li> 
+                    <li id="WebMaster" runat="server"><a href="Backup-Restore.aspx">Web Master</a></li>
                     <% if (FGF_Finanzas.Capas.Servicios.SessionManager.Instancia != null)
                         { %>
-                    <li><a href="BitacoraEventos.aspx">Administrador</a></li>
                     <li>
                         <asp:Button runat="server" OnClick="LogoutBtn_Click" ID="LogoutBtn" Text="Cerrar Sesión" class="btn-logout" CausesValidation="false" /></li>
                     <% } %>
