@@ -80,6 +80,7 @@
     <Content Include="Content\logoVitalPet.png" />
     <Content Include="Content\RegistrarStyles.css" />
     <Content Include="Default.aspx" />
+    <Content Include="DV_Form.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Login.aspx" />
     <Content Include="Registrarse.aspx" />
@@ -121,6 +122,13 @@
     </Compile>
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="DV_Form.aspx.cs">
+      <DependentUpon>DV_Form.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DV_Form.aspx.designer.cs">
+      <DependentUpon>DV_Form.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

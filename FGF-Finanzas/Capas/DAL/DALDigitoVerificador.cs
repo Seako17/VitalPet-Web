@@ -12,81 +12,89 @@ namespace FGF_Finanzas.Capas.DAL
 {
     public class DALDigitoVerificador : DALAbstracta
     {
-        public string CalcularDigitoVerificadorHorizontal(BEDigitoVerificador dv)
+        #region Reales
+        public List<FilaGenerica> ObtenerFilasDeTablaNegocio(string nombreTabla)
         {
-            BigInteger sumaTotal = 0;
+            List<FilaGenerica> filas = new List<FilaGenerica>();
+
             using (SqlConnection con = new SqlConnection(_conexion))
             {
-                string consulta = $"SELECT * FROM {dv.NombreTabla}";
+                string consulta = $"SELECT * FROM {nombreTabla}";
                 SqlCommand cmd = new SqlCommand(consulta, con);
                 con.Open();
-                SqlDataReader rdr = cmd.ExecuteReader();
-                while (rdr.Read())
-                {
-                    object[] datos = new object[rdr.FieldCount];
-                    rdr.GetValues(datos);
-                    BigInteger sumaParcial = 0;
-                    foreach (object o in datos)
-                    {
-                        string hex = Encriptacion.Encriptar(o.ToString());
-                        BigInteger num = BigInteger.Parse("00" + hex, NumberStyles.HexNumber);
-                        sumaParcial += num;
-                    }
-                    string hex2 = Encriptacion.Encriptar(sumaParcial.ToString());
-                    sumaParcial = BigInteger.Parse("00" + hex2, NumberStyles.HexNumber);
-                    sumaTotal += sumaParcial;
-                }
-            }
-            return sumaTotal.ToString("X");
-        }
 
-        public string CalcularDigitoVerificadorVertical(BEDigitoVerificador dv)
-        {
-            BigInteger sumaTotal = 0;
-            using (SqlConnection con = new SqlConnection(_conexion))
-            {
-                string consulta = $"SELECT * FROM {dv.NombreTabla}";
-                SqlCommand cmd = new SqlCommand(consulta, con);
-                con.Open();
-                SqlDataReader rdr = cmd.ExecuteReader();
-                List<object[]> registros = new List<object[]>();
-                while (rdr.Read())
+                using (SqlDataReader rdr = cmd.ExecuteReader())
                 {
-                    object[] fila = new object[rdr.FieldCount];
-                    rdr.GetValues(fila);
-                    registros.Add(fila);
-                }
-                rdr.Close();
-                if (registros.Count > 0)
-                {
-                    for (int col = 0; col < registros[0].Length; col++)
+                    while (rdr.Read())
                     {
-                        BigInteger sumaColumna = 0;
+                        var fila = new FilaGenerica();
+                        fila.Id = rdr.GetValue(0).ToString();
 
-                        foreach (var fila in registros)
+                        for (int i = 0; i < rdr.FieldCount; i++)
                         {
-                            string texto = fila[col]?.ToString() ?? "";
-                            string hex = Encriptacion.Encriptar(texto);
+                            string nombreColumna = rdr.GetName(i);
 
-                            try
+                            if (nombreColumna.Equals("DV_Horizontal", StringComparison.OrdinalIgnoreCase))
                             {
-                                BigInteger valor = BigInteger.Parse("00" + hex, NumberStyles.HexNumber);
-                                sumaColumna += valor;
+                                fila.DV_HorizontalGuardado = rdr.GetValue(i).ToString();
                             }
-                            catch
+                            else
                             {
-
+                                fila.ValoresCampos.Add(rdr.GetValue(i));
                             }
                         }
-                        string hexCol = Encriptacion.Encriptar(sumaColumna.ToString());
-                        sumaColumna = BigInteger.Parse("00" + hexCol, NumberStyles.HexNumber);
-
-                        sumaTotal += sumaColumna;
+                        filas.Add(fila);
                     }
                 }
             }
-            return sumaTotal.ToString("X");
+            return filas;
         }
+
+        public string ObtenerConexionString() { return _conexion; }
+
+        public string CalcularDVHorizontalFila(FilaGenerica fila)
+        {
+            BigInteger sumaParcial = 0;
+            foreach (object o in fila.ValoresCampos)
+            {
+                string texto = o?.ToString() ?? "";
+                string hex = Encriptacion.Encriptar(texto);
+                BigInteger num = BigInteger.Parse("00" + hex, NumberStyles.HexNumber);
+                sumaParcial += num;
+            }
+
+            string hex2 = Encriptacion.Encriptar(sumaParcial.ToString());
+            BigInteger resultadoFinal = BigInteger.Parse("00" + hex2, NumberStyles.HexNumber);
+
+            return resultadoFinal.ToString("X");
+        }
+
+        public BEDigitoVerificador ObtenerDV_Tabla(string nombreTabla)
+        {
+            using (SqlConnection con = new SqlConnection(_conexion))
+            {
+                string consulta = "SELECT NombreTabla, DigitoVertical, CantidadRegistros FROM DigitoVerificador WHERE NombreTabla = @nombre";
+                SqlCommand cmd = new SqlCommand(consulta, con);
+                cmd.Parameters.AddWithValue("@nombre", nombreTabla);
+                con.Open();
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        var dv = new BEDigitoVerificador(
+                            reader["NombreTabla"].ToString(),
+                            reader["DigitoVertical"].ToString(),
+                            Convert.ToInt32(reader["CantidadRegistros"])
+                        );
+
+                        return dv;
+                    }
+                }
+            }
+            return null;
+        }
+
         public void GuardarDigitoVerificador(BEDigitoVerificador dv)
         {
             using (SqlConnection con = new SqlConnection(_conexion))
@@ -96,40 +104,55 @@ namespace FGF_Finanzas.Capas.DAL
                 cmd.Parameters.AddWithValue("@nombre", dv.NombreTabla);
                 con.Open();
                 int existe = (int)cmd.ExecuteScalar();
+
                 if (existe > 0)
                 {
-                    string queryUpdate = @"UPDATE DigitoVerificador SET DigitoHorizontal = @horizontal, DigitoVertical = @vertical WHERE NombreTabla = @nombre";
+                    string queryUpdate = @"UPDATE DigitoVerificador 
+                                   SET DigitoVertical = @vertical, 
+                                       CantidadRegistros = @cantidad 
+                                   WHERE NombreTabla = @nombre";
 
                     cmd = new SqlCommand(queryUpdate, con);
-                    cmd.Parameters.AddWithValue("@horizontal", dv.DV_Horizontal);
                     cmd.Parameters.AddWithValue("@vertical", dv.DV_Vertical);
+                    cmd.Parameters.AddWithValue("@cantidad", dv.CantidadRegistros);
                     cmd.Parameters.AddWithValue("@nombre", dv.NombreTabla);
+                    cmd.ExecuteNonQuery();
+                }
+                else
+                {
+                    string queryInsert = @"INSERT INTO DigitoVerificador (NombreTabla, DigitoVertical, CantidadRegistros) 
+                                   VALUES (@nombre, @vertical, @cantidad)";
 
+                    cmd = new SqlCommand(queryInsert, con);
+                    cmd.Parameters.AddWithValue("@nombre", dv.NombreTabla);
+                    cmd.Parameters.AddWithValue("@vertical", dv.DV_Vertical);
+                    cmd.Parameters.AddWithValue("@cantidad", dv.CantidadRegistros);
                     cmd.ExecuteNonQuery();
                 }
             }
-
         }
+
         public List<BEDigitoVerificador> ObtenerTodos()
         {
             List<BEDigitoVerificador> lista = new List<BEDigitoVerificador>();
-
             using (SqlConnection con = new SqlConnection(_conexion))
             {
-                SqlCommand cmd = new SqlCommand("SELECT * FROM DigitoVerificador", con);
+                SqlCommand cmd = new SqlCommand("SELECT NombreTabla, DigitoVertical, CantidadRegistros FROM DigitoVerificador", con);
                 con.Open();
-
-                SqlDataReader reader = cmd.ExecuteReader();
-
-                while (reader.Read())
+                using (SqlDataReader reader = cmd.ExecuteReader())
                 {
-                    BEDigitoVerificador dv = new BEDigitoVerificador(reader["NombreTabla"].ToString(), reader["DigitoHorizontal"].ToString()
-                        , reader["DigitoVertical"].ToString());
-
-                    lista.Add(dv);
+                    while (reader.Read())
+                    {
+                        lista.Add(new BEDigitoVerificador(
+                            reader["NombreTabla"].ToString(),
+                            reader["DigitoVertical"].ToString(),
+                            Convert.ToInt32(reader["CantidadRegistros"])
+                        ));
+                    }
                 }
             }
             return lista;
         }
+        #endregion
     }
 }
