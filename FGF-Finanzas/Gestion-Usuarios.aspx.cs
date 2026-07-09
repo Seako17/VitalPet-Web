@@ -50,6 +50,7 @@ namespace FGF_Finanzas
                     LimpiarFormulario();
                     AlternarCampos(true);
                     txtNombreUsuario.Enabled = false;
+                    if (dgvUsuarios.Rows.Count > 0) dgvUsuarios.SelectedIndex = -1;
                     break;
 
                 case "Modificar":
@@ -100,11 +101,11 @@ namespace FGF_Finanzas
             if (dgvUsuarios.SelectedRow == null) return;
 
             var cells = dgvUsuarios.SelectedRow.Cells;
-            txtDni.Text = cells[0].Text;
-            txtNombre.Text = cells[1].Text;
-            txtApellido.Text = cells[2].Text;
-            txtEmail.Text = cells[3].Text;
-            txtNombreUsuario.Text = cells[4].Text;
+            txtDni.Text = System.Web.HttpUtility.HtmlDecode(cells[0].Text).Trim();
+            txtNombre.Text = System.Web.HttpUtility.HtmlDecode(cells[1].Text).Trim();
+            txtApellido.Text = System.Web.HttpUtility.HtmlDecode(cells[2].Text).Trim();
+            txtEmail.Text = System.Web.HttpUtility.HtmlDecode(cells[3].Text).Trim();
+            txtNombreUsuario.Text = System.Web.HttpUtility.HtmlDecode(cells[4].Text).Trim();
 
             string rol = cells[5].Text;
             if (ddlRol.Items.FindByValue(rol) != null)
@@ -138,7 +139,7 @@ namespace FGF_Finanzas
         {
             string modoActual = txtModo.Text;
 
-            if (modoActual == "Modificar" || modoActual == "Consulta" || modoActual == "Desbloquear")
+            if (modoActual == "Modificar" || modoActual == "Consulta" || modoActual == "Desbloquear" || modoActual == "Crear")
             {
                 EstablecerEstado(modoActual);
             }
