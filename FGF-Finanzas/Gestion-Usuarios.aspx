@@ -1,5 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Gestion-Usuarios.aspx.cs" Inherits="FGF_Finanzas.Gestion_Usuarios" %>
-
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Gestion-Usuarios.aspx.cs" Inherits="FGF_Finanzas.Gestion_Usuarios" MaintainScrollPositionOnPostback="true"%>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link href="Content/GestionUsuarios/GestionUsuariosStyles.css" rel="stylesheet" />
 </asp:Content>
@@ -7,7 +6,7 @@
     <div class="barra-titulo">
         <h2>Panel de Administrador</h2>
     </div>
-
+     <div id="contenedor-alertas"></div>
     <div class="main-layout">
         <aside class="sidebar">
             <h3>Menú</h3>
@@ -22,11 +21,10 @@
 
         <div class="gestion-usuarios__container">
             <h3>Gestión de usuarios</h3>
-
             <div class="area-datos">
                 <div class="tabla-usuarios">
                     <asp:GridView ID="dgvUsuarios" runat="server" AutoGenerateColumns="False"
-                        ShowHeaderWhenEmpty="true" EmptyDataText="No hay usuarios registrados." OnSelectedIndexChanged="dgvUsuarios_SelectedIndexChanged" SelectedRowStyle-CssClass="fila-seleccionada">
+                        ShowHeaderWhenEmpty="true" EmptyDataText="No hay usuarios para mostrar." OnSelectedIndexChanged="dgvUsuarios_SelectedIndexChanged" SelectedRowStyle-CssClass="fila-seleccionada">
                         <Columns>
                             <asp:BoundField DataField="DNI" HeaderText="DNI" />
                             <asp:BoundField DataField="Nombre" HeaderText="Nombre" />
@@ -39,11 +37,9 @@
                     </asp:GridView>
                 </div>
 
-
-
                 <div class="fila-intermedia">
                     <div class="filtro-activos">
-                        <asp:RadioButtonList ID="rblFiltroTodosActivos" runat="server" RepeatLayout="Flow" RepeatDirection="Horizontal">
+                        <asp:RadioButtonList ID="rblFiltroTodosActivos" runat="server" RepeatLayout="Flow" RepeatDirection="Horizontal" OnSelectedIndexChanged="rblFiltroTodosActivos_SelectedIndexChanged" AutoPostBack="true">
                             <asp:ListItem Value="Bloqueados">Bloqueados</asp:ListItem>
                             <asp:ListItem Selected="True" Value="Todos">Todos</asp:ListItem>
                         </asp:RadioButtonList>
@@ -58,38 +54,27 @@
                 <div class="formulario-inputs">
                     <table>
                         <tr>
-                            <td>
-                                <label>DNI:</label></td>
-                            <td>
-                                <asp:TextBox ID="txtDni" runat="server"></asp:TextBox></td>
+                            <td><label>DNI:</label></td>
+                            <td><asp:TextBox ID="txtDni" runat="server"></asp:TextBox></td>
                         </tr>
                         <tr>
-                            <td>
-                                <label>Nombre:</label></td>
-                            <td>
-                                <asp:TextBox ID="txtNombre" runat="server"></asp:TextBox></td>
+                            <td><label>Nombre:</label></td>
+                            <td><asp:TextBox ID="txtNombre" runat="server"></asp:TextBox></td>
                         </tr>
                         <tr>
-                            <td>
-                                <label>Apellido:</label></td>
-                            <td>
-                                <asp:TextBox ID="txtApellido" runat="server"></asp:TextBox></td>
+                            <td><label>Apellido:</label></td>
+                            <td><asp:TextBox ID="txtApellido" runat="server"></asp:TextBox></td>
                         </tr>
                         <tr>
-                            <td>
-                                <label>Email:</label></td>
-                            <td>
-                                <asp:TextBox ID="txtEmail" runat="server"></asp:TextBox></td>
+                            <td><label>Email:</label></td>
+                            <td><asp:TextBox ID="txtEmail" runat="server"></asp:TextBox></td>
                         </tr>
                         <tr>
-                            <td>
-                                <label>Nombre usuario:</label></td>
-                            <td>
-                                <asp:TextBox ID="txtNombreUsuario" runat="server"></asp:TextBox></td>
+                            <td><label>Nombre usuario:</label></td>
+                            <td><asp:TextBox ID="txtNombreUsuario" runat="server"></asp:TextBox></td>
                         </tr>
                         <tr>
-                            <td>
-                                <label>Rol:</label></td>
+                            <td><label>Rol:</label></td>
                             <td>
                                 <asp:DropDownList ID="ddlRol" runat="server">
                                     <asp:ListItem Text="-- Seleccionar Rol --" Value=""></asp:ListItem>
@@ -105,7 +90,7 @@
                         <asp:Button ID="btnCrear" runat="server" Text="Crear" OnClick="btnCrear_Click" />
                         <asp:Button ID="btnDesbloquear" runat="server" Text="Desbloquear" OnClick="btnDesbloquear_Click" />
                         <asp:Button ID="btnModificar" runat="server" Text="Modificar" OnClick="btnModificar_Click" />
-                        <asp:Button ID="btnAplicar" runat="server" Text="Aplicar" />
+                        <asp:Button ID="btnAplicar" runat="server" Text="Aplicar" OnClick="btnAplicar_Click" />
                         <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" OnClick="btnCancelar_Click" />
                     </aside>
                 </div>
