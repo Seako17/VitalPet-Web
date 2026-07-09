@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Backup-Restore.aspx.cs" Inherits="FGF_Finanzas.Backup_Restore" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <link href="Content/BackupStyles.css" rel="stylesheet" />
+    <link href="Content/BackupRestore/BackupStyles.css" rel="stylesheet" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <div class="barra-titulo">
@@ -12,7 +12,7 @@
         <aside class="sidebar">
             <h3>Menú</h3>
             <ul>
-                <li>Gestión Usuarios</li>
+                <li><a href="Gestion-Usuarios.aspx">Gestión Usuarios</a></li>
                 <li><a href="BitacoraEventos.aspx">Bitácora eventos</a></li>
                 <li>Gestión Perfiles</li>
                 <li>Gestión Familias</li>
