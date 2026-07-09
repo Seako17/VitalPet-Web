@@ -1,8 +1,10 @@
 ﻿using FGF_Finanzas.Capas.BLL;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
+using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -32,6 +34,7 @@ namespace FGF_Finanzas
 
                     Response.Cookies.Add(usuarioCookie);
                 }
+                
                 Response.Redirect("~/");
             }
             catch (Exception ex)
