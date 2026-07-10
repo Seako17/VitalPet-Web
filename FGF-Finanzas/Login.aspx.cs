@@ -35,7 +35,7 @@ namespace FGF_Finanzas
                     Response.Cookies.Add(usuarioCookie);
                 }
                 
-                Response.Redirect("~/");
+                Response.Redirect("~/Default.aspx");
             }
             catch (Exception ex)
             {

@@ -56,27 +56,33 @@ namespace FGF_Finanzas
                     if (SessionManager.Instancia.Usuario.Rol == "Web Master")
                     {
                         Session["InconsistenciasDetectadas"] = lista;
-                        Response.Redirect("~/DV_Form.aspx");
+                        Response.Redirect("~/DV_Form.aspx", false);
+                        Context.ApplicationInstance.CompleteRequest();
+                        return;
                     }
                     else
                     {
                         string mensajeScript = "alert('El sistema se encuentra en mantenimiento');";
                         Page.ClientScript.RegisterStartupScript(this.GetType(), "AlertaInconsistencia", mensajeScript, true);
                         Limpiar_Session();
+                        return;
                     }
                 }
 
-                if (SessionManager.Instancia.Usuario.Rol == "Admin")
+                if(SessionManager.Instancia != null && SessionManager.Instancia.Usuario != null)
                 {
-                    Admin.Visible = true;
-                }
-                if (SessionManager.Instancia.Usuario.Rol == "Web Master")
-                {
-                    WebMaster.Visible = true;
-                }
-                if (SessionManager.Instancia.Usuario.Rol == "Cliente")
-                {
-                    Cliente.Visible = true;
+                    if (SessionManager.Instancia.Usuario.Rol == "Admin")
+                    {
+                        Admin.Visible = true;
+                    }
+                    if (SessionManager.Instancia.Usuario.Rol == "Web Master")
+                    {
+                        WebMaster.Visible = true;
+                    }
+                    if (SessionManager.Instancia.Usuario.Rol == "Cliente")
+                    {
+                        Cliente.Visible = true;
+                    }
                 }
             }
         }
