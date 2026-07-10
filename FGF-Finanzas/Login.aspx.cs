@@ -12,7 +12,7 @@ namespace FGF_Finanzas
 {
     public partial class Login : System.Web.UI.Page
     {
-        BLLUsuario bllUsuario = new BLLUsuario();
+        BLLUsuario bllUsuario = new BLLUsuario(); BLLDigitoVerificador bllDigitoVerificador = new BLLDigitoVerificador();
         protected void Page_Load(object sender, EventArgs e)
         {
 

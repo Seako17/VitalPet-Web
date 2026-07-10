@@ -28,15 +28,7 @@ namespace FGF_Finanzas
                 }
             }
             lblBienvenida.Text = "¡Bienvenido!";
-            HttpCookie cookie = Request.Cookies["UserSessionFGF"];
-            if(cookie != null)
-            {
-                BEUsuario usuario = new BEUsuario(bllUsuario.ObtenerUsuarios().AsEnumerable().Where(x=> x["usuario"].ToString() == cookie.Value.ToString()).FirstOrDefault());
-                if(usuario != null)
-                {
-                    SessionManager.Login(usuario);
-                }
-            }
+            
             if(SessionManager.IsLogged())
             {
                 lblBienvenida.Text += $" {SessionManager.Instancia.Usuario.Usuario.ToString()}";

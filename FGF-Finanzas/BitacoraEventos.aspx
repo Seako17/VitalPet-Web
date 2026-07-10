@@ -23,7 +23,7 @@
             <h3>Bitácora de Eventos</h3>
 
             <div class="table-responsive">
-                <asp:GridView ID="GridViewEventos" runat="server" AutoGenerateColumns="False" CssClass="table">
+                <asp:GridView ID="GridViewEventos" runat="server" AutoGenerateColumns="False" AutoGenerateSelectButton="True" CssClass="table">
                     <Columns>
                         <asp:BoundField DataField="DNI" HeaderText="Usuario" />
                         <asp:BoundField DataField="fechaHora" HeaderText="Fecha y Hora" DataFormatString="{0:dd/MM/yyyy HH:mm:ss}" />

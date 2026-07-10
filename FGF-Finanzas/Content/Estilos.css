@@ -122,3 +122,8 @@ footer{
     }
 
 }
+
+.dropdown {
+    position: relative;
+}
+

@@ -44,6 +44,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -71,6 +72,7 @@
     <Content Include="BitacoraEventos.aspx" />
     <Content Include="Content\BackupRestore\clip.png" />
     <Content Include="Content\BackupRestore\BackupStyles.css" />
+    <Content Include="Content\DV_Styles.css" />
     <Content Include="Content\Estilos.css" />
     <Content Include="Content\EventosStyles.css" />
     <Content Include="Content\GestionUsuarios\GestionUsuariosStyles.css" />
@@ -81,6 +83,7 @@
     <Content Include="Content\RegistrarStyles.css" />
     <Content Include="Default.aspx" />
     <Content Include="Gestion-Usuarios.aspx" />
+    <Content Include="DV_Form.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Login.aspx" />
     <Content Include="Registrarse.aspx" />
@@ -106,10 +109,13 @@
     <Compile Include="Capas\BE\BEUsuario.cs" />
     <Compile Include="Capas\BLL\BLLBackupRestore.cs" />
     <Compile Include="Capas\BLL\BLLEvento.cs" />
+    <Compile Include="Capas\BE\BEDigitoVerificador.cs" />
+    <Compile Include="Capas\BLL\BLLDigitoVerificador.cs" />
     <Compile Include="Capas\BLL\BLLUsuario.cs" />
     <Compile Include="Capas\DAL\DALAbstracta.cs" />
     <Compile Include="Capas\DAL\DALBackupRestore.cs" />
     <Compile Include="Capas\DAL\DALEvento.cs" />
+    <Compile Include="Capas\DAL\DALDigitoVerificador.cs" />
     <Compile Include="Capas\DAL\DALUsuario.cs" />
     <Compile Include="Capas\Servicios\Encriptacion.cs" />
     <Compile Include="Capas\Servicios\SessionManager.cs" />
@@ -126,6 +132,13 @@
     </Compile>
     <Compile Include="Gestion-Usuarios.aspx.designer.cs">
       <DependentUpon>Gestion-Usuarios.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="DV_Form.aspx.cs">
+      <DependentUpon>DV_Form.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DV_Form.aspx.designer.cs">
+      <DependentUpon>DV_Form.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

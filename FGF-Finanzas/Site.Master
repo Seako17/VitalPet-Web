@@ -15,6 +15,7 @@
 </head>
 <body>
     <form id="form1" runat="server">
+
         <header>
             <nav class="navbar">
 
@@ -42,13 +43,14 @@
                     <span></span>
                     <span></span>
                 </div>
-
-            </nav>
+                </nav>
         </header>
+
         <div class="container body-content">
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
             </asp:ContentPlaceHolder>
             <hr />
+
         </div>
 
         <footer>
