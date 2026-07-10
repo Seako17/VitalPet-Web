@@ -20,7 +20,7 @@ namespace FGF_Finanzas.Capas.BLL
 
         public string HacerBackup(string rutaBase)
         {
-            string nombreArchivo = $"Backup_FGF-Finanzas{DateTime.Now:yyyyMMdd_HHmmss}.bak";
+            string nombreArchivo = $"Backup_Vital-Pet{DateTime.Now:yyyyMMdd_HHmmss}.bak";
             if (!Directory.Exists(rutaBase)) throw new Exception("No existe la carpeta temporal en el servidor");
             string rutaServidor = System.IO.Path.Combine(rutaBase, nombreArchivo);
             _dalBackupRestore.RealizarBackup(rutaServidor);
