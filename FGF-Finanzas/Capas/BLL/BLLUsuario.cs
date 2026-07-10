@@ -16,10 +16,12 @@ namespace FGF_Finanzas.Capas.BLL
     {
         DALUsuario dalUsuario;
         BLLEvento bllEvento;
+        BLLDigitoVerificador bllDigitoVerificador;
         public BLLUsuario()
         {
             dalUsuario = new DALUsuario();
             bllEvento = new BLLEvento();
+            bllDigitoVerificador = new BLLDigitoVerificador();
         }
 
         public void ValidarUsuario(string dni, string usuario, string nombre, string apellido, string contraseña, string confirmacion)
@@ -66,6 +68,7 @@ namespace FGF_Finanzas.Capas.BLL
             usuario.Contraseña = encriptado;
             dalUsuario.AgregarUsuario(usuario);
             bllEvento.AgregarEvento(new BEEvento(usuario, DateTime.Now, "Usuarios", "Registrar Usuario", 4));
+            bllDigitoVerificador.InicializarTablaCompleta("Usuario");
         }
 
         public void IniciarSesion(string usuario, string contraseña)
@@ -94,16 +97,17 @@ namespace FGF_Finanzas.Capas.BLL
                 {
                     user.Bloqueado = true;
                     user.Intento = 0;
-                    dalUsuario.Actualizar(user);
+                    ActualizarUsuario(user);
+                    
                 }
-                else { dalUsuario.Actualizar(user); }
+                else { ActualizarUsuario(user); }
 
                 throw new Exception("Credenciales incorrectas.");
             }
             else
             {
                 user.Intento = 0;
-                dalUsuario.Actualizar(user);
+                ActualizarUsuario(user);
                 SessionManager.Login(user);
 
                 //SessionManager.Idioma = user.Idioma_516MF;
@@ -120,6 +124,7 @@ namespace FGF_Finanzas.Capas.BLL
         public void ActualizarUsuario(BEUsuario usuario)
         {
             dalUsuario.Actualizar(usuario);
+            bllDigitoVerificador.InicializarTablaCompleta("Usuario");
         }
 
         public void CambiarContraseña(string contraseñaActual, string nuevaContraseña)
@@ -135,9 +140,10 @@ namespace FGF_Finanzas.Capas.BLL
             if (actualEncriptada != SessionManager.Instancia.Usuario.Contraseña) throw new Exception("La contraseña actual es incorrecta.");
             string nuevaEncriptada = Encriptacion.Encriptar(nuevaContraseña);
 
-            dalUsuario.ActualizarContraseña(SessionManager.Instancia.Usuario.DNI, nuevaEncriptada);
             SessionManager.Instancia.Usuario.Contraseña = nuevaEncriptada;
+            dalUsuario.ActualizarContraseña(SessionManager.Instancia.Usuario.DNI, nuevaEncriptada);
             bllEvento.AgregarEvento(new BEEvento(SessionManager.Instancia.Usuario, DateTime.Now, "Usuarios", "Cambiar Contraseña", 3));
+            bllDigitoVerificador.InicializarTablaCompleta("Usuario");
         }
     }
 }

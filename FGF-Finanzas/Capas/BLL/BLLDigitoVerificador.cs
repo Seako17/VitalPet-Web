@@ -36,6 +36,7 @@ namespace FGF_Finanzas.Capas.BLL
 
             BEDigitoVerificador dvGlobal = new BEDigitoVerificador();
             dvGlobal.NombreTabla = nombreTabla;
+            dvGlobal.CantidadRegistros = filas.Count;
             dvGlobal.DV_Vertical = sumaVertical.ToString("X");
 
             _dalDigito.GuardarDigitoVerificador(dvGlobal);

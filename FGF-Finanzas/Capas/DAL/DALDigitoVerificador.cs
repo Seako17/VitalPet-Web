@@ -43,6 +43,7 @@ namespace FGF_Finanzas.Capas.DAL
                                 fila.ValoresCampos.Add(rdr.GetValue(i));
                             }
                         }
+                        
                         filas.Add(fila);
                     }
                 }
