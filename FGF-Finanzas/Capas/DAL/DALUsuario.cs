@@ -69,5 +69,48 @@ namespace FGF_Finanzas.Capas.DAL
                 con.Close();
             }
         }
+
+        public BEUsuario ConsultaIndividual(string dni)
+        {
+            BEUsuario usuarioEncontrado = null;
+            SqlConnection con = new SqlConnection(_conexion);
+            SqlCommand cmd = null;
+            SqlDataReader reader = null;
+
+            try
+            {
+                con.Open();
+                string query = "SELECT DNI, nombre, apellido, usuario, contraseña, intento, bloqueado, mail, rol FROM Usuario WHERE DNI = @Dni";
+
+                cmd = new SqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@Dni", dni);
+                reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    usuarioEncontrado = new BEUsuario();
+                    usuarioEncontrado.DNI = reader["DNI"].ToString();
+                    usuarioEncontrado.Nombre = reader["nombre"].ToString();
+                    usuarioEncontrado.Apellido = reader["apellido"].ToString();
+                    usuarioEncontrado.Usuario = reader["usuario"].ToString();
+                    usuarioEncontrado.Contraseña = reader["contraseña"].ToString();
+                    usuarioEncontrado.Intento = Convert.ToInt32(reader["intento"]);
+                    usuarioEncontrado.Bloqueado = Convert.ToBoolean(reader["bloqueado"]);
+                    usuarioEncontrado.Mail = reader["mail"].ToString();
+                    usuarioEncontrado.Rol = reader["rol"].ToString();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error al consultar el usuario de forma individual", e);
+            }
+            finally
+            {
+                if (reader != null) reader.Close();
+                con.Close();
+            }
+
+            return usuarioEncontrado;
+        }
     }
 }

@@ -111,5 +111,15 @@ namespace FGF_Finanzas.Capas.BLL
                 bllEvento.AgregarEvento(new BEEvento(SessionManager.Instancia.Usuario,DateTime.Now,"Usuarios","Iniciar Sesión",5));
             }
         }
+
+        public BEUsuario ConsultaIndividual(string dni)
+        {
+            return dalUsuario.ConsultaIndividual(dni);
+        }
+
+        public void ActualizarUsuario(BEUsuario usuario)
+        {
+            dalUsuario.Actualizar(usuario);
+        }
     }
 }

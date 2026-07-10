@@ -71,16 +71,18 @@
     <Content Include="Backup-Restore.aspx" />
     <Content Include="BitacoraEventos.aspx" />
     <Content Include="Content\BackupRestore\clip.png" />
-    <Content Include="Content\BackupStyles.css" />
+    <Content Include="Content\BackupRestore\BackupStyles.css" />
     <Content Include="Content\DV_Styles.css" />
     <Content Include="Content\Estilos.css" />
     <Content Include="Content\EventosStyles.css" />
+    <Content Include="Content\GestionUsuarios\GestionUsuariosStyles.css" />
     <Content Include="Content\Login\ojoAbierto.png" />
     <Content Include="Content\Login\ojoCerrado.png" />
     <Content Include="Content\Login\LoginStyles.css" />
     <Content Include="Content\logoVitalPet.png" />
     <Content Include="Content\RegistrarStyles.css" />
     <Content Include="Default.aspx" />
+    <Content Include="Gestion-Usuarios.aspx" />
     <Content Include="DV_Form.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Login.aspx" />
@@ -123,6 +125,13 @@
     </Compile>
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Gestion-Usuarios.aspx.cs">
+      <DependentUpon>Gestion-Usuarios.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Gestion-Usuarios.aspx.designer.cs">
+      <DependentUpon>Gestion-Usuarios.aspx</DependentUpon>
     </Compile>
     <Compile Include="DV_Form.aspx.cs">
       <DependentUpon>DV_Form.aspx</DependentUpon>

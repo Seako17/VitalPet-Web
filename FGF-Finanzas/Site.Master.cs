@@ -24,6 +24,9 @@ namespace FGF_Finanzas
         protected override void OnInit(EventArgs e)
         {
             base.OnInit(e);
+            Admin.Visible = false;
+            WebMaster.Visible = false;
+            Cliente.Visible = false;
             if (SessionManager.IsLogged())
             {
                 HttpCookie cookie = Request.Cookies["UserSessionFGF"];
@@ -62,6 +65,22 @@ namespace FGF_Finanzas
                         Limpiar_Session();
                     }
                 }
+
+                if (SessionManager.Instancia.Usuario.Rol == "Admin")
+                {
+                    Admin.Visible = true;
+                }
+                if (SessionManager.Instancia.Usuario.Rol == "Web Master")
+                {
+                    WebMaster.Visible = true;
+                }
+                if (SessionManager.Instancia.Usuario.Rol == "Cliente")
+                {
+                    Cliente.Visible = true;
+                }
+            }
+        }
+                
             }
         }
 
@@ -86,6 +105,7 @@ namespace FGF_Finanzas
             bLLEvento.AgregarEvento(new BEEvento(SessionManager.Instancia.Usuario, DateTime.Now, "Usuarios", "Cerrar Sesión", 5));
             Limpiar_Session();
 
+            FormsAuthentication.SignOut();
             Response.Redirect("~/Default.aspx");
         }
     }
