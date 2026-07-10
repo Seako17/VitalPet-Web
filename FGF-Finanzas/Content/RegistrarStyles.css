@@ -49,6 +49,7 @@
 .input-group {
     width: 100%;
     position: relative;
+    margin-bottom: 15px;
 }
 
 .entrada-formulario {
@@ -65,10 +66,6 @@
 
     .entrada-formulario::placeholder {
         color: #95a5a6;
-    }
-
-    .entrada-formulario:last-of-type{
-        margin-bottom: 15px;
     }
 
 

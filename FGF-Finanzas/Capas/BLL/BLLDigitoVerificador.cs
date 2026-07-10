@@ -36,6 +36,7 @@ namespace FGF_Finanzas.Capas.BLL
 
             BEDigitoVerificador dvGlobal = new BEDigitoVerificador();
             dvGlobal.NombreTabla = nombreTabla;
+            dvGlobal.CantidadRegistros = filas.Count;
             dvGlobal.DV_Vertical = sumaVertical.ToString("X");
 
             _dalDigito.GuardarDigitoVerificador(dvGlobal);
@@ -152,6 +153,25 @@ namespace FGF_Finanzas.Capas.BLL
             }
 
             return reporteInconsistencias;
+        }
+
+        public void ActualizarDigitoFilaUnica(string nombreTabla, string idRegistro, FilaGenerica filaModificada)
+        {
+            BEDigitoVerificador dv_Tabla = _dalDigito.ObtenerDV_Tabla(nombreTabla);
+            if (dv_Tabla == null) return;
+            BigInteger sumaVerticalActual = BigInteger.Parse("00" + dv_Tabla.DV_Vertical, System.Globalization.NumberStyles.HexNumber);
+            FilaGenerica filaVieja = _dalDigito.ObtenerFilaPorId(nombreTabla, idRegistro);
+            if (filaVieja != null && !string.IsNullOrEmpty(filaVieja.DV_HorizontalGuardado))
+            {
+                string hexViejo = Encriptacion.Encriptar(filaVieja.DV_HorizontalGuardado);
+                sumaVerticalActual -= BigInteger.Parse("00" + hexViejo, System.Globalization.NumberStyles.HexNumber);
+            }
+            string nuevoDVHorizontal = _dalDigito.CalcularDVHorizontalFila(filaModificada);
+            string hexNuevo = Encriptacion.Encriptar(nuevoDVHorizontal);
+            sumaVerticalActual += BigInteger.Parse("00" + hexNuevo, System.Globalization.NumberStyles.HexNumber);            
+            _dalDigito.ActualizarDVHorizontalFilaEspecifica(nombreTabla, idRegistro, nuevoDVHorizontal);
+            dv_Tabla.DV_Vertical = sumaVerticalActual.ToString("X");
+            _dalDigito.GuardarDigitoVerificador(dv_Tabla);
         }
         #endregion
     }

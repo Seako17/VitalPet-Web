@@ -25,7 +25,7 @@
         <div class="input-group">
             <div class="password">
                 <asp:TextBox runat="server" ID="Password" TextMode="Password" CssClass="form-input" Placeholder="Contraseña" ClientIDMode="Static" />
-                <button type="button" id="togglePassword" class="mostrarContraseña" onclick="togglePasswordIcon()"></button>
+                <button type="button" id="togglePassword" class="mostrarContraseña" onclick="togglePasswordIcon('Password','togglePassword')"></button>
             </div>
             <asp:RequiredFieldValidator runat="server" ControlToValidate="Password"
                 CssClass="validation-error" ErrorMessage="El campo de contraseña es obligatorio." Display="Dynamic" />
