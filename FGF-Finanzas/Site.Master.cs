@@ -18,6 +18,12 @@ namespace FGF_Finanzas
         BLLUsuario bllUsuario = new BLLUsuario(); BEUsuario usuario;
         protected void Page_Load(object sender, EventArgs e)
         {
+            
+        }
+
+        protected override void OnInit(EventArgs e)
+        {
+            base.OnInit(e);
             Admin.Visible = false;
             WebMaster.Visible = false;
             Cliente.Visible = false;
@@ -26,7 +32,6 @@ namespace FGF_Finanzas
                 HttpCookie cookie = Request.Cookies["UserSessionFGF"];
                 if (cookie != null)
                 {
-                    
                     string nombreUsuario = cookie.Value;
                     var usuarios = bllUsuario.ObtenerUsuarios();
 
@@ -43,25 +48,47 @@ namespace FGF_Finanzas
                         SessionManager.Login(usuario);
                     }
                 }
-                if (SessionManager.Instancia.Usuario.Rol=="Admin")
+
+                BLLDigitoVerificador bllDV = new BLLDigitoVerificador();
+                var lista = bllDV.CompararDigito();
+                if (lista != null && lista.Count > 0)
                 {
-                    Admin.Visible = true;
+                    if (SessionManager.Instancia.Usuario.Rol == "Web Master")
+                    {
+                        Session["InconsistenciasDetectadas"] = lista;
+                        Response.Redirect("~/DV_Form.aspx", false);
+                        Context.ApplicationInstance.CompleteRequest();
+                        return;
+                    }
+                    else
+                    {
+                        string mensajeScript = "alert('El sistema se encuentra en mantenimiento');";
+                        Page.ClientScript.RegisterStartupScript(this.GetType(), "AlertaInconsistencia", mensajeScript, true);
+                        Limpiar_Session();
+                        return;
+                    }
                 }
-                if(SessionManager.Instancia.Usuario.Rol=="Web Master")
+
+                if(SessionManager.Instancia != null && SessionManager.Instancia.Usuario != null)
                 {
-                    WebMaster.Visible = true;
-                }
-                if(SessionManager.Instancia.Usuario.Rol=="Cliente")
-                {
-                    Cliente.Visible = true;
+                    if (SessionManager.Instancia.Usuario.Rol == "Admin")
+                    {
+                        Admin.Visible = true;
+                    }
+                    if (SessionManager.Instancia.Usuario.Rol == "Web Master")
+                    {
+                        WebMaster.Visible = true;
+                    }
+                    if (SessionManager.Instancia.Usuario.Rol == "Cliente")
+                    {
+                        Cliente.Visible = true;
+                    }
                 }
             }
         }
 
-        protected void LogoutBtn_Click(object sender, EventArgs e)
+        private void Limpiar_Session()
         {
-            BLLEvento bLLEvento = new BLLEvento();
-            bLLEvento.AgregarEvento(new BEEvento(SessionManager.Instancia.Usuario, DateTime.Now, "Usuarios", "Cerrar Sesión", 5));
             SessionManager.LogOut();
 
             Session.Clear();
@@ -73,6 +100,14 @@ namespace FGF_Finanzas
                 myCookie.Expires = DateTime.Now.AddDays(-1d);
                 Response.Cookies.Add(myCookie);
             }
+        }
+
+        protected void LogoutBtn_Click(object sender, EventArgs e)
+        {
+            BLLEvento bLLEvento = new BLLEvento();
+            bLLEvento.AgregarEvento(new BEEvento(SessionManager.Instancia.Usuario, DateTime.Now, "Usuarios", "Cerrar Sesión", 5));
+            Limpiar_Session();
+
             FormsAuthentication.SignOut();
             Response.Redirect("~/Default.aspx");
         }

@@ -1,4 +1,5 @@
 ﻿using FGF_Finanzas.Capas.BE;
+using FGF_Finanzas.Capas.BLL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
