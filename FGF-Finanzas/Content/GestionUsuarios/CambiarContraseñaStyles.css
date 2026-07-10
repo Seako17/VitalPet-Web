@@ -3,15 +3,15 @@
     background-color: #81C4DE;
     color: #ffffff;
     text-align: center;
-    padding: 15px 0;
+    padding: 10px 0;
     font-family: 'Segoe UI', Arial, sans-serif;
     width: 100%;
 }
 
     .barra-titulo h2 {
         margin: 0;
-        font-size: 26px;
-        font-weight: 500;
+        font-size: 32px;
+        font-weight: 400;
         letter-spacing: 0.5px;
     }
 
@@ -20,7 +20,7 @@
     justify-content: center;
     align-items: center;
     font-family: 'Segoe UI', Arial, sans-serif;
-    min-height: 65vh; 
+    min-height: 59vh; 
     padding: 0 20px;
 }
 
@@ -84,21 +84,24 @@
     cursor: pointer;
     font-weight: bold;
     color: #444;
-    background-color: #e8e4df;
+    background-color: #ffffff;
     transition: all 0.2s ease;
 }
 
     .btn:hover {
-        background-color: #ffffff;
+        background-color: #e8e4df;
         color: #333;
     }
 
 #contenedor-alertas {
+    position: absolute; 
+    left: 50%;
+    transform: translateX(-50%); 
+    top: 18%;
     width: 100%;
-    max-width: 1200px;
-    margin: 15px auto 0 auto;
-    padding: 0 10px;
-    box-sizing: border-box;
+    max-width: 420px; 
+    z-index: 999; 
+    pointer-events: none;
 }
 
 

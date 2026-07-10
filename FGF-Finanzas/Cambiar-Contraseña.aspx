@@ -8,7 +8,7 @@
     <div class="barra-titulo">
         <h2>Cambiar contraseña</h2>
     </div>
-
+    <div id="contenedor-alertas"></div>
     <div class="main-layout">
         <div class="cambiar-contraseña__container">
             <h3>Complete los datos:</h3>
@@ -35,7 +35,7 @@
             </div>
             
             <div class="botones">
-                <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" CssClass="btn" OnClick="btnCancelar_Click" />
+                <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" CssClass="btn" PostBackUrl="~/Default.aspx"/>
                 <asp:Button ID="btnCambiar" runat="server" Text="Cambiar contraseña" CssClass="btn" OnClick="btnCambiar_Click" />
             </div>
         </div>

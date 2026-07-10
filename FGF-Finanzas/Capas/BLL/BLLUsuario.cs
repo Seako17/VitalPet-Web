@@ -35,9 +35,9 @@ namespace FGF_Finanzas.Capas.BLL
 
             if (string.IsNullOrWhiteSpace(usuario)) throw new Exception("El campo de Usuario es obligatorio.");
 
-            if (!Regex.IsMatch(contraseña, @"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@*_/#$%]).{8,20}$"))
+            if (!Regex.IsMatch(contraseña, @"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*\W).{8,20}$"))
             {
-                throw new Exception("La contraseña debe tener entre 8 y 20 caracteres, incluir letras, números y un carácter especial (@*_/#$%).");
+                throw new Exception("La contraseña debe tener entre 8 y 20 caracteres, e incluir al menos una mayúscula, una minúscula, un número y un carácter especial (@*_/#$%).");
             }
             if (contraseña != confirmacion) throw new Exception("La contraseña y la contraseña de confirmación no coinciden.");
 
@@ -108,7 +108,7 @@ namespace FGF_Finanzas.Capas.BLL
 
                 //SessionManager.Idioma = user.Idioma_516MF;
                 
-                bllEvento.AgregarEvento(new BEEvento(SessionManager.Instancia.Usuario,DateTime.Now,"Usuarios","Iniciar Sesión",5));
+                bllEvento.AgregarEvento(new BEEvento(user,DateTime.Now,"Usuarios","Iniciar Sesión",5));
             }
         }
 
@@ -120,6 +120,24 @@ namespace FGF_Finanzas.Capas.BLL
         public void ActualizarUsuario(BEUsuario usuario)
         {
             dalUsuario.Actualizar(usuario);
+        }
+
+        public void CambiarContraseña(string contraseñaActual, string nuevaContraseña)
+        {
+            if (!Regex.IsMatch(nuevaContraseña, @"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*\W).{8,20}$"))
+            {
+                throw new Exception("La contraseña nueva debe tener entre 8 y 20 caracteres, e incluir al menos una mayúscula, una minúscula, un número y un carácter especial (@*_/#$%).");
+            }
+
+            if (contraseñaActual == nuevaContraseña) throw new Exception("La nueva contraseña no puede ser igual a la actual.");
+
+            string actualEncriptada = Encriptacion.Encriptar(contraseñaActual);
+            if (actualEncriptada != SessionManager.Instancia.Usuario.Contraseña) throw new Exception("La contraseña actual es incorrecta.");
+            string nuevaEncriptada = Encriptacion.Encriptar(nuevaContraseña);
+
+            dalUsuario.ActualizarContraseña(SessionManager.Instancia.Usuario.DNI, nuevaEncriptada);
+            SessionManager.Instancia.Usuario.Contraseña = nuevaEncriptada;
+            bllEvento.AgregarEvento(new BEEvento(SessionManager.Instancia.Usuario, DateTime.Now, "Usuarios", "Cambiar Contraseña", 3));
         }
     }
 }

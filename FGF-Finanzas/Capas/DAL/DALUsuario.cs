@@ -1,10 +1,7 @@
 ﻿using FGF_Finanzas.Capas.BE;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
 
 namespace FGF_Finanzas.Capas.DAL
 {
@@ -111,6 +108,32 @@ namespace FGF_Finanzas.Capas.DAL
             }
 
             return usuarioEncontrado;
+        }
+
+        public void ActualizarContraseña(string dni, string nuevaContraseñaEncriptada)
+        {
+            SqlConnection con = new SqlConnection(_conexion);
+            SqlCommand cmd;
+
+            try
+            {
+                con.Open();
+                string query = "UPDATE Usuario SET contraseña = @Contraseña WHERE DNI = @Dni";
+
+                cmd = new SqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@Dni", dni);
+                cmd.Parameters.AddWithValue("@Contraseña", nuevaContraseñaEncriptada);
+
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error al actualizar la contraseña del usuario", e);
+            }
+            finally
+            {
+                con.Close();
+            }
         }
     }
 }
