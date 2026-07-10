@@ -87,17 +87,30 @@ namespace FGF_Finanzas.Capas.BLL
             {
                 string nombreTabla = tablaControlada.NombreTabla;
 
-                //BORRAR CUANDO PONGAMOS LAS DEMÁS TABLAS
+                //BORRAR DESPUES
                 if (!nombreTabla.Equals("Usuario", StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }
 
-                List<FilaGenerica> filasActuales = _dalDigito.ObtenerFilasDeTablaNegocio(nombreTabla);
                 BEDigitoVerificador dv_Tabla = _dalDigito.ObtenerDV_Tabla(nombreTabla);
+                if (dv_Tabla == null) continue;
+
+                List<FilaGenerica> filasActuales = _dalDigito.ObtenerFilasDeTablaNegocio(nombreTabla);
                 int cantidadRegistrosGuardada = dv_Tabla.CantidadRegistros;
 
-                if (dv_Tabla == null) continue;
+                if (filasActuales.Count != cantidadRegistrosGuardada)
+                {
+                    reporteInconsistencias.Add(new InconsistenciaReporte
+                    {
+                        NombreTabla = nombreTabla,
+                        IdRegistro = "N/A",
+                        TipoFalla = filasActuales.Count > cantidadRegistrosGuardada
+                            ? "Hubo un alta no registrada."
+                            : "Hubo una eliminación no registrada."
+                    });
+                    continue;
+                }
 
                 BigInteger sumaVerticalCalculada = 0;
                 bool huboModificacionEnTabla = false;
@@ -106,7 +119,7 @@ namespace FGF_Finanzas.Capas.BLL
                 {
                     string dvHorizontalCalculado = _dalDigito.CalcularDVHorizontalFila(fila);
 
-                    if (dvHorizontalCalculado != fila.DV_HorizontalGuardado)
+                    if (dvHorizontalCalculado != fila.DV_HorizontalGuardado && dvHorizontalCalculado != null)
                     {
                         reporteInconsistencias.Add(new InconsistenciaReporte
                         {
@@ -117,7 +130,8 @@ namespace FGF_Finanzas.Capas.BLL
                         huboModificacionEnTabla = true;
                     }
 
-                    string hexCol = Encriptacion.Encriptar(dvHorizontalCalculado);
+                    string hashFilaTestigo = fila.DV_HorizontalGuardado ?? "";
+                    string hexCol = Encriptacion.Encriptar(hashFilaTestigo);
                     sumaVerticalCalculada += BigInteger.Parse("00" + hexCol, NumberStyles.HexNumber);
                 }
 
@@ -127,24 +141,12 @@ namespace FGF_Finanzas.Capas.BLL
                 {
                     if (!huboModificacionEnTabla)
                     {
-                        if (filasActuales.Count < cantidadRegistrosGuardada)
+                        reporteInconsistencias.Add(new InconsistenciaReporte
                         {
-                            reporteInconsistencias.Add(new InconsistenciaReporte
-                            {
-                                NombreTabla = nombreTabla,
-                                IdRegistro = "N/A",
-                                TipoFalla = "Hubo una eliminación no registrada."
-                            });
-                        }
-                        else
-                        {
-                            reporteInconsistencias.Add(new InconsistenciaReporte
-                            {
-                                NombreTabla = nombreTabla,
-                                IdRegistro = "N/A",
-                                TipoFalla = "Hubo un alta no registrada."
-                            });
-                        }
+                            NombreTabla = nombreTabla,
+                            IdRegistro = "N/A",
+                            TipoFalla = "Falla de integridad estructural."
+                        });
                     }
                 }
             }

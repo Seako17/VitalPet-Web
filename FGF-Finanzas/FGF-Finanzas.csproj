@@ -72,6 +72,7 @@
     <Content Include="BitacoraEventos.aspx" />
     <Content Include="Content\BackupRestore\clip.png" />
     <Content Include="Content\BackupStyles.css" />
+    <Content Include="Content\DV_Styles.css" />
     <Content Include="Content\Estilos.css" />
     <Content Include="Content\EventosStyles.css" />
     <Content Include="Content\Login\ojoAbierto.png" />

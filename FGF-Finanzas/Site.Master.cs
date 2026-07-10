@@ -60,7 +60,6 @@ namespace FGF_Finanzas
                         string mensajeScript = "alert('El sistema se encuentra en mantenimiento');";
                         Page.ClientScript.RegisterStartupScript(this.GetType(), "AlertaInconsistencia", mensajeScript, true);
                         Limpiar_Session();
-
                     }
                 }
             }

@@ -17,17 +17,12 @@ namespace FGF_Finanzas
         private readonly BLLBackupRestore _bllBackupRestore = new BLLBackupRestore();
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack)
+            List<InconsistenciaReporte> listaInconsistencias = _bllDV.CompararDigito();
+            if (listaInconsistencias.Count > 0)
             {
-                if (Session["InconsistenciasDetectadas"] != null)
-                {
-                    var listaInconsistencias = (List<InconsistenciaReporte>)Session["InconsistenciasDetectadas"];
-                    GridInconsistencias.DataSource = listaInconsistencias;
-                    GridInconsistencias.DataBind();
-                    GridInconsistencias.Visible = true;
-
-                    Session["InconsistenciasDetectadas"] = null;
-                }
+                GridInconsistencias.DataSource = listaInconsistencias;
+                GridInconsistencias.DataBind();
+                GridInconsistencias.Visible = true;
             }
         }
 
@@ -52,13 +47,15 @@ namespace FGF_Finanzas
         {
             try
             {
-                List<string> tablasAControlar = new List<string> { "Usuario"};
+                List<string> tablasAControlar = new List<string> { "Usuario" };
 
                 foreach (string tabla in tablasAControlar)
                 {
                     _bllDV.InicializarTablaCompleta(tabla);
                 }
-
+                string mensajeScript = "alert('Se han reestablecido los dígitos verificadores');";
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "AlertaInconsistencia", mensajeScript, true);
+                Response.Redirect("~/Default.aspx");
             }
             catch (Exception ex)
             {
@@ -106,6 +103,10 @@ namespace FGF_Finanzas
                 lblMensaje.Text = "Debe seleccionar un archivo .bak en su computadora primero.";
                 lblMensaje.ForeColor = System.Drawing.Color.Orange;
             }
+
+            string mensajeScript = "alert('Se ha restaurado la base de datos');";
+            Page.ClientScript.RegisterStartupScript(this.GetType(), "AlertaInconsistencia", mensajeScript, true);
+            Response.Redirect("~/Default.aspx");
         }
     }
 }
