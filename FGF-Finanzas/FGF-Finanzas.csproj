@@ -69,10 +69,12 @@
   <ItemGroup>
     <Content Include="Backup-Restore.aspx" />
     <Content Include="BitacoraEventos.aspx" />
+    <Content Include="Cambiar-Contraseña.aspx" />
     <Content Include="Content\BackupRestore\clip.png" />
     <Content Include="Content\BackupRestore\BackupStyles.css" />
     <Content Include="Content\Estilos.css" />
     <Content Include="Content\EventosStyles.css" />
+    <Content Include="Content\GestionUsuarios\CambiarContraseñaStyles.css" />
     <Content Include="Content\GestionUsuarios\GestionUsuariosStyles.css" />
     <Content Include="Content\Login\ojoAbierto.png" />
     <Content Include="Content\Login\ojoCerrado.png" />
@@ -101,6 +103,13 @@
     </Compile>
     <Compile Include="BitacoraEventos.aspx.designer.cs">
       <DependentUpon>BitacoraEventos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Cambiar-Contraseña.aspx.cs">
+      <DependentUpon>Cambiar-Contraseña.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Cambiar-Contraseña.aspx.designer.cs">
+      <DependentUpon>Cambiar-Contraseña.aspx</DependentUpon>
     </Compile>
     <Compile Include="Capas\BE\BEEvento.cs" />
     <Compile Include="Capas\BE\BEUsuario.cs" />

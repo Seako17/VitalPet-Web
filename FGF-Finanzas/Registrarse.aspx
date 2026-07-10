@@ -15,11 +15,11 @@
         <hr class="linea-subrayado" />
 
         <div class="formulario-datos">
-            
+
             <div class="input-group">
                 <asp:TextBox runat="server" ID="DniUsuario" CssClass="entrada-formulario" Placeholder="DNI" />
             </div>
-                 
+
             <div class="input-group">
                 <asp:TextBox runat="server" ID="Nombre" CssClass="entrada-formulario" Placeholder="Nombre" />
             </div>
@@ -38,20 +38,22 @@
 
             <div class="input-group">
                 <div class="password">
-                    <asp:TextBox runat="server" ID="Password" TextMode="Password" CssClass="entrada-formulario" Placeholder="Contraseña" ClientIDMode="Static" />
-                    <button type="button" id="togglePassword" class="mostrarContraseña" onclick="togglePasswordIcon()"></button>
+                    <asp:TextBox runat="server" ID="Password" TextMode="Password" CssClass="entrada-formulario" Placeholder="Contraseña" ClientIDMode="Static" ></asp:TextBox>
+                    <button type="button" id="togglePassword" class="mostrarContraseña" onclick="togglePasswordIcon('Password', 'togglePassword')"></button>
                 </div>
             </div>
 
             <div class="input-group">
-                <asp:TextBox runat="server" ID="ConfirmPassword" TextMode="Password" CssClass="entrada-formulario" Placeholder="Confirmar contraseña" ClientIDMode="Static" />
-                <br />
+                <div class="password">
+                    <asp:TextBox runat="server" ID="ConfirmPassword" TextMode="Password" CssClass="entrada-formulario" Placeholder="Confirmar contraseña" ClientIDMode="Static" ></asp:TextBox>
+                    <button type="button" id="toggleConfirmPassword" class="mostrarContraseña" onclick="togglePasswordIcon('ConfirmPassword', 'toggleConfirmPassword')"></button>
+                </div>
                 <asp:Label runat="server" ID="lblError" CssClass="lblError" />
             </div>
 
             <div class="botones">
                 <asp:Button class="boton" runat="server" ID="BtnCancelar" Text="Cancelar" PostBackUrl="~/Default.aspx" CauseValidation="false" />
-                <asp:Button class="boton" runat="server" ID="BtnRegistrar" OnClick="CreateUser_Click" Text="Registrarse"/>
+                <asp:Button class="boton" runat="server" ID="BtnRegistrar" OnClick="CreateUser_Click" Text="Registrarse" />
             </div>
 
         </div>
