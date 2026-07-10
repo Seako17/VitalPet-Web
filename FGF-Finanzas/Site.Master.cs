@@ -80,9 +80,6 @@ namespace FGF_Finanzas
                 }
             }
         }
-                
-            }
-        }
 
         private void Limpiar_Session()
         {
