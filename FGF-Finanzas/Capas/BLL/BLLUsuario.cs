@@ -123,8 +123,19 @@ namespace FGF_Finanzas.Capas.BLL
 
         public void ActualizarUsuario(BEUsuario usuario)
         {
+            FilaGenerica filaModificada = new FilaGenerica();
+            filaModificada.Id = usuario.DNI;
+            filaModificada.ValoresCampos.Add(usuario.DNI);
+            filaModificada.ValoresCampos.Add(usuario.Nombre);
+            filaModificada.ValoresCampos.Add(usuario.Apellido);
+            filaModificada.ValoresCampos.Add(usuario.Usuario);
+            filaModificada.ValoresCampos.Add(usuario.Contraseña);
+            filaModificada.ValoresCampos.Add(usuario.Intento);
+            filaModificada.ValoresCampos.Add(usuario.Bloqueado);
+            filaModificada.ValoresCampos.Add(usuario.Mail);
+            filaModificada.ValoresCampos.Add(usuario.Rol);
+            bllDigitoVerificador.ActualizarDigitoFilaUnica("Usuario", usuario.DNI, filaModificada);
             dalUsuario.Actualizar(usuario);
-            bllDigitoVerificador.InicializarTablaCompleta("Usuario");
         }
 
         public void CambiarContraseña(string contraseñaActual, string nuevaContraseña)
@@ -139,11 +150,22 @@ namespace FGF_Finanzas.Capas.BLL
             string actualEncriptada = Encriptacion.Encriptar(contraseñaActual);
             if (actualEncriptada != SessionManager.Instancia.Usuario.Contraseña) throw new Exception("La contraseña actual es incorrecta.");
             string nuevaEncriptada = Encriptacion.Encriptar(nuevaContraseña);
+            FilaGenerica filaFutura = new FilaGenerica();
+            filaFutura.Id = SessionManager.Instancia.Usuario.DNI;
+            filaFutura.ValoresCampos.Add(SessionManager.Instancia.Usuario.DNI);
+            filaFutura.ValoresCampos.Add(SessionManager.Instancia.Usuario.Nombre);
+            filaFutura.ValoresCampos.Add(SessionManager.Instancia.Usuario.Apellido);
+            filaFutura.ValoresCampos.Add(SessionManager.Instancia.Usuario.Usuario);
+            filaFutura.ValoresCampos.Add(nuevaEncriptada);
+            filaFutura.ValoresCampos.Add(SessionManager.Instancia.Usuario.Intento);
+            filaFutura.ValoresCampos.Add(SessionManager.Instancia.Usuario.Bloqueado);
+            filaFutura.ValoresCampos.Add(SessionManager.Instancia.Usuario.Mail);
+            filaFutura.ValoresCampos.Add(SessionManager.Instancia.Usuario.Rol);
 
-            SessionManager.Instancia.Usuario.Contraseña = nuevaEncriptada;
+            bllDigitoVerificador.ActualizarDigitoFilaUnica("Usuario", SessionManager.Instancia.Usuario.DNI, filaFutura);
             dalUsuario.ActualizarContraseña(SessionManager.Instancia.Usuario.DNI, nuevaEncriptada);
+            SessionManager.Instancia.Usuario.Contraseña = nuevaEncriptada;
             bllEvento.AgregarEvento(new BEEvento(SessionManager.Instancia.Usuario, DateTime.Now, "Usuarios", "Cambiar Contraseña", 3));
-            bllDigitoVerificador.InicializarTablaCompleta("Usuario");
         }
     }
 }

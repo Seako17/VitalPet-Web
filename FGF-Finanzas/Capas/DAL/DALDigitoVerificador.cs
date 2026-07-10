@@ -13,6 +13,55 @@ namespace FGF_Finanzas.Capas.DAL
     public class DALDigitoVerificador : DALAbstracta
     {
         #region Reales
+
+        public FilaGenerica ObtenerFilaPorId(string nombreTabla, string id)
+        {
+            string nombrePK = nombreTabla.Equals("Usuario", StringComparison.OrdinalIgnoreCase) ? "DNI" : "id";
+            using (SqlConnection con = new SqlConnection(_conexion))
+            {
+                string consulta = $"SELECT * FROM {nombreTabla} WHERE {nombrePK} = @id";
+                SqlCommand cmd = new SqlCommand(consulta, con);
+                cmd.Parameters.AddWithValue("@id", id);
+                con.Open();
+
+                using (SqlDataReader rdr = cmd.ExecuteReader())
+                {
+                    if (rdr.Read())
+                    {
+                        var fila = new FilaGenerica();
+                        fila.Id = rdr.GetValue(0).ToString();
+                        for (int i = 0; i < rdr.FieldCount; i++)
+                        {
+                            string nombreColumna = rdr.GetName(i);
+                            if (nombreColumna.Equals("DV_Horizontal", StringComparison.OrdinalIgnoreCase))
+                            {
+                                fila.DV_HorizontalGuardado = rdr.GetValue(i).ToString();
+                            }
+                            else
+                            {
+                                fila.ValoresCampos.Add(rdr.GetValue(i));
+                            }
+                        }
+                        return fila;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public void ActualizarDVHorizontalFilaEspecifica(string nombreTabla, string id, string nuevoDVH)
+        {
+            string nombrePK = nombreTabla.Equals("Usuario", StringComparison.OrdinalIgnoreCase) ? "DNI" : "id";
+            using (SqlConnection con = new SqlConnection(_conexion))
+            {
+                string query = $"UPDATE {nombreTabla} SET DV_Horizontal = @dvh WHERE {nombrePK} = @id";
+                SqlCommand cmd = new SqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@dvh", nuevoDVH);
+                cmd.Parameters.AddWithValue("@id", id);
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
         public List<FilaGenerica> ObtenerFilasDeTablaNegocio(string nombreTabla)
         {
             List<FilaGenerica> filas = new List<FilaGenerica>();

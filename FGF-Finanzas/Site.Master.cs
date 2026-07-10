@@ -62,9 +62,10 @@ namespace FGF_Finanzas
                     }
                     else
                     {
-                        string mensajeScript = "alert('El sistema se encuentra en mantenimiento');";
-                        Page.ClientScript.RegisterStartupScript(this.GetType(), "AlertaInconsistencia", mensajeScript, true);
                         Limpiar_Session();
+                        FormsAuthentication.SignOut();
+                        string script= @"alert('El sistema se encuentra en mantenimiento.');  window.location.href = 'Default.aspx';";
+                        Page.ClientScript.RegisterStartupScript(this.GetType(), "AlertaInconsistencia", script, true);
                         return;
                     }
                 }
