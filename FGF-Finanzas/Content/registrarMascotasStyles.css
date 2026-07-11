@@ -1,0 +1,106 @@
+﻿body {
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+.form-container-main {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.main-title {
+    background-color: #81C4DE;
+    width: 100%;
+    text-align: center;
+    padding: 12px 0;
+    margin-bottom: 30px;
+}
+
+    .main-title h2 {
+        color: #ffffff;
+        font-size: 34px;
+        font-weight: 500;
+        margin: 0;
+    }
+
+.form-card {
+    background-color: #d2bc9e;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 550px;
+    padding: 35px 40px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.form-subtitle {
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    margin-top: 0;
+    margin-bottom: 25px;
+    text-align: center;
+    border-bottom: 2px solid white;
+    padding-bottom: 5px;
+    display: inline-block;
+}
+
+.form-group {
+    width: 100%;
+    margin-bottom: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+}
+
+    .form-group label {
+        color: white;
+        font-size: 17px;
+        font-weight: 600;
+        margin-left: 10px;
+    }
+
+.form-input {
+    width: 100%;
+    padding: 14px 20px;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    font-size: 17px; 
+    color: #333;
+    box-sizing: border-box;
+    outline: none;
+    background-color: white;
+}
+
+    .form-input:focus {
+        box-shadow: 0 0 5px rgba(114, 188, 212, 0.8);
+    }
+
+.form-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    margin-top: 25px;
+}
+
+.btn {
+    padding: 10px 28px;
+    font-size: 17px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #333;
+    background-color: white;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
