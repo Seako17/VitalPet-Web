@@ -67,7 +67,14 @@ namespace FGF_Finanzas.Capas.BLL
             string encriptado = Encriptacion.Encriptar(usuario.Contraseña);
             usuario.Contraseña = encriptado;
             dalUsuario.AgregarUsuario(usuario);
-            bllEvento.AgregarEvento(new BEEvento(usuario, DateTime.Now, "Usuarios", "Registrar Usuario", 4));
+            if(SessionManager.IsLogged())
+            {
+                bllEvento.AgregarEvento(new BEEvento(SessionManager.Instancia.Usuario, DateTime.Now, "Usuarios", "Registrar Usuario", 4));
+            }
+            else
+            {
+                bllEvento.AgregarEvento(new BEEvento(usuario, DateTime.Now, "Usuarios", "Registrar Usuario", 4));
+            }
             bllDigitoVerificador.InicializarTablaCompleta("Usuario");
         }
 

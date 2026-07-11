@@ -1,5 +1,7 @@
 ﻿using FGF_Finanzas.Capas.BE;
 using FGF_Finanzas.Capas.BLL;
+using FGF_Finanzas.Capas.DAL;
+using FGF_Finanzas.Capas.Servicios;
 using System;
 using System.Data;
 using System.Linq;
@@ -11,6 +13,7 @@ namespace FGF_Finanzas
     public partial class Gestion_Usuarios : System.Web.UI.Page
     {
         BLLUsuario bllUsuario = new BLLUsuario();
+        BLLEvento bllEvento = new BLLEvento();
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!Page.IsPostBack)
@@ -188,6 +191,7 @@ namespace FGF_Finanzas
                         usuario.Bloqueado = false;
                         usuario.Intento = 0;
                         bllUsuario.ActualizarUsuario(usuario);
+                        bllEvento.AgregarEvento(new BEEvento(SessionManager.Instancia.Usuario, DateTime.Now, "Usuarios", "Desbloquear Usuario", 2));
                         MostrarAlerta("El usuario ha sido desbloqueado correctamente.");
                         CargarGrillaUsuarios();
                         EstablecerEstado("Consulta");
@@ -224,6 +228,7 @@ namespace FGF_Finanzas
                         usuarioModificar.Rol = rolModificar;
                         usuarioModificar.Usuario = usernameModificar;
                         bllUsuario.ActualizarUsuario(usuarioModificar);
+                        bllEvento.AgregarEvento(new BEEvento(SessionManager.Instancia.Usuario, DateTime.Now, "Usuarios", "Modificar Usuario", 2));
                         MostrarAlerta("Usuario modificado correctamente.");
                         CargarGrillaUsuarios();
                         EstablecerEstado("Consulta");
