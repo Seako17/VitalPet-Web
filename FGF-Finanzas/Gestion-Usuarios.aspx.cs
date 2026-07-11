@@ -1,5 +1,7 @@
 ﻿using FGF_Finanzas.Capas.BE;
 using FGF_Finanzas.Capas.BLL;
+using FGF_Finanzas.Capas.DAL;
+using FGF_Finanzas.Capas.Servicios;
 using System;
 using System.Data;
 using System.Linq;
@@ -11,6 +13,7 @@ namespace FGF_Finanzas
     public partial class Gestion_Usuarios : System.Web.UI.Page
     {
         BLLUsuario bllUsuario = new BLLUsuario();
+        BLLEvento bllEvento = new BLLEvento();
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!Page.IsPostBack)
@@ -20,12 +23,36 @@ namespace FGF_Finanzas
             }
 
         }
-
         private void CargarGrillaUsuarios()
         {
-            dgvUsuarios.DataSource = bllUsuario.ObtenerUsuarios().DefaultView;
+            DataTable dt;
+
+            if (chkVerEncriptado.Checked)
+            {
+                dt = bllUsuario.ObtenerUsuariosPuros();
+            }
+            else
+            {
+                dt = bllUsuario.ObtenerUsuarios();
+            }
+
+            if (rblFiltroTodosActivos.SelectedValue == "Bloqueados")
+            {
+                var filasFiltradas = dt.AsEnumerable().Where(row => Convert.ToBoolean(row.Field<object>("Bloqueado")) == true);
+                if (filasFiltradas.Any())
+                    dgvUsuarios.DataSource = filasFiltradas.CopyToDataTable();
+                else
+                    dgvUsuarios.DataSource = dt.Clone();
+            }
+            else
+            {
+                dgvUsuarios.DataSource = dt.DefaultView;
+            }
+
             dgvUsuarios.DataBind();
         }
+
+        
 
         private void EstablecerEstado(string modo)
         {
@@ -99,17 +126,21 @@ namespace FGF_Finanzas
         private void LlenarCamposForm()
         {
             if (dgvUsuarios.SelectedRow == null) return;
-
             var cells = dgvUsuarios.SelectedRow.Cells;
-            txtDni.Text = System.Web.HttpUtility.HtmlDecode(cells[0].Text).Trim();
-            txtNombre.Text = System.Web.HttpUtility.HtmlDecode(cells[1].Text).Trim();
-            txtApellido.Text = System.Web.HttpUtility.HtmlDecode(cells[2].Text).Trim();
-            txtEmail.Text = System.Web.HttpUtility.HtmlDecode(cells[3].Text).Trim();
-            txtNombreUsuario.Text = System.Web.HttpUtility.HtmlDecode(cells[4].Text).Trim();
+            string dni = System.Web.HttpUtility.HtmlDecode(cells[0].Text).Trim();
+            BEUsuario usuarioReal = bllUsuario.ConsultaIndividual(dni);
 
-            string rol = cells[5].Text;
-            if (ddlRol.Items.FindByValue(rol) != null)
-                ddlRol.SelectedValue = rol;
+            if (usuarioReal != null)
+            {
+                txtDni.Text = usuarioReal.DNI;
+                txtNombre.Text = usuarioReal.Nombre;
+                txtApellido.Text = usuarioReal.Apellido;
+                txtEmail.Text = usuarioReal.Mail;
+                txtNombreUsuario.Text = usuarioReal.Usuario;
+
+                if (ddlRol.Items.FindByValue(usuarioReal.Rol) != null)
+                    ddlRol.SelectedValue = usuarioReal.Rol;
+            }
         }
 
 
@@ -188,6 +219,7 @@ namespace FGF_Finanzas
                         usuario.Bloqueado = false;
                         usuario.Intento = 0;
                         bllUsuario.ActualizarUsuario(usuario);
+                        bllEvento.AgregarEvento(new BEEvento(SessionManager.Instancia.Usuario, DateTime.Now, "Usuarios", "Desbloquear Usuario", 2));
                         MostrarAlerta("El usuario ha sido desbloqueado correctamente.");
                         CargarGrillaUsuarios();
                         EstablecerEstado("Consulta");
@@ -224,6 +256,7 @@ namespace FGF_Finanzas
                         usuarioModificar.Rol = rolModificar;
                         usuarioModificar.Usuario = usernameModificar;
                         bllUsuario.ActualizarUsuario(usuarioModificar);
+                        bllEvento.AgregarEvento(new BEEvento(SessionManager.Instancia.Usuario, DateTime.Now, "Usuarios", "Modificar Usuario", 2));
                         MostrarAlerta("Usuario modificado correctamente.");
                         CargarGrillaUsuarios();
                         EstablecerEstado("Consulta");
@@ -248,30 +281,26 @@ namespace FGF_Finanzas
         {
             try
             {
-                DataTable dtUsuario = bllUsuario.ObtenerUsuarios();
-                if(rblFiltroTodosActivos.SelectedValue == "Bloqueados")
-                {
-                    var filasFiltradas = dtUsuario.AsEnumerable().Where(row => Convert.ToBoolean(row.Field<object>("Bloqueado")) == true);
-                    if (filasFiltradas.Any())
-                    {
-                        dgvUsuarios.DataSource = filasFiltradas.CopyToDataTable();
-                    }
-                    else
-                    {
-                        dgvUsuarios.DataSource = dtUsuario.Clone();
-                    }
-                }
-                else
-                {
-                    dgvUsuarios.DataSource = dtUsuario.DefaultView;
-                }
-                dgvUsuarios.DataBind();
+                CargarGrillaUsuarios(); 
                 if (dgvUsuarios.Rows.Count > 0) dgvUsuarios.SelectedIndex = -1;
                 EstablecerEstado("Consulta");
             }
             catch (Exception ex)
             {
                 MostrarAlerta("Error al filtrar la lista: " + ex.Message, "error");
+            }
+        }
+        protected void chkVerEncriptado_CheckedChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                CargarGrillaUsuarios();
+                if (dgvUsuarios.Rows.Count > 0) dgvUsuarios.SelectedIndex = -1;
+                EstablecerEstado("Consulta");
+            }
+            catch (Exception ex)
+            {
+                MostrarAlerta("Error al cambiar visualización: " + ex.Message, "error");
             }
         }
     }

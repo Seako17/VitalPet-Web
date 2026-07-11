@@ -23,7 +23,7 @@
             <h3>Bitácora de Eventos</h3>
 
             <div class="table-responsive">
-                <asp:GridView ID="GridViewEventos" runat="server" AutoGenerateColumns="False" AutoGenerateSelectButton="True" CssClass="table">
+                <asp:GridView ID="GridViewEventos" runat="server" AutoGenerateColumns="False" CssClass="table">
                     <Columns>
                         <asp:BoundField DataField="DNI" HeaderText="Usuario" />
                         <asp:BoundField DataField="fechaHora" HeaderText="Fecha y Hora" DataFormatString="{0:dd/MM/yyyy HH:mm:ss}" />
@@ -40,6 +40,8 @@
                 <select id="moduloFiltro" runat="server">
                     <option value="">Módulo</option>
                     <option value="Usuarios">Usuarios</option>
+                    <option value="Administrador">Administrador</option>
+                    <option value="Clientes">Clientes</option>
                     <option value="">En desarollo ...</option>
                 </select>
                 <select id="eventoFiltro" runat="server">
@@ -47,14 +49,20 @@
                     <option value="Iniciar Sesión">Iniciar Sesión</option>
                     <option value="Registrar Usuario">Registrar Usuario</option>
                     <option value="Cerrar Sesión">Cerrar Sesión</option>
+                    <option value="Cambiar Contraseña">Cambiar Contraseña</option>
+                    <option value="Desbloquear Usuario">Desbloquear Usuario</option>
+                    <option value="Modificar Usuario">Modificar Usuario</option>
+                    <option value="Hacer Backup">Hacer Backup</option>
+                    <option value="Hacer Restore">Hacer Restore</option>
+                    <option value="Registrar Mascota">Registrar Mascota</option>
                 </select>
                 <select id="criticidadFiltro" runat="server">
                     <option value="0">Criticidad</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
+                    <option value="1">1 (Crítica)</option>
+                    <option value="2">2 (Importante)</option>
+                    <option value="3">3 (Media)</option>
+                    <option value="4">4 (Baja)</option>
+                    <option value="5">5 (Mínima)</option>
                 </select>
 
                 <div class="filtros-acciones">
