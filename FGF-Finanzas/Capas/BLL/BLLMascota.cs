@@ -1,5 +1,6 @@
 ﻿using FGF_Finanzas.Capas.BE;
 using FGF_Finanzas.Capas.DAL;
+using FGF_Finanzas.Capas.Servicios;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,9 +12,11 @@ namespace FGF_Finanzas.Capas.BLL
     public class BLLMascota
     {
         DALMascota dalMascota;
+        BLLEvento bllEvento;
         public BLLMascota()
         {
             dalMascota = new DALMascota();
+            bllEvento = new BLLEvento();
         }
         public DataTable ObtenerMascotas()
         {
@@ -33,6 +36,7 @@ namespace FGF_Finanzas.Capas.BLL
         public void AgregarMascota(BEMascota mascota)
         {
             dalMascota.AgregarMascota(mascota);
+            bllEvento.AgregarEvento(new BEEvento(SessionManager.Instancia.Usuario, DateTime.Now, "Clientes", "Registrar Mascota", 4));
         }
         public DataTable ObtenerMascotasDeUsuario(BEUsuario usuario)
         {
