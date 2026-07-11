@@ -1,4 +1,5 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Gestion-Usuarios.aspx.cs" Inherits="FGF_Finanzas.Gestion_Usuarios" MaintainScrollPositionOnPostback="true"%>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Gestion-Usuarios.aspx.cs" Inherits="FGF_Finanzas.Gestion_Usuarios" MaintainScrollPositionOnPostback="true" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link href="Content/GestionUsuarios/GestionUsuariosStyles.css" rel="stylesheet" />
 </asp:Content>
@@ -6,7 +7,7 @@
     <div class="barra-titulo">
         <h2>Panel de Administrador</h2>
     </div>
-     <div id="contenedor-alertas"></div>
+    <div id="contenedor-alertas"></div>
     <div class="main-layout">
         <aside class="sidebar">
             <h3>Menú</h3>
@@ -32,7 +33,7 @@
                             <asp:BoundField DataField="mail" HeaderText="Email" />
                             <asp:BoundField DataField="Usuario" HeaderText="Usuario" />
                             <asp:BoundField DataField="Rol" HeaderText="Rol" />
-                            <asp:CommandField ShowSelectButton="True" SelectText="Seleccionar"/>
+                            <asp:CommandField ShowSelectButton="True" SelectText="Seleccionar" />
                         </Columns>
                     </asp:GridView>
                 </div>
@@ -45,6 +46,10 @@
                         </asp:RadioButtonList>
                     </div>
 
+                    <div class="control-encriptado">
+                        <asp:CheckBox ID="chkVerEncriptado" runat="server" Text="Ver datos encriptados" AutoPostBack="true" OnCheckedChanged="chkVerEncriptado_CheckedChanged" />
+                    </div>
+
                     <div class="campo-modo">
                         <label>Modo:</label>
                         <asp:TextBox ID="txtModo" runat="server" Enabled="false"></asp:TextBox>
@@ -54,27 +59,38 @@
                 <div class="formulario-inputs">
                     <table>
                         <tr>
-                            <td><label>DNI:</label></td>
-                            <td><asp:TextBox ID="txtDni" runat="server"></asp:TextBox></td>
+                            <td>
+                                <label>DNI:</label></td>
+                            <td>
+                                <asp:TextBox ID="txtDni" runat="server"></asp:TextBox></td>
                         </tr>
                         <tr>
-                            <td><label>Nombre:</label></td>
-                            <td><asp:TextBox ID="txtNombre" runat="server"></asp:TextBox></td>
+                            <td>
+                                <label>Nombre:</label></td>
+                            <td>
+                                <asp:TextBox ID="txtNombre" runat="server"></asp:TextBox></td>
                         </tr>
                         <tr>
-                            <td><label>Apellido:</label></td>
-                            <td><asp:TextBox ID="txtApellido" runat="server"></asp:TextBox></td>
+                            <td>
+                                <label>Apellido:</label></td>
+                            <td>
+                                <asp:TextBox ID="txtApellido" runat="server"></asp:TextBox></td>
                         </tr>
                         <tr>
-                            <td><label>Email:</label></td>
-                            <td><asp:TextBox ID="txtEmail" runat="server"></asp:TextBox></td>
+                            <td>
+                                <label>Email:</label></td>
+                            <td>
+                                <asp:TextBox ID="txtEmail" runat="server"></asp:TextBox></td>
                         </tr>
                         <tr>
-                            <td><label>Nombre usuario:</label></td>
-                            <td><asp:TextBox ID="txtNombreUsuario" runat="server"></asp:TextBox></td>
+                            <td>
+                                <label>Nombre usuario:</label></td>
+                            <td>
+                                <asp:TextBox ID="txtNombreUsuario" runat="server"></asp:TextBox></td>
                         </tr>
                         <tr>
-                            <td><label>Rol:</label></td>
+                            <td>
+                                <label>Rol:</label></td>
                             <td>
                                 <asp:DropDownList ID="ddlRol" runat="server">
                                     <asp:ListItem Text="-- Seleccionar Rol --" Value=""></asp:ListItem>
