@@ -87,8 +87,6 @@ namespace FGF_Finanzas.Capas.BLL
             foreach (BEDigitoVerificador tablaControlada in _dalDigito.ObtenerTodos())
             {
                 string nombreTabla = tablaControlada.NombreTabla;
-
-                //BORRAR DESPUES
                 if (!nombreTabla.Equals("Usuario", StringComparison.OrdinalIgnoreCase))
                 {
                     continue;

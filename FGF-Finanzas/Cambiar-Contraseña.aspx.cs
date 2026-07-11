@@ -1,4 +1,5 @@
 ﻿using FGF_Finanzas.Capas.BLL;
+using FGF_Finanzas.Capas.Servicios;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,13 @@ namespace FGF_Finanzas
         BLLUsuario bllUsuario = new BLLUsuario();
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.Cache.SetNoStore();
+            Response.Cache.SetExpires(DateTime.UtcNow.AddHours(-1));
+            if (!SessionManager.IsLogged())
+            {
+                Response.Redirect("Default.aspx?ReturnUrl=Cambiar-Contraseña.aspx");
+            }
         }
 
         protected void btnCambiar_Click(object sender, EventArgs e)
