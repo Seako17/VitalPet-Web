@@ -17,8 +17,6 @@ namespace FGF_Finanzas.Capas.DAL
 
             SqlDataAdapter adapter = new SqlDataAdapter(query, _conexion);
             adapter.Fill(dt);
-
-            // DESENCRIPTAMOS los 4 campos para que la BLL trabaje con strings legibles
             foreach (DataRow row in dt.Rows)
             {
                 row["nombre"] = Encriptacion.DesencriptarAES(row["nombre"].ToString());
@@ -26,21 +24,19 @@ namespace FGF_Finanzas.Capas.DAL
                 row["usuario"] = Encriptacion.DesencriptarAES(row["usuario"].ToString());
                 row["mail"] = Encriptacion.DesencriptarAES(row["mail"].ToString());
             }
-            dt.AcceptChanges(); // Sincroniza el estado del DataTable
+            dt.AcceptChanges(); 
             return dt;
         }
 
         public void AgregarUsuario(BEUsuario usuario)
         {
             DataTable dt = ObtenerUsuarios();
-
-            // ENCRIPTAMOS los 4 campos antes de insertarlos en el DataTable
             dt.Rows.Add(new object[] {
                 usuario.DNI,
                 Encriptacion.EncriptarAES(usuario.Nombre),
                 Encriptacion.EncriptarAES(usuario.Apellido),
                 Encriptacion.EncriptarAES(usuario.Usuario),
-                usuario.Contraseña, // Sigue usando SHA256 desde la BLL
+                usuario.Contraseña,
                 usuario.Intento,
                 usuario.Bloqueado,
                 Encriptacion.EncriptarAES(usuario.Mail),
@@ -70,8 +66,6 @@ namespace FGF_Finanzas.Capas.DAL
                 cmd.Parameters.AddWithValue("@Intento", usuario.Intento);
                 cmd.Parameters.AddWithValue("@Bloqueado", usuario.Bloqueado);
                 cmd.Parameters.AddWithValue("@Rol", usuario.Rol);
-
-                // ENCRIPTAMOS los 4 campos en los parámetros del comando
                 cmd.Parameters.AddWithValue("@Nombre", Encriptacion.EncriptarAES(usuario.Nombre));
                 cmd.Parameters.AddWithValue("@Apellido", Encriptacion.EncriptarAES(usuario.Apellido));
                 cmd.Parameters.AddWithValue("@Usuario", Encriptacion.EncriptarAES(usuario.Usuario));
@@ -113,8 +107,6 @@ namespace FGF_Finanzas.Capas.DAL
                     usuarioEncontrado.Intento = Convert.ToInt32(reader["intento"]);
                     usuarioEncontrado.Bloqueado = Convert.ToBoolean(reader["bloqueado"]);
                     usuarioEncontrado.Rol = reader["rol"].ToString();
-
-                    // DESENCRIPTAMOS al mapear el objeto de la entidad
                     usuarioEncontrado.Nombre = Encriptacion.DesencriptarAES(reader["nombre"].ToString());
                     usuarioEncontrado.Apellido = Encriptacion.DesencriptarAES(reader["apellido"].ToString());
                     usuarioEncontrado.Usuario = Encriptacion.DesencriptarAES(reader["usuario"].ToString());
@@ -165,6 +157,15 @@ namespace FGF_Finanzas.Capas.DAL
                     cmd.ExecuteNonQuery();
                 }
             }
+        }
+        public DataTable ObtenerUsuariosPuros()
+        {
+            string query = "SELECT * FROM Usuario";
+            DataTable dt = new DataTable();
+
+            SqlDataAdapter adapter = new SqlDataAdapter(query, _conexion);
+            adapter.Fill(dt);   
+            return dt;
         }
     }
 }

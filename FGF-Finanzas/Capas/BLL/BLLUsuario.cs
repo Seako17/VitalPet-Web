@@ -167,5 +167,10 @@ namespace FGF_Finanzas.Capas.BLL
             bllEvento.AgregarEvento(new BEEvento(SessionManager.Instancia.Usuario, DateTime.Now, "Usuarios", "Cambiar Contraseña", 3));
         }
 
+        public DataTable ObtenerUsuariosPuros()
+        {
+            return dalUsuario.ObtenerUsuariosPuros();
+        }
+
     }
 }
