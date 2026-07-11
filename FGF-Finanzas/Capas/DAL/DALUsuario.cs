@@ -135,5 +135,26 @@ namespace FGF_Finanzas.Capas.DAL
                 con.Close();
             }
         }
+
+        public void ActualizarIntentosYBloqueo(string dni, int intentos, bool bloqueado)
+        {
+            using (SqlConnection con = new SqlConnection(_conexion))
+            {
+                string query = @"UPDATE Usuario 
+                         SET intento = @intentos, 
+                             bloqueado = @bloqueado 
+                         WHERE dni = @dni";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@intentos", intentos);
+                    cmd.Parameters.AddWithValue("@bloqueado", bloqueado);
+                    cmd.Parameters.AddWithValue("@dni", dni);
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }

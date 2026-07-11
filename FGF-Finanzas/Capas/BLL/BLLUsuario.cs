@@ -62,13 +62,15 @@ namespace FGF_Finanzas.Capas.BLL
             return dalUsuario.ObtenerUsuarios();
         }
 
-        public void AgregarUsuario(BEUsuario usuario)
+
+
+        public void ActualizarIntentosUsuario(BEUsuario usuario,bool sistemaIntegro)
         {
-            string encriptado = Encriptacion.Encriptar(usuario.Contraseña);
-            usuario.Contraseña = encriptado;
-            dalUsuario.AgregarUsuario(usuario);
-            bllEvento.AgregarEvento(new BEEvento(usuario, DateTime.Now, "Usuarios", "Registrar Usuario", 4));
-            bllDigitoVerificador.InicializarTablaCompleta("Usuario");
+            dalUsuario.ActualizarIntentosYBloqueo(usuario.DNI, usuario.Intento, usuario.Bloqueado);
+            if (sistemaIntegro)
+            {
+                bllDigitoVerificador.InicializarTablaCompleta("Usuario");
+            }
         }
 
         public void IniciarSesion(string usuario, string contraseña)
@@ -76,44 +78,38 @@ namespace FGF_Finanzas.Capas.BLL
             if (SessionManager.IsLogged()) throw new Exception("Ya ha iniciado sesión.");
 
             BEUsuario user = null;
-
             foreach (DataRow item in dalUsuario.ObtenerUsuarios().Rows)
             {
                 if (item["usuario"].ToString() == usuario)
                 {
                     user = new BEUsuario(item);
+                    break;
                 }
             }
 
             if (user == null) throw new Exception("Credenciales incorrectas.");
-
             if (user.Bloqueado == true) throw new Exception("Usuario bloqueado");
+            bool sistemaIntegro = bllDigitoVerificador.ValidarIntegridadDelSistema();
 
-            if (!Encriptacion.Encriptar(contraseña).Equals(user.Contraseña))
-            {
-                user.Intento++;
-
-                if (user.Intento == 3)
-                {
-                    user.Bloqueado = true;
-                    user.Intento = 0;
-                    ActualizarUsuario(user);
-                    
-                }
-                else { ActualizarUsuario(user); }
-
-                throw new Exception("Credenciales incorrectas.");
-            }
-            else
+            if (Encriptacion.Encriptar(contraseña).Equals(user.Contraseña))
             {
                 user.Intento = 0;
-                ActualizarUsuario(user);
+                ActualizarIntentosUsuario(user, sistemaIntegro);
                 SessionManager.Login(user);
-
-                //SessionManager.Idioma = user.Idioma_516MF;
-                
-                bllEvento.AgregarEvento(new BEEvento(user,DateTime.Now,"Usuarios","Iniciar Sesión",5));
+                bllEvento.AgregarEvento(new BEEvento(user, DateTime.Now, "Usuarios", "Iniciar Sesión", 5));
+                return;
             }
+
+            user.Intento++;
+            if (user.Intento >= 3)
+            {
+                user.Bloqueado = true;
+                user.Intento = 0;
+            }
+
+            ActualizarIntentosUsuario(user, sistemaIntegro);
+
+            throw new Exception("Credenciales incorrectas.");
         }
 
         public BEUsuario ConsultaIndividual(string dni)
@@ -121,25 +117,39 @@ namespace FGF_Finanzas.Capas.BLL
             return dalUsuario.ConsultaIndividual(dni);
         }
 
+
+
+        public void AgregarUsuario(BEUsuario usuario)
+        {
+            if (!bllDigitoVerificador.ValidarIntegridadDelSistema())
+            {
+                throw new Exception("No se pueden registrar usuarios. El sistema se encuentra en mantenimiento.");
+            }
+
+            string encriptado = Encriptacion.Encriptar(usuario.Contraseña);
+            usuario.Contraseña = encriptado;
+            dalUsuario.AgregarUsuario(usuario);
+            bllEvento.AgregarEvento(new BEEvento(usuario, DateTime.Now, "Usuarios", "Registrar Usuario", 4));
+            bllDigitoVerificador.InicializarTablaCompleta("Usuario");
+        }
+
         public void ActualizarUsuario(BEUsuario usuario)
         {
-            FilaGenerica filaModificada = new FilaGenerica();
-            filaModificada.Id = usuario.DNI;
-            filaModificada.ValoresCampos.Add(usuario.DNI);
-            filaModificada.ValoresCampos.Add(usuario.Nombre);
-            filaModificada.ValoresCampos.Add(usuario.Apellido);
-            filaModificada.ValoresCampos.Add(usuario.Usuario);
-            filaModificada.ValoresCampos.Add(usuario.Contraseña);
-            filaModificada.ValoresCampos.Add(usuario.Intento);
-            filaModificada.ValoresCampos.Add(usuario.Bloqueado);
-            filaModificada.ValoresCampos.Add(usuario.Mail);
-            filaModificada.ValoresCampos.Add(usuario.Rol);
-            bllDigitoVerificador.ActualizarDigitoFilaUnica("Usuario", usuario.DNI, filaModificada);
+            if (!bllDigitoVerificador.ValidarIntegridadDelSistema())
+            {
+                throw new Exception("No se pueden actualizar datos. El sistema se encuentra en mantenimiento.");
+            }
             dalUsuario.Actualizar(usuario);
+            bllDigitoVerificador.InicializarTablaCompleta("Usuario");
         }
 
         public void CambiarContraseña(string contraseñaActual, string nuevaContraseña)
         {
+            if (!bllDigitoVerificador.ValidarIntegridadDelSistema())
+            {
+                throw new Exception("No se puede cambiar la contraseña. El sistema se encuentra en estado de inconsistencia.");
+            }
+
             if (!Regex.IsMatch(nuevaContraseña, @"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*\W).{8,20}$"))
             {
                 throw new Exception("La contraseña nueva debe tener entre 8 y 20 caracteres, e incluir al menos una mayúscula, una minúscula, un número y un carácter especial (@*_/#$%).");
@@ -150,22 +160,12 @@ namespace FGF_Finanzas.Capas.BLL
             string actualEncriptada = Encriptacion.Encriptar(contraseñaActual);
             if (actualEncriptada != SessionManager.Instancia.Usuario.Contraseña) throw new Exception("La contraseña actual es incorrecta.");
             string nuevaEncriptada = Encriptacion.Encriptar(nuevaContraseña);
-            FilaGenerica filaFutura = new FilaGenerica();
-            filaFutura.Id = SessionManager.Instancia.Usuario.DNI;
-            filaFutura.ValoresCampos.Add(SessionManager.Instancia.Usuario.DNI);
-            filaFutura.ValoresCampos.Add(SessionManager.Instancia.Usuario.Nombre);
-            filaFutura.ValoresCampos.Add(SessionManager.Instancia.Usuario.Apellido);
-            filaFutura.ValoresCampos.Add(SessionManager.Instancia.Usuario.Usuario);
-            filaFutura.ValoresCampos.Add(nuevaEncriptada);
-            filaFutura.ValoresCampos.Add(SessionManager.Instancia.Usuario.Intento);
-            filaFutura.ValoresCampos.Add(SessionManager.Instancia.Usuario.Bloqueado);
-            filaFutura.ValoresCampos.Add(SessionManager.Instancia.Usuario.Mail);
-            filaFutura.ValoresCampos.Add(SessionManager.Instancia.Usuario.Rol);
-
-            bllDigitoVerificador.ActualizarDigitoFilaUnica("Usuario", SessionManager.Instancia.Usuario.DNI, filaFutura);
             dalUsuario.ActualizarContraseña(SessionManager.Instancia.Usuario.DNI, nuevaEncriptada);
             SessionManager.Instancia.Usuario.Contraseña = nuevaEncriptada;
+            bllDigitoVerificador.InicializarTablaCompleta("Usuario");
+
             bllEvento.AgregarEvento(new BEEvento(SessionManager.Instancia.Usuario, DateTime.Now, "Usuarios", "Cambiar Contraseña", 3));
         }
+
     }
 }
