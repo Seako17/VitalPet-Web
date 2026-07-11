@@ -33,13 +33,26 @@ namespace FGF_Finanzas.Capas.DAL
                         for (int i = 0; i < rdr.FieldCount; i++)
                         {
                             string nombreColumna = rdr.GetName(i);
+
                             if (nombreColumna.Equals("DV_Horizontal", StringComparison.OrdinalIgnoreCase))
                             {
                                 fila.DV_HorizontalGuardado = rdr.GetValue(i).ToString();
                             }
                             else
                             {
-                                fila.ValoresCampos.Add(rdr.GetValue(i));
+                                object valor = rdr.GetValue(i);
+
+                                if (nombreTabla.Equals("Usuario", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    if (nombreColumna.Equals("nombre", StringComparison.OrdinalIgnoreCase) ||
+                                        nombreColumna.Equals("apellido", StringComparison.OrdinalIgnoreCase) ||
+                                        nombreColumna.Equals("usuario", StringComparison.OrdinalIgnoreCase) ||
+                                        nombreColumna.Equals("mail", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        valor = Servicios.Encriptacion.DesencriptarAES(valor?.ToString());
+                                    }
+                                }
+                                fila.ValoresCampos.Add(valor);
                             }
                         }
                         return fila;
@@ -89,10 +102,22 @@ namespace FGF_Finanzas.Capas.DAL
                             }
                             else
                             {
-                                fila.ValoresCampos.Add(rdr.GetValue(i));
+                                object valor = rdr.GetValue(i);
+
+                                if (nombreTabla.Equals("Usuario", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    if (nombreColumna.Equals("nombre", StringComparison.OrdinalIgnoreCase) ||
+                                        nombreColumna.Equals("apellido", StringComparison.OrdinalIgnoreCase) ||
+                                        nombreColumna.Equals("usuario", StringComparison.OrdinalIgnoreCase) ||
+                                        nombreColumna.Equals("mail", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        valor = Servicios.Encriptacion.DesencriptarAES(valor?.ToString());
+                                    }
+                                }
+                                fila.ValoresCampos.Add(valor);
                             }
                         }
-                        
+
                         filas.Add(fila);
                     }
                 }
