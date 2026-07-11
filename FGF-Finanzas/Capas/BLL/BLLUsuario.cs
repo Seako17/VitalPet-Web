@@ -66,9 +66,9 @@ namespace FGF_Finanzas.Capas.BLL
 
         public void ActualizarIntentosUsuario(BEUsuario usuario,bool sistemaIntegro)
         {
-            dalUsuario.ActualizarIntentosYBloqueo(usuario.DNI, usuario.Intento, usuario.Bloqueado);
             if (sistemaIntegro)
             {
+                dalUsuario.ActualizarIntentosYBloqueo(usuario.DNI, usuario.Intento, usuario.Bloqueado);
                 bllDigitoVerificador.InicializarTablaCompleta("Usuario");
             }
         }
