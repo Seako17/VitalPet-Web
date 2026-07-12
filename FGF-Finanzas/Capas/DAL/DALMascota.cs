@@ -30,5 +30,7 @@ namespace FGF_Finanzas.Capas.DAL
 
             adapter.Update(dt);
         }
+
+
     }
 }

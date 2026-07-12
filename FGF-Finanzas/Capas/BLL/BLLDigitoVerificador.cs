@@ -45,10 +45,7 @@ namespace FGF_Finanzas.Capas.BLL
         public void InicializarTablaCompleta(string nombreTabla)
         {
             List<FilaGenerica> filas = _dalDigito.ObtenerFilasDeTablaNegocio(nombreTabla);
-
-            string nombrePK = "id";
-            if (nombreTabla.Equals("Usuario", StringComparison.OrdinalIgnoreCase)) nombrePK = "dni";
-            if (nombreTabla.Equals("Evento", StringComparison.OrdinalIgnoreCase)) nombrePK = "id";
+            string nombrePK = _dalDigito.ObtenerPKPublico(nombreTabla);
 
             BigInteger sumaVertical = 0;
 
@@ -75,7 +72,7 @@ namespace FGF_Finanzas.Capas.BLL
             BEDigitoVerificador dvGlobal = new BEDigitoVerificador();
             dvGlobal.NombreTabla = nombreTabla;
             dvGlobal.DV_Vertical = sumaVertical.ToString("X");
-            dvGlobal.CantidadRegistros = filas.Count; 
+            dvGlobal.CantidadRegistros = filas.Count;
 
             _dalDigito.GuardarDigitoVerificador(dvGlobal);
         }
@@ -86,12 +83,7 @@ namespace FGF_Finanzas.Capas.BLL
 
             foreach (BEDigitoVerificador tablaControlada in _dalDigito.ObtenerTodos())
             {
-                string nombreTabla = tablaControlada.NombreTabla;
-                if (!nombreTabla.Equals("Usuario", StringComparison.OrdinalIgnoreCase))
-                {
-                    continue;
-                }
-
+                string nombreTabla = tablaControlada.NombreTabla;   
                 BEDigitoVerificador dv_Tabla = _dalDigito.ObtenerDV_Tabla(nombreTabla);
                 if (dv_Tabla == null) continue;
 

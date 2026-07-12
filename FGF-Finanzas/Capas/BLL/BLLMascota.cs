@@ -13,10 +13,12 @@ namespace FGF_Finanzas.Capas.BLL
     {
         DALMascota dalMascota;
         BLLEvento bllEvento;
+        BLLDigitoVerificador bllDigitoVerificador;
         public BLLMascota()
         {
             dalMascota = new DALMascota();
             bllEvento = new BLLEvento();
+            bllDigitoVerificador = new BLLDigitoVerificador(); 
         }
         public DataTable ObtenerMascotas()
         {
@@ -35,8 +37,13 @@ namespace FGF_Finanzas.Capas.BLL
         }
         public void AgregarMascota(BEMascota mascota)
         {
+            if (!bllDigitoVerificador.ValidarIntegridadDelSistema())
+            {
+                throw new Exception("No se pueden registrar mascotas. El sistema se encuentra en mantenimiento.");
+            }
             dalMascota.AgregarMascota(mascota);
             bllEvento.AgregarEvento(new BEEvento(SessionManager.Instancia.Usuario, DateTime.Now, "Clientes", "Registrar Mascota", 4));
+            bllDigitoVerificador.InicializarTablaCompleta("Mascota");
         }
         public DataTable ObtenerMascotasDeUsuario(BEUsuario usuario)
         {
