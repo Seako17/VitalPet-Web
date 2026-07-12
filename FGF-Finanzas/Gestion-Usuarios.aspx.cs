@@ -218,6 +218,8 @@ namespace FGF_Finanzas
                         if (!usuario.Bloqueado) throw new Exception("El usuario no está bloqueado.");
                         usuario.Bloqueado = false;
                         usuario.Intento = 0;
+                        string nuevaContraseña = usuario.DNI + usuario.Apellido;
+                        usuario.Contraseña = Encriptacion.Encriptar(nuevaContraseña);
                         bllUsuario.ActualizarUsuario(usuario);
                         bllEvento.AgregarEvento(new BEEvento(SessionManager.Instancia.Usuario, DateTime.Now, "Usuarios", "Desbloquear Usuario", 2));
                         MostrarAlerta("El usuario ha sido desbloqueado correctamente.");

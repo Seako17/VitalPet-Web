@@ -16,13 +16,14 @@ namespace FGF_Finanzas.Capas.DAL
 
         public FilaGenerica ObtenerFilaPorId(string nombreTabla, string id)
         {
-            string nombrePK = nombreTabla.Equals("Usuario", StringComparison.OrdinalIgnoreCase) ? "DNI" : "id";
             using (SqlConnection con = new SqlConnection(_conexion))
             {
+                con.Open();
+                string nombrePK = ObtenerNombrePK(nombreTabla, con);
+
                 string consulta = $"SELECT * FROM {nombreTabla} WHERE {nombrePK} = @id";
                 SqlCommand cmd = new SqlCommand(consulta, con);
                 cmd.Parameters.AddWithValue("@id", id);
-                con.Open();
 
                 using (SqlDataReader rdr = cmd.ExecuteReader())
                 {
@@ -49,7 +50,7 @@ namespace FGF_Finanzas.Capas.DAL
                                         nombreColumna.Equals("usuario", StringComparison.OrdinalIgnoreCase) ||
                                         nombreColumna.Equals("mail", StringComparison.OrdinalIgnoreCase))
                                     {
-                                        valor = Servicios.Encriptacion.DesencriptarAES(valor?.ToString());
+                                        valor = Encriptacion.DesencriptarAES(valor?.ToString());
                                     }
                                 }
                                 fila.ValoresCampos.Add(valor);
@@ -64,15 +65,19 @@ namespace FGF_Finanzas.Capas.DAL
 
         public void ActualizarDVHorizontalFilaEspecifica(string nombreTabla, string id, string nuevoDVH)
         {
-            string nombrePK = nombreTabla.Equals("Usuario", StringComparison.OrdinalIgnoreCase) ? "DNI" : "id";
             using (SqlConnection con = new SqlConnection(_conexion))
             {
-                string query = $"UPDATE {nombreTabla} SET DV_Horizontal = @dvh WHERE {nombrePK} = @id";
-                SqlCommand cmd = new SqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@dvh", nuevoDVH);
-                cmd.Parameters.AddWithValue("@id", id);
                 con.Open();
-                cmd.ExecuteNonQuery();
+                // 1. Averiguamos la PK dinámicamente
+                string nombrePK = ObtenerNombrePK(nombreTabla, con);
+
+                string query = $"UPDATE {nombreTabla} SET DV_Horizontal = @dvh WHERE {nombrePK} = @id";
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@dvh", nuevoDVH);
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.ExecuteNonQuery();
+                }
             }
         }
         public List<FilaGenerica> ObtenerFilasDeTablaNegocio(string nombreTabla)
@@ -111,7 +116,7 @@ namespace FGF_Finanzas.Capas.DAL
                                         nombreColumna.Equals("usuario", StringComparison.OrdinalIgnoreCase) ||
                                         nombreColumna.Equals("mail", StringComparison.OrdinalIgnoreCase))
                                     {
-                                        valor = Servicios.Encriptacion.DesencriptarAES(valor?.ToString());
+                                        valor = Encriptacion.DesencriptarAES(valor?.ToString());
                                     }
                                 }
                                 fila.ValoresCampos.Add(valor);
@@ -227,6 +232,29 @@ namespace FGF_Finanzas.Capas.DAL
                 }
             }
             return lista;
+        }
+
+        private string ObtenerNombrePK(string nombreTabla, SqlConnection con)
+        {
+            string query = @"SELECT COLUMN_NAME 
+                     FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE 
+                     WHERE OBJECTPROPERTY(OBJECT_ID(CONSTRAINT_SCHEMA + '.' + CONSTRAINT_NAME), 'IsPrimaryKey') = 1
+                     AND TABLE_NAME = @tabla";
+
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@tabla", nombreTabla);
+                object resultado = cmd.ExecuteScalar();
+                return resultado?.ToString() ?? "id";
+            }
+        }
+        public string ObtenerPKPublico(string nombreTabla)
+        {
+            using (SqlConnection con = new SqlConnection(_conexion))
+            {
+                con.Open();
+                return ObtenerNombrePK(nombreTabla, con);
+            }
         }
         #endregion
     }

@@ -17,12 +17,19 @@ namespace FGF_Finanzas
         private readonly BLLBackupRestore _bllBackupRestore = new BLLBackupRestore();
         protected void Page_Load(object sender, EventArgs e)
         {
-            List<InconsistenciaReporte> listaInconsistencias = _bllDV.CompararDigito();
-            if (listaInconsistencias.Count > 0)
+            if (!IsPostBack)
             {
-                GridInconsistencias.DataSource = listaInconsistencias;
-                GridInconsistencias.DataBind();
-                GridInconsistencias.Visible = true;
+                List<InconsistenciaReporte> listaInconsistencias = _bllDV.CompararDigito();
+                if (listaInconsistencias.Count > 0)
+                {
+                    GridInconsistencias.DataSource = listaInconsistencias;
+                    GridInconsistencias.DataBind();
+                    GridInconsistencias.Visible = true;
+                }
+                else
+                {
+                    Response.Redirect("~/Default.aspx");
+                }
             }
         }
 
@@ -47,18 +54,20 @@ namespace FGF_Finanzas
         {
             try
             {
-                List<string> tablasAControlar = new List<string> { "Usuario" };
+                List<string> tablasAControlar = new List<string> { "Usuario", "Mascota" };
 
                 foreach (string tabla in tablasAControlar)
                 {
                     _bllDV.InicializarTablaCompleta(tabla);
                 }
-                string mensajeScript = "alert('Se han reestablecido los dígitos verificadores');";
+                string mensajeScript = @"alert('Se han reestablecido los dígitos verificadores con éxito.'); 
+                                window.location.href = 'Default.aspx';";
                 Page.ClientScript.RegisterStartupScript(this.GetType(), "AlertaInconsistencia", mensajeScript, true);
-                Response.Redirect("~/Default.aspx");
             }
             catch (Exception ex)
             {
+                lblMensaje.Text = $"Error al reestablecer dígitos: {ex.Message}";
+                lblMensaje.ForeColor = System.Drawing.Color.Red;
             }
         }
 
