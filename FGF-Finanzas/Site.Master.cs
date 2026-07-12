@@ -27,28 +27,27 @@ namespace FGF_Finanzas
             Admin.Visible = false;
             WebMaster.Visible = false;
             Cliente.Visible = false;
-            if (SessionManager.IsLogged())
+            HttpCookie cookie = Request.Cookies["UserSessionFGF"];
+            if (cookie != null)
             {
-                HttpCookie cookie = Request.Cookies["UserSessionFGF"];
-                if (cookie != null)
+                string nombreUsuario = cookie.Value;
+                var usuarios = bllUsuario.ObtenerUsuarios();
+
+                foreach (DataRow dr in usuarios.Rows)
                 {
-                    string nombreUsuario = cookie.Value;
-                    var usuarios = bllUsuario.ObtenerUsuarios();
-
-                    foreach (DataRow dr in usuarios.Rows)
+                    if (dr[3].ToString() == nombreUsuario)
                     {
-                        if (dr[3].ToString() == nombreUsuario)
-                        {
-                            usuario = new BEUsuario(dr);
-                        }
-                    }
-
-                    if (usuario != null)
-                    {
-                        SessionManager.Login(usuario);
+                        usuario = new BEUsuario(dr);
                     }
                 }
 
+                if (usuario != null)
+                {
+                    SessionManager.Login(usuario);
+                }
+            }
+            if (SessionManager.IsLogged())
+            {
                 BLLDigitoVerificador bllDV = new BLLDigitoVerificador();
                 var lista = bllDV.CompararDigito();
                 if (lista != null && lista.Count > 0)
@@ -85,6 +84,10 @@ namespace FGF_Finanzas
                         Cliente.Visible = true;
                     }
                 }
+            }
+            else
+            {
+                FormsAuthentication.SignOut();
             }
         }
 
