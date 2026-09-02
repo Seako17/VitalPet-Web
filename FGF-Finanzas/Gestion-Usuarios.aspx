@@ -108,6 +108,7 @@
                         <asp:Button ID="btnModificar" runat="server" Text="Modificar" OnClick="btnModificar_Click" />
                         <asp:Button ID="btnAplicar" runat="server" Text="Aplicar" OnClick="btnAplicar_Click" />
                         <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" OnClick="btnCancelar_Click" />
+                        <asp:Button ID="btnExportar" runat="server" Text="Exportar Xml" OnClick="btnExportar_Click" />
                     </aside>
                 </div>
             </div>

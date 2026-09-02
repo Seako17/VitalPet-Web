@@ -133,6 +133,7 @@
     <Compile Include="Capas\DAL\DALUsuario.cs" />
     <Compile Include="Capas\Servicios\Encriptacion.cs" />
     <Compile Include="Capas\Servicios\SessionManager.cs" />
+    <Compile Include="Capas\Servicios\XMLExportador.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

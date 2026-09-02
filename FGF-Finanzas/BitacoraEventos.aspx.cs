@@ -21,6 +21,12 @@ namespace FGF_Finanzas
         {
             GridViewEventos.DataSource = eventos;
             GridViewEventos.DataBind();
+
+            if (GridViewEventos.Rows.Count > 0)
+            {
+                GridViewEventos.UseAccessibleHeader = true;
+                GridViewEventos.HeaderRow.TableSection = TableRowSection.TableHeader;
+            }
         }
 
         protected void btnAplicar_Click(object sender, EventArgs e)

@@ -4,6 +4,7 @@ using FGF_Finanzas.Capas.DAL;
 using FGF_Finanzas.Capas.Servicios;
 using System;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.UI;
@@ -304,6 +305,29 @@ namespace FGF_Finanzas
             {
                 MostrarAlerta("Error al cambiar visualización: " + ex.Message, "error");
             }
+        }
+
+        protected void btnExportar_Click(object sender, EventArgs e)
+        {
+            DataTable dt = bllUsuario.ObtenerUsuarios();
+
+            string carpeta = Server.MapPath("~/Temp");
+
+            if (!Directory.Exists(carpeta))
+            {
+                Directory.CreateDirectory(carpeta);
+            }
+
+            string ruta = Path.Combine(carpeta, "Usuarios.xml");
+
+            XMLExportador exp = new XMLExportador();
+            exp.Exportar(dt, ruta);
+
+            Response.Clear();
+            Response.ContentType = "application/xml";
+            Response.AddHeader("Content-Disposition", "attachment; filename=usuarios.xml");
+            Response.TransmitFile(ruta);
+            Response.End();
         }
     }
 }
