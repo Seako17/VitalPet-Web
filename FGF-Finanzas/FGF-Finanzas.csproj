@@ -131,7 +131,11 @@
     <Compile Include="Capas\DAL\DALDigitoVerificador.cs" />
     <Compile Include="Capas\DAL\DALMascota.cs" />
     <Compile Include="Capas\DAL\DALUsuario.cs" />
+    <Compile Include="Capas\Servicios\Cambio-Idioma\TraduccionService.cs" />
     <Compile Include="Capas\Servicios\Encriptacion.cs" />
+    <Compile Include="Capas\Servicios\Cambio-Idioma\IdiomaManager.cs" />
+    <Compile Include="Capas\Servicios\Cambio-Idioma\IIdiomaSubject.cs" />
+    <Compile Include="Capas\Servicios\Cambio-Idioma\IIdiomaObserver.cs" />
     <Compile Include="Capas\Servicios\SessionManager.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
