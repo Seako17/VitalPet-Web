@@ -102,6 +102,9 @@
     <Compile Include="Backup-Restore.aspx.designer.cs">
       <DependentUpon>Backup-Restore.aspx</DependentUpon>
     </Compile>
+    <Compile Include="BasePage.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="BitacoraEventos.aspx.cs">
       <DependentUpon>BitacoraEventos.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -119,6 +122,7 @@
     <Compile Include="Capas\BE\BEEvento.cs" />
     <Compile Include="Capas\BE\BEMascota.cs" />
     <Compile Include="Capas\BE\BEUsuario.cs" />
+    <Compile Include="Capas\BE\CustomException.cs" />
     <Compile Include="Capas\BLL\BLLBackupRestore.cs" />
     <Compile Include="Capas\BLL\BLLEvento.cs" />
     <Compile Include="Capas\BE\BEDigitoVerificador.cs" />

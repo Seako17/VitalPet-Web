@@ -1,4 +1,6 @@
-﻿using FGF_Finanzas.Capas.BLL;
+﻿using FGF_Finanzas.Capas.BE;
+using FGF_Finanzas.Capas.BLL;
+using FGF_Finanzas.Capas.Servicios.Cambio_Idioma;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,12 +12,12 @@ using System.Web.UI.WebControls;
 
 namespace FGF_Finanzas
 {
-    public partial class Login : System.Web.UI.Page
+    public partial class Login : BasePage
     {
         BLLUsuario bllUsuario = new BLLUsuario(); BLLDigitoVerificador bllDigitoVerificador = new BLLDigitoVerificador();
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            
         }
 
         protected void LogIn(object sender, EventArgs e)
@@ -24,7 +26,7 @@ namespace FGF_Finanzas
             {
                 HttpCookie usuarioCookie = null;
                 bllUsuario.IniciarSesion(UserName.Text, Password.Text);
-                if (RememberMe.Checked)
+                if (chkRememberMe.Checked)
                 {
                     usuarioCookie = new HttpCookie("UserSessionFGF");
                     usuarioCookie.Value = UserName.Text;
@@ -37,9 +39,9 @@ namespace FGF_Finanzas
                 
                 Response.Redirect("~/Default.aspx");
             }
-            catch (Exception ex)
+            catch (CustomException bex)
             {
-                lblError.Text = ex.Message;
+                lblError.Text = ObtenerError(bex.CodigoError);
             }
         }
     }
