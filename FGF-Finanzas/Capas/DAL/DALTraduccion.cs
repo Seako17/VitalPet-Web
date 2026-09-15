@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
+using FGF_Finanzas.Capas.BE;
 
 namespace FGF_Finanzas.Capas.DAL
 {
@@ -34,6 +35,30 @@ namespace FGF_Finanzas.Capas.DAL
                 }
             }
             return diccionario;
+        }
+
+        public List<BEIdioma> ObtenerIdiomasDisponibles()
+        {
+            var lista = new List<BEIdioma>();
+            const string query = "SELECT Codigo, Nombre FROM Idioma ORDER BY Nombre";
+
+            using (var con = new SqlConnection(_connectionString))
+            using (var cmd = new SqlCommand(query, con))
+            {
+                con.Open();
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        lista.Add(new BEIdioma
+                        {
+                            Codigo = reader["Codigo"].ToString(),
+                            Nombre = reader["Nombre"].ToString()
+                        });
+                    }
+                }
+            }
+            return lista;
         }
     }
 }

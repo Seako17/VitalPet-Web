@@ -120,6 +120,7 @@
       <DependentUpon>Cambiar-Contraseña.aspx</DependentUpon>
     </Compile>
     <Compile Include="Capas\BE\BEEvento.cs" />
+    <Compile Include="Capas\BE\BEIdioma.cs" />
     <Compile Include="Capas\BE\BEMascota.cs" />
     <Compile Include="Capas\BE\BEUsuario.cs" />
     <Compile Include="Capas\BE\BECustomException.cs" />

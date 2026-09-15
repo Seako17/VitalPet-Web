@@ -1,8 +1,6 @@
-﻿
+﻿using FGF_Finanzas.Capas.BE;
 using FGF_Finanzas.Capas.DAL;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 
 
@@ -61,6 +59,11 @@ namespace FGF_Finanzas.Capas.Servicios.Cambio_Idioma
                 return texto;
 
             return $"[{clave}]";
+        }
+
+        public List<BEIdioma> ObtenerIdiomasDisponibles()
+        {
+            return _dalTraduccion.ObtenerIdiomasDisponibles();
         }
     }
 }

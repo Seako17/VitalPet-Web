@@ -1,6 +1,8 @@
 ﻿using FGF_Finanzas.Capas.BE;
 using FGF_Finanzas.Capas.BLL;
+using FGF_Finanzas.Capas.DAL;
 using FGF_Finanzas.Capas.Servicios;
+using FGF_Finanzas.Capas.Servicios.Cambio_Idioma;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -13,17 +15,25 @@ using System.Web.UI.WebControls;
 
 namespace FGF_Finanzas
 {
-    public partial class Site : System.Web.UI.MasterPage
+    public partial class Site : MasterPage, IIdiomaObserver
     {
         BLLUsuario bllUsuario = new BLLUsuario(); BEUsuario usuario;
+
+        public string NombreFormulario => "Site.Master";
+
         protected void Page_Load(object sender, EventArgs e)
         {
-            
+            if (!IsPostBack)
+            {
+                CargarComboIdiomas();
+                IdiomaManager.Instancia.Notificar();
+            }
         }
 
         protected override void OnInit(EventArgs e)
         {
             base.OnInit(e);
+            IdiomaManager.Instancia.Suscribir(this);
             Admin.Visible = false;
             WebMaster.Visible = false;
             Cliente.Visible = false;
@@ -90,7 +100,24 @@ namespace FGF_Finanzas
                 FormsAuthentication.SignOut();
             }
         }
+        protected override void OnUnload(EventArgs e)
+        {
+            base.OnUnload(e);
+            IdiomaManager.Instancia.Desuscribir(this);
+        }
 
+        private void CargarComboIdiomas()
+        {
+            var lista = IdiomaManager.Instancia.ObtenerIdiomasDisponibles();
+            rptIdiomas.DataSource = lista;
+            rptIdiomas.DataBind();
+
+            var actual = lista.Find(i => i.Codigo == IdiomaManager.Instancia.IdiomaActual);
+            if (actual != null)
+            {
+                lblIdiomaSeleccionado.Text = actual.Nombre;
+            }
+        }
         private void Limpiar_Session()
         {
             SessionManager.LogOut();
@@ -114,6 +141,46 @@ namespace FGF_Finanzas
 
             FormsAuthentication.SignOut();
             Response.Redirect("~/Default.aspx");
+        }
+
+        public void ActualizarIdioma(string codigoIdioma, IDictionary<string, string> traducciones)
+        {
+            AplicarTraducciones(this.Controls, traducciones);
+        }
+        private void AplicarTraducciones(ControlCollection controls, IDictionary<string, string> traducciones)
+        {
+            foreach (Control c in controls)
+            {
+                if (!string.IsNullOrEmpty(c.ID) && traducciones.TryGetValue(c.ID, out string texto))
+                {
+                    switch (c)
+                    {
+                        case HyperLink hl:
+                            hl.Text = texto;
+                            break;
+                        case Button btn:
+                            btn.Text = texto;
+                            break;
+                        case Label lbl:
+                            lbl.Text = texto;
+                            break;
+                    }
+                }
+
+                if (c.HasControls())
+                {
+                    AplicarTraducciones(c.Controls, traducciones);
+                }
+            }
+        }
+
+        protected void rptIdiomas_ItemCommand(object source, RepeaterCommandEventArgs e)
+        {
+            if (e.CommandName == "CambiarIdioma")
+            {
+                IdiomaManager.Instancia.IdiomaActual = e.CommandArgument.ToString();
+                CargarComboIdiomas();
+            }
         }
     }
 }
