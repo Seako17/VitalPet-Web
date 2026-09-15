@@ -39,7 +39,7 @@ namespace FGF_Finanzas
                 
                 Response.Redirect("~/Default.aspx");
             }
-            catch (CustomException bex)
+            catch (BECustomException bex)
             {
                 lblError.Text = ObtenerError(bex.CodigoError);
             }

@@ -1,4 +1,5 @@
 ﻿
+using FGF_Finanzas.Capas.DAL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,8 @@ namespace FGF_Finanzas.Capas.Servicios.Cambio_Idioma
     public class IdiomaManager : IIdiomaSubject
     {
         private readonly List<IIdiomaObserver> _observadores = new List<IIdiomaObserver>();
-        private readonly TraduccionService _traduccionService = new TraduccionService();
-        
+        private readonly DALTraduccion _dalTraduccion = new DALTraduccion();
+
         public static IdiomaManager Instancia
         {
             get
@@ -33,11 +34,13 @@ namespace FGF_Finanzas.Capas.Servicios.Cambio_Idioma
                 Notificar();
             }
         }
+
         public void Suscribir(IIdiomaObserver observer)
         {
-            if(!_observadores.Contains(observer))
+            if (!_observadores.Contains(observer))
                 _observadores.Add(observer);
         }
+
         public void Desuscribir(IIdiomaObserver observer)
         {
             _observadores.Remove(observer);
@@ -45,15 +48,19 @@ namespace FGF_Finanzas.Capas.Servicios.Cambio_Idioma
 
         public void Notificar()
         {
-            foreach (var observer in _observadores) 
+            foreach (var observer in _observadores)
             {
-                if(observer is BasePage page)
-                {
-                    var textos = _traduccionService.ObtenerTraducciones(page.NombreFormulario, IdiomaActual);
-                    observer.ActualizarIdioma(IdiomaActual, textos);
-                }
+                var textos = _dalTraduccion.ObtenerTraducciones(observer.NombreFormulario, IdiomaActual);
+                observer.ActualizarIdioma(IdiomaActual, textos);
             }
         }
+        public string ObtenerTexto(string formulario, string clave)
+        {
+            var textos = _dalTraduccion.ObtenerTraducciones(formulario, IdiomaActual);
+            if (textos.TryGetValue(clave, out string texto))
+                return texto;
 
+            return $"[{clave}]";
+        }
     }
 }

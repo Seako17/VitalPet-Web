@@ -5,11 +5,11 @@ using System.Web;
 
 namespace FGF_Finanzas.Capas.BE
 {
-    public class CustomException : Exception
+    public class BECustomException : Exception
     {
         public string CodigoError { get; }
 
-        public CustomException(string codigoError): base(codigoError)
+        public BECustomException(string codigoError): base(codigoError)
         {
             CodigoError = codigoError;
         }

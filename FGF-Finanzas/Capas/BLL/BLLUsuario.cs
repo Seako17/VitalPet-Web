@@ -76,7 +76,7 @@ namespace FGF_Finanzas.Capas.BLL
         public void IniciarSesion(string usuario, string contraseña)
         {
             if (SessionManager.IsLogged())
-                throw new CustomException("ERR_SESION_YA_INICIADA");
+                throw new BECustomException("ERR_SESION_YA_INICIADA");
 
             BEUsuario user = null;
             foreach (DataRow item in dalUsuario.ObtenerUsuarios().Rows)
@@ -89,10 +89,10 @@ namespace FGF_Finanzas.Capas.BLL
             }
 
             if (user == null)
-                throw new CustomException("ERR_CREDENCIALES_INVALIDAS");
+                throw new BECustomException("ERR_CREDENCIALES_INVALIDAS");
 
             if (user.Bloqueado == true)
-                throw new CustomException("ERR_USUARIO_BLOQUEADO");
+                throw new BECustomException("ERR_USUARIO_BLOQUEADO");
 
             bool sistemaIntegro = bllDigitoVerificador.ValidarIntegridadDelSistema();
 
@@ -114,7 +114,7 @@ namespace FGF_Finanzas.Capas.BLL
 
             ActualizarIntentosUsuario(user, sistemaIntegro);
 
-            throw new CustomException("ERR_CREDENCIALES_INVALIDAS");
+            throw new BECustomException("ERR_CREDENCIALES_INVALIDAS");
         }
 
         public BEUsuario ConsultaIndividual(string dni)

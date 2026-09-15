@@ -9,7 +9,6 @@ namespace FGF_Finanzas
 {
     public abstract class BasePage : Page, IIdiomaObserver
     {
-        private readonly TraduccionService _traduccionService = new TraduccionService();
         public virtual string NombreFormulario => Path.GetFileName(Request.AppRelativeCurrentExecutionFilePath);
 
         protected override void OnInit(EventArgs e)
@@ -44,10 +43,11 @@ namespace FGF_Finanzas
             {
                 if (!string.IsNullOrEmpty(c.ID) && traducciones.TryGetValue(c.ID, out string texto))
                 {
-                    switch (c) 
+                    switch (c)
                     {
                         case Button btn:
-                            btn.Text = texto; break;
+                            btn.Text = texto;
+                            break;
                         case BaseValidator val:
                             val.ErrorMessage = texto;
                             break;
@@ -71,7 +71,7 @@ namespace FGF_Finanzas
                             break;
                     }
                 }
-                if(c.HasControls())
+                if (c.HasControls())
                 {
                     AplicarTraducciones(c.Controls, traducciones);
                 }
@@ -80,13 +80,7 @@ namespace FGF_Finanzas
 
         public string ObtenerError(string codigoError)
         {
-            string idioma = IdiomaManager.Instancia.IdiomaActual;
-            var errores = _traduccionService.ObtenerTraducciones("Errores", idioma);
-
-            if (errores.TryGetValue(codigoError, out string mensaje))
-                return mensaje;
-
-            return $"[{codigoError}]";
+            return IdiomaManager.Instancia.ObtenerTexto("Errores", codigoError);
         }
     }
 }

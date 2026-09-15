@@ -122,7 +122,7 @@
     <Compile Include="Capas\BE\BEEvento.cs" />
     <Compile Include="Capas\BE\BEMascota.cs" />
     <Compile Include="Capas\BE\BEUsuario.cs" />
-    <Compile Include="Capas\BE\CustomException.cs" />
+    <Compile Include="Capas\BE\BECustomException.cs" />
     <Compile Include="Capas\BLL\BLLBackupRestore.cs" />
     <Compile Include="Capas\BLL\BLLEvento.cs" />
     <Compile Include="Capas\BE\BEDigitoVerificador.cs" />
@@ -134,8 +134,8 @@
     <Compile Include="Capas\DAL\DALEvento.cs" />
     <Compile Include="Capas\DAL\DALDigitoVerificador.cs" />
     <Compile Include="Capas\DAL\DALMascota.cs" />
+    <Compile Include="Capas\DAL\DALTraduccion.cs" />
     <Compile Include="Capas\DAL\DALUsuario.cs" />
-    <Compile Include="Capas\Servicios\Cambio-Idioma\TraduccionService.cs" />
     <Compile Include="Capas\Servicios\Encriptacion.cs" />
     <Compile Include="Capas\Servicios\Cambio-Idioma\IdiomaManager.cs" />
     <Compile Include="Capas\Servicios\Cambio-Idioma\IIdiomaSubject.cs" />
