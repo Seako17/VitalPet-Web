@@ -178,7 +178,14 @@ namespace FGF_Finanzas
         {
             if (e.CommandName == "CambiarIdioma")
             {
-                IdiomaManager.Instancia.IdiomaActual = e.CommandArgument.ToString();
+                string nuevoIdioma = e.CommandArgument.ToString();
+                IdiomaManager.Instancia.IdiomaActual = nuevoIdioma;
+                if (SessionManager.IsLogged())
+                {
+                    SessionManager.Instancia.Usuario.Idioma = nuevoIdioma;
+                    bllUsuario.CambiarIdiomaPreferido(SessionManager.Instancia.Usuario.DNI, nuevoIdioma);
+                }
+
                 CargarComboIdiomas();
             }
         }

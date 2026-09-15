@@ -17,6 +17,8 @@ namespace FGF_Finanzas.Capas.BE
         public int Intento { get; set; }
         public bool Bloqueado { get; set; }
         public string Rol { get; set; }
+        public string Idioma { get; set; } = "es-AR";
+
         public BEUsuario()
         {
 
@@ -33,7 +35,6 @@ namespace FGF_Finanzas.Capas.BE
             Mail = mail;
             Rol = rol;
         }
-
         public BEUsuario(DataRow dr)
         {
             DNI = dr[0].ToString();
@@ -45,6 +46,12 @@ namespace FGF_Finanzas.Capas.BE
             Bloqueado = Convert.ToBoolean(dr[6]);
             Mail = dr[7].ToString();
             Rol = dr[8].ToString();
+            if (dr.Table.Columns.Contains("idioma") && dr["idioma"] != DBNull.Value)
+            {
+                Idioma = dr["idioma"].ToString();
+            }
         }
+
+        
     }
 }

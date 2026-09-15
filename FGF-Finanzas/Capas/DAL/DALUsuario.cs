@@ -167,5 +167,20 @@ namespace FGF_Finanzas.Capas.DAL
             adapter.Fill(dt);   
             return dt;
         }
+
+        public void ActualizarIdioma(string dni, string codigoIdioma)
+        {
+            using (SqlConnection con = new SqlConnection(_conexion))
+            {
+                string query = "UPDATE Usuario SET idioma = @idioma WHERE dni = @dni";
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@idioma", codigoIdioma);
+                    cmd.Parameters.AddWithValue("@dni", dni);
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }

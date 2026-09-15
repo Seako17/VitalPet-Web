@@ -1,6 +1,7 @@
 ﻿using FGF_Finanzas.Capas.BE;
 using FGF_Finanzas.Capas.DAL;
 using FGF_Finanzas.Capas.Servicios;
+using FGF_Finanzas.Capas.Servicios.Cambio_Idioma;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -101,6 +102,7 @@ namespace FGF_Finanzas.Capas.BLL
                 user.Intento = 0;
                 ActualizarIntentosUsuario(user, sistemaIntegro);
                 SessionManager.Login(user);
+                IdiomaManager.Instancia.IdiomaActual = user.Idioma;
                 bllEvento.AgregarEvento(new BEEvento(user, DateTime.Now, "Usuarios", "Iniciar Sesión", 5));
                 return;
             }
@@ -178,7 +180,11 @@ namespace FGF_Finanzas.Capas.BLL
 
             bllEvento.AgregarEvento(new BEEvento(SessionManager.Instancia.Usuario, DateTime.Now, "Usuarios", "Cambiar Contraseña", 3));
         }
-
+        public void CambiarIdiomaPreferido(string dni, string codigoIdioma)
+        {
+            dalUsuario.ActualizarIdioma(dni, codigoIdioma);
+            bllDigitoVerificador.InicializarTablaCompleta("Usuario");
+        }
         public DataTable ObtenerUsuariosPuros()
         {
             return dalUsuario.ObtenerUsuariosPuros();
