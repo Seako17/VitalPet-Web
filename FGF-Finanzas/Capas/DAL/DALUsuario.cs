@@ -106,7 +106,7 @@ namespace FGF_Finanzas.Capas.DAL
                     usuarioEncontrado.Contraseña = reader["contraseña"].ToString();
                     usuarioEncontrado.Intento = Convert.ToInt32(reader["intento"]);
                     usuarioEncontrado.Bloqueado = Convert.ToBoolean(reader["bloqueado"]);
-                    usuarioEncontrado.Rol = reader["rol"].ToString();
+                    usuarioEncontrado.Rol = new Rol(int.Parse(reader["rol"].ToString()));
                     usuarioEncontrado.Nombre = Encriptacion.DesencriptarAES(reader["nombre"].ToString());
                     usuarioEncontrado.Apellido = Encriptacion.DesencriptarAES(reader["apellido"].ToString());
                     usuarioEncontrado.Usuario = Encriptacion.DesencriptarAES(reader["usuario"].ToString());

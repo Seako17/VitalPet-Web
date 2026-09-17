@@ -9,9 +9,24 @@ using System.Web.UI.WebControls;
 
 namespace FGF_Finanzas
 {
-    public partial class Cambiar_Contraseña : System.Web.UI.Page
+    public partial class Cambiar_Contraseña : Page
     {
         BLLUsuario bllUsuario = new BLLUsuario();
+        protected override void OnInit(EventArgs e)
+        {
+            base.OnInit(e);
+
+            if (!SessionManager.IsLogged())
+            {
+                Response.Redirect(
+                    "~/Default.aspx?ReturnUrl=" +
+                    Server.UrlEncode(Request.RawUrl)
+                );
+
+                return;
+            }
+
+        }
         protected void Page_Load(object sender, EventArgs e)
         {
             Response.Cache.SetCacheability(HttpCacheability.NoCache);

@@ -16,6 +16,7 @@ namespace FGF_Finanzas
     public partial class Site : System.Web.UI.MasterPage
     {
         BLLUsuario bllUsuario = new BLLUsuario(); BEUsuario usuario;
+        BLLRol BLLRol = new BLLRol();
         protected void Page_Load(object sender, EventArgs e)
         {
             
@@ -48,11 +49,13 @@ namespace FGF_Finanzas
             }
             if (SessionManager.IsLogged())
             {
+                
                 BLLDigitoVerificador bllDV = new BLLDigitoVerificador();
                 var lista = bllDV.CompararDigito();
                 if (lista != null && lista.Count > 0)
                 {
-                    if (SessionManager.Instancia.Usuario.Rol == "Web Master")
+                    //Cambiar por .rol.tienePermiso = Servicios.CodigoPermiso.DV
+                    if (SessionManager.Instancia.Usuario.Rol.Nombre == "Web Master")
                     {
                         Session["InconsistenciasDetectadas"] = lista;
                         Response.Redirect("~/DV_Form.aspx", false);
@@ -71,15 +74,18 @@ namespace FGF_Finanzas
 
                 if(SessionManager.Instancia != null && SessionManager.Instancia.Usuario != null)
                 {
-                    if (SessionManager.Instancia.Usuario.Rol == "Admin")
+                    //Cambiar por .rol.tienePermiso = Servicios.CodigoPermiso.admin ej
+                    if (SessionManager.Instancia.Usuario.Rol.Nombre == "Admin")
                     {
                         Admin.Visible = true;
                     }
-                    if (SessionManager.Instancia.Usuario.Rol == "Web Master")
+                    //Cambiar por .rol.tienePermiso = Servicios.CodigoPermiso.DV ej
+                    if (SessionManager.Instancia.Usuario.Rol.Nombre == "Web Master")
                     {
                         WebMaster.Visible = true;
                     }
-                    if (SessionManager.Instancia.Usuario.Rol == "Cliente")
+                    //Cambiar por .rol.tienePermiso = Servicios.CodigoPermiso.cliente ej
+                    if (SessionManager.Instancia.Usuario.Rol.Nombre == "Cliente")
                     {
                         Cliente.Visible = true;
                     }

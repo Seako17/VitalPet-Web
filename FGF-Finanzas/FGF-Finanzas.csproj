@@ -123,15 +123,25 @@
     <Compile Include="Capas\BLL\BLLEvento.cs" />
     <Compile Include="Capas\BE\BEDigitoVerificador.cs" />
     <Compile Include="Capas\BLL\BLLDigitoVerificador.cs" />
+    <Compile Include="Capas\BLL\BLLFamilia.cs" />
     <Compile Include="Capas\BLL\BLLMascota.cs" />
+    <Compile Include="Capas\BLL\BLLRol.cs" />
     <Compile Include="Capas\BLL\BLLUsuario.cs" />
     <Compile Include="Capas\DAL\DALAbstracta.cs" />
     <Compile Include="Capas\DAL\DALBackupRestore.cs" />
     <Compile Include="Capas\DAL\DALEvento.cs" />
     <Compile Include="Capas\DAL\DALDigitoVerificador.cs" />
+    <Compile Include="Capas\DAL\DALFamilia.cs" />
     <Compile Include="Capas\DAL\DALMascota.cs" />
+    <Compile Include="Capas\DAL\DALPermiso.cs" />
+    <Compile Include="Capas\DAL\DALRol.cs" />
     <Compile Include="Capas\DAL\DALUsuario.cs" />
+    <Compile Include="Capas\Servicios\CodigosPermiso.cs" />
+    <Compile Include="Capas\Servicios\Componente.cs" />
     <Compile Include="Capas\Servicios\Encriptacion.cs" />
+    <Compile Include="Capas\Servicios\Familia.cs" />
+    <Compile Include="Capas\Servicios\Permiso.cs" />
+    <Compile Include="Capas\Servicios\Rol.cs" />
     <Compile Include="Capas\Servicios\SessionManager.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
@@ -163,6 +173,9 @@
     </Compile>
     <Compile Include="Login.aspx.designer.cs">
       <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PaginaSegura.cs">
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegistrarMascotas.aspx.cs">

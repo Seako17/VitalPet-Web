@@ -1,4 +1,5 @@
 ﻿using FGF_Finanzas.Capas.BLL;
+using FGF_Finanzas.Capas.Servicios;
 using Microsoft.SqlServer.Server;
 using System;
 using System.Collections.Generic;
@@ -10,8 +11,12 @@ using System.Web.UI.WebControls;
 
 namespace FGF_Finanzas
 {
-    public partial class BitacoraEventos : System.Web.UI.Page
+    public partial class BitacoraEventos : PaginaSegura
     {
+        protected override Permiso PermisoRequerido
+        {
+            get { return CodigosPermiso.BitacoraVer; }
+        }
         BLLEvento bllEvento = new BLLEvento();
         protected void Page_Load(object sender, EventArgs e)
         {

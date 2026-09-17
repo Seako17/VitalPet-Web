@@ -94,9 +94,9 @@
                             <td>
                                 <asp:DropDownList ID="ddlRol" runat="server">
                                     <asp:ListItem Text="-- Seleccionar Rol --" Value=""></asp:ListItem>
-                                    <asp:ListItem Text="Web Master" Value="Web Master"></asp:ListItem>
-                                    <asp:ListItem Text="Admin" Value="Admin"></asp:ListItem>
-                                    <asp:ListItem Text="Cliente" Value="Cliente"></asp:ListItem>
+                                    <asp:ListItem Text="Web Master" Value="1"></asp:ListItem>
+                                    <asp:ListItem Text="Admin" Value="2"></asp:ListItem>
+                                    <asp:ListItem Text="Cliente" Value="3"></asp:ListItem>
                                 </asp:DropDownList>
                             </td>
                         </tr>

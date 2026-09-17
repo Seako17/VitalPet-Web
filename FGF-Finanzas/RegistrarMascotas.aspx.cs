@@ -13,8 +13,12 @@ using System.Web.UI.WebControls;
 
 namespace FGF_Finanzas
 {
-    public partial class RegistrarMascotas : System.Web.UI.Page
+    public partial class RegistrarMascotas : PaginaSegura
     {
+        protected override Permiso PermisoRequerido
+        {
+            get { return CodigosPermiso.MascotaRegistrar; }
+        }
         BLLMascota bllMascota = new BLLMascota();
         protected void Page_Load(object sender, EventArgs e)
         {
