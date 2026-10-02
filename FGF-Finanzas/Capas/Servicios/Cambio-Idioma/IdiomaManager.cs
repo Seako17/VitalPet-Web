@@ -1,4 +1,5 @@
 ﻿using FGF_Finanzas.Capas.BE;
+using FGF_Finanzas.Capas.BLL;
 using FGF_Finanzas.Capas.DAL;
 using System.Collections.Generic;
 using System.Web;
@@ -25,10 +26,11 @@ namespace FGF_Finanzas.Capas.Servicios.Cambio_Idioma
 
         public string IdiomaActual
         {
-            get => HttpContext.Current.Session["IdiomaActual"]?.ToString() ?? "es-AR";
+            get => HttpContext.Current.Session["IdiomaActual"]?.ToString() ?? BLLTraduccion.IDIOMA_POR_DEFECTO;
             set
             {
-                HttpContext.Current.Session["IdiomaActual"] = value;
+                BEIdioma idioma = string.IsNullOrWhiteSpace(value) ? null : _dalTraduccion.ObtenerIdiomaPorCodigo(value);
+                HttpContext.Current.Session["IdiomaActual"] = idioma != null ? idioma.Codigo : BLLTraduccion.IDIOMA_POR_DEFECTO;
                 Notificar();
             }
         }

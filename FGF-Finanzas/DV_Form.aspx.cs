@@ -34,17 +34,26 @@ namespace FGF_Finanzas
             }
         }
 
-        protected void Page_PreRender(object sender, EventArgs e)
+        protected void Page_PreRenderComplete(object sender, EventArgs e)
         {
-            GridInconsistencias.Columns[0].HeaderText = TextoTraducido("GridInconsistencias_Header_NombreTabla", "Tabla Afectada");
-            GridInconsistencias.Columns[1].HeaderText = TextoTraducido("GridInconsistencias_Header_IdRegistro", "ID Registro");
-            GridInconsistencias.Columns[2].HeaderText = TextoTraducido("GridInconsistencias_Header_TipoFalla", "Diagnóstico de la Inconsistencia");
+            TraducirColumna(GridInconsistencias, 0, "GridInconsistencias_Header_NombreTabla", "Tabla Afectada");
+            TraducirColumna(GridInconsistencias, 1, "GridInconsistencias_Header_IdRegistro", "ID Registro");
+            TraducirColumna(GridInconsistencias, 2, "GridInconsistencias_Header_TipoFalla", "Diagnóstico de la Inconsistencia");
         }
 
         private string TextoTraducido(string clave, string porDefecto)
         {
             string texto = IdiomaManager.Instancia.ObtenerTexto(NombreFormulario, clave);
             return texto == "[" + clave + "]" ? porDefecto : texto;
+        }
+
+        private void TraducirColumna(GridView grilla, int columna, string clave, string porDefecto)
+        {
+            string texto = TextoTraducido(clave, porDefecto);
+            grilla.Columns[columna].HeaderText = texto;
+
+            if (grilla.HeaderRow != null && columna < grilla.HeaderRow.Cells.Count)
+                grilla.HeaderRow.Cells[columna].Text = texto;
         }
 
         protected void btnSalir_Click(object sender, EventArgs e)

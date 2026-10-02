@@ -1,5 +1,6 @@
 ﻿using FGF_Finanzas.Capas.BE;
 using FGF_Finanzas.Capas.BLL;
+using FGF_Finanzas.Capas.Servicios;
 using FGF_Finanzas.Capas.Servicios.Cambio_Idioma;
 using System;
 using System.Collections.Generic;
@@ -22,8 +23,19 @@ namespace FGF_Finanzas
             {
                 CargarIdiomas();
                 CargarFormularios();
+
+                string idioma = Request.QueryString["idioma"];
+                if (!string.IsNullOrEmpty(idioma) && ddlIdioma.Items.FindByValue(idioma) != null)
+                    ddlIdioma.SelectedValue = idioma;
+
+                string formulario = Request.QueryString["formulario"];
+                if (!string.IsNullOrEmpty(formulario) && ddlFormulario.Items.FindByValue(formulario) != null)
+                    ddlFormulario.SelectedValue = formulario;
+
                 CargarGrillaIdiomas();
                 CargarGrillaTraducciones();
+
+                MostrarAlertaPendiente();
             }
         }
 
@@ -150,9 +162,8 @@ namespace FGF_Finanzas
 
                 bllTraduccion.ActualizarTraduccion(ddlFormulario.SelectedValue, ddlIdioma.SelectedValue, idEtiqueta, texto);
 
-                MostrarAlerta($"Traducción de '{controlId}' guardada para '{ddlIdioma.SelectedValue}'.");
-                CargarGrillaTraducciones();
-                CargarGrillaIdiomas();
+                RedirigirConAlerta($"Traducción de '{controlId}' guardada para '{ddlIdioma.SelectedValue}'.");
+                return;
             }
             catch (Exception ex)
             {
@@ -170,12 +181,10 @@ namespace FGF_Finanzas
                 txtNombreIdioma.Text = string.Empty;
 
                 CargarIdiomas();
-                CargarGrillaIdiomas();
-
                 ddlIdioma.SelectedValue = idioma.Codigo;
-                CargarGrillaTraducciones();
 
-                MostrarAlerta($"Idioma '{idioma.Nombre}' creado con las traducciones por defecto.");
+                RedirigirConAlerta($"Idioma '{idioma.Nombre}' creado con las traducciones por defecto.");
+                return;
             }
             catch (Exception ex)
             {
@@ -189,21 +198,21 @@ namespace FGF_Finanzas
                 return;
 
             string codigo = Convert.ToString(e.CommandArgument);
-            string seleccionado = ddlIdioma.SelectedValue;
 
             try
             {
                 bllTraduccion.EliminarIdioma(codigo);
 
-                CargarIdiomas();
-                CargarGrillaIdiomas();
+                if (codigo.Equals(IdiomaManager.Instancia.IdiomaActual, StringComparison.OrdinalIgnoreCase))
+                {
+                    IdiomaManager.Instancia.IdiomaActual = BLLTraduccion.IDIOMA_POR_DEFECTO;
 
-                if (ddlIdioma.Items.FindByValue(seleccionado) != null)
-                    ddlIdioma.SelectedValue = seleccionado;
+                    if (SessionManager.IsLogged())
+                        SessionManager.Instancia.Usuario.Idioma = BLLTraduccion.IDIOMA_POR_DEFECTO;
+                }
 
-                CargarGrillaTraducciones();
-
-                MostrarAlerta($"Idioma '{codigo}' eliminado correctamente.");
+                RedirigirConAlerta($"Idioma '{codigo}' eliminado correctamente.");
+                return;
             }
             catch (Exception ex)
             {
@@ -211,23 +220,90 @@ namespace FGF_Finanzas
             }
         }
 
-        protected void Page_PreRender(object sender, EventArgs e)
+        protected void Page_PreRenderComplete(object sender, EventArgs e)
         {
-            dgvTraducciones.Columns[0].HeaderText = TextoTraducido("dgvTraducciones_Header_Control", "Control");
-            dgvTraducciones.Columns[1].HeaderText = TextoTraducido("dgvTraducciones_Header_TextoTraducido", "Texto traducido");
-            dgvTraducciones.Columns[2].HeaderText = TextoTraducido("dgvTraducciones_Header_Acciones", "Acciones");
-            dgvTraducciones.EmptyDataText = TextoTraducido("dgvTraducciones_Vacio", "No hay etiquetas para mostrar.");
+            TraducirColumna(dgvTraducciones, 0, "dgvTraducciones_Header_Control", "Control");
+            TraducirColumna(dgvTraducciones, 1, "dgvTraducciones_Header_TextoTraducido", "Texto traducido");
+            TraducirColumna(dgvTraducciones, 2, "dgvTraducciones_Header_Acciones", "Acciones");
+            TraducirSinDatos(dgvTraducciones, "dgvTraducciones_Vacio", "No hay etiquetas para mostrar.");
+            TraducirBotonFila(dgvTraducciones, "btnGuardarTraduccion", "btnGuardarTraduccion", "Guardar");
 
-            dgvIdiomas.Columns[0].HeaderText = TextoTraducido("dgvIdiomas_Header_Codigo", "Código");
-            dgvIdiomas.Columns[1].HeaderText = TextoTraducido("dgvIdiomas_Header_Nombre", "Nombre");
-            dgvIdiomas.Columns[2].HeaderText = TextoTraducido("dgvIdiomas_Header_Acciones", "Acciones");
-            dgvIdiomas.EmptyDataText = TextoTraducido("dgvIdiomas_Vacio", "No hay idiomas registrados.");
+            TraducirColumna(dgvIdiomas, 0, "dgvIdiomas_Header_Codigo", "Código");
+            TraducirColumna(dgvIdiomas, 1, "dgvIdiomas_Header_Nombre", "Nombre");
+            TraducirColumna(dgvIdiomas, 2, "dgvIdiomas_Header_Acciones", "Acciones");
+            TraducirSinDatos(dgvIdiomas, "dgvIdiomas_Vacio", "No hay idiomas registrados.");
+            TraducirBotonFila(dgvIdiomas, "btnEliminarIdioma", "btnEliminarIdioma", "Eliminar");
+        }
+
+        private void TraducirColumna(GridView grilla, int columna, string clave, string porDefecto)
+        {
+            string texto = TextoTraducido(clave, porDefecto);
+            grilla.Columns[columna].HeaderText = texto;
+
+            if (grilla.HeaderRow != null && columna < grilla.HeaderRow.Cells.Count)
+                grilla.HeaderRow.Cells[columna].Text = texto;
+        }
+
+        private void TraducirSinDatos(GridView grilla, string clave, string porDefecto)
+        {
+            string texto = TextoTraducido(clave, porDefecto);
+            grilla.EmptyDataText = texto;
+
+            GridViewRow filaVacia = BuscarFilaVacia(grilla);
+            if (filaVacia != null && filaVacia.Cells.Count > 0)
+                filaVacia.Cells[0].Text = texto;
+        }
+
+        private GridViewRow BuscarFilaVacia(Control contenedor)
+        {
+            foreach (Control hijo in contenedor.Controls)
+            {
+                if (hijo is GridViewRow fila && fila.RowType == DataControlRowType.EmptyDataRow)
+                    return fila;
+
+                GridViewRow encontrada = BuscarFilaVacia(hijo);
+                if (encontrada != null)
+                    return encontrada;
+            }
+            return null;
+        }
+
+        private void TraducirBotonFila(GridView grilla, string idBoton, string clave, string porDefecto)
+        {
+            string texto = TextoTraducido(clave, porDefecto);
+
+            foreach (GridViewRow fila in grilla.Rows)
+            {
+                if (fila.RowType != DataControlRowType.DataRow)
+                    continue;
+
+                LinkButton boton = fila.FindControl(idBoton) as LinkButton;
+                if (boton != null)
+                    boton.Text = texto;
+            }
         }
 
         private string TextoTraducido(string clave, string porDefecto)
         {
             string texto = IdiomaManager.Instancia.ObtenerTexto(NombreFormulario, clave);
             return texto == "[" + clave + "]" ? porDefecto : texto;
+        }
+
+        private void MostrarAlertaPendiente()
+        {
+            if (Session["GestionIdioma_Alerta"] is string[] alerta)
+            {
+                Session.Remove("GestionIdioma_Alerta");
+                MostrarAlerta(alerta[0], alerta[1]);
+            }
+        }
+
+        private void RedirigirConAlerta(string mensaje, string tipo = "exito")
+        {
+            Session["GestionIdioma_Alerta"] = new[] { mensaje, tipo };
+            string url = $"~/{NombreFormulario}?idioma={HttpUtility.UrlEncode(ddlIdioma.SelectedValue)}&formulario={HttpUtility.UrlEncode(ddlFormulario.SelectedValue)}";
+            Response.Redirect(url, false);
+            Context.ApplicationInstance.CompleteRequest();
         }
 
         private void MostrarAlerta(string mensaje, string tipo = "exito")

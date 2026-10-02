@@ -114,13 +114,6 @@ namespace FGF_Finanzas.Capas.BLL
             if (idioma.Codigo.Equals(IDIOMA_POR_DEFECTO, StringComparison.OrdinalIgnoreCase))
                 throw new Exception($"No se puede eliminar el idioma por defecto '{IDIOMA_POR_DEFECTO}'.");
 
-            if (_dalTraduccion.ObtenerIdiomas().Count <= 1)
-                throw new Exception("No se puede eliminar el idioma porque es el único registrado.");
-
-            int usuariosAsociados = _dalTraduccion.ContarUsuariosConIdioma(idioma.Codigo);
-            if (usuariosAsociados > 0)
-                throw new Exception($"No se puede eliminar el idioma porque {usuariosAsociados} usuario(s) lo tienen asignado como idioma preferido.");
-
             _dalTraduccion.EliminarIdioma(idioma.IdIdioma);
 
             RegistrarEvento("Eliminar Idioma", 2);

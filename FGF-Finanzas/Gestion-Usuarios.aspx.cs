@@ -274,20 +274,73 @@ namespace FGF_Finanzas
             }
         }
 
-        protected void Page_PreRender(object sender, EventArgs e)
+        protected void Page_PreRenderComplete(object sender, EventArgs e)
         {
-            dgvUsuarios.Columns[0].HeaderText = TextoTraducido("dgvUsuarios_Header_Dni", "DNI");
-            dgvUsuarios.Columns[1].HeaderText = TextoTraducido("dgvUsuarios_Header_Nombre", "Nombre");
-            dgvUsuarios.Columns[2].HeaderText = TextoTraducido("dgvUsuarios_Header_Apellido", "Apellido");
-            dgvUsuarios.Columns[3].HeaderText = TextoTraducido("dgvUsuarios_Header_Mail", "Email");
-            dgvUsuarios.Columns[4].HeaderText = TextoTraducido("dgvUsuarios_Header_Usuario", "Usuario");
-            dgvUsuarios.Columns[5].HeaderText = TextoTraducido("dgvUsuarios_Header_Rol", "Rol");
-            ((CommandField)dgvUsuarios.Columns[6]).SelectText = TextoTraducido("dgvUsuarios_Seleccionar", "Seleccionar");
-            dgvUsuarios.EmptyDataText = TextoTraducido("dgvUsuarios_Vacio", "No hay usuarios para mostrar.");
+            TraducirColumna(dgvUsuarios, 0, "dgvUsuarios_Header_Dni", "DNI");
+            TraducirColumna(dgvUsuarios, 1, "dgvUsuarios_Header_Nombre", "Nombre");
+            TraducirColumna(dgvUsuarios, 2, "dgvUsuarios_Header_Apellido", "Apellido");
+            TraducirColumna(dgvUsuarios, 3, "dgvUsuarios_Header_Mail", "Email");
+            TraducirColumna(dgvUsuarios, 4, "dgvUsuarios_Header_Usuario", "Usuario");
+            TraducirColumna(dgvUsuarios, 5, "dgvUsuarios_Header_Rol", "Rol");
+            TraducirBotonSeleccion(dgvUsuarios, 6, "dgvUsuarios_Seleccionar", "Seleccionar");
+            TraducirSinDatos(dgvUsuarios, "dgvUsuarios_Vacio", "No hay usuarios para mostrar.");
 
             TraducirItem(rblFiltroTodosActivos, "Bloqueados", "rblFiltroTodosActivos_Bloqueados", "Bloqueados");
             TraducirItem(rblFiltroTodosActivos, "Todos", "rblFiltroTodosActivos_Todos", "Todos");
             TraducirItem(ddlRol, string.Empty, "ddlRol_Seleccionar", "-- Seleccionar Rol --");
+        }
+
+        private void TraducirColumna(GridView grilla, int columna, string clave, string porDefecto)
+        {
+            string texto = TextoTraducido(clave, porDefecto);
+            grilla.Columns[columna].HeaderText = texto;
+
+            if (grilla.HeaderRow != null && columna < grilla.HeaderRow.Cells.Count)
+                grilla.HeaderRow.Cells[columna].Text = texto;
+        }
+
+        private void TraducirBotonSeleccion(GridView grilla, int columna, string clave, string porDefecto)
+        {
+            string texto = TextoTraducido(clave, porDefecto);
+
+            if (grilla.Columns[columna] is CommandField campo)
+                campo.SelectText = texto;
+
+            foreach (GridViewRow fila in grilla.Rows)
+            {
+                if (fila.RowType != DataControlRowType.DataRow || columna >= fila.Cells.Count)
+                    continue;
+
+                LinkButton boton = fila.Cells[columna].Controls.OfType<LinkButton>()
+                    .FirstOrDefault(b => b.CommandName == "Select");
+
+                if (boton != null)
+                    boton.Text = texto;
+            }
+        }
+
+        private void TraducirSinDatos(GridView grilla, string clave, string porDefecto)
+        {
+            string texto = TextoTraducido(clave, porDefecto);
+            grilla.EmptyDataText = texto;
+
+            GridViewRow filaVacia = BuscarFilaVacia(grilla);
+            if (filaVacia != null && filaVacia.Cells.Count > 0)
+                filaVacia.Cells[0].Text = texto;
+        }
+
+        private GridViewRow BuscarFilaVacia(Control contenedor)
+        {
+            foreach (Control hijo in contenedor.Controls)
+            {
+                if (hijo is GridViewRow fila && fila.RowType == DataControlRowType.EmptyDataRow)
+                    return fila;
+
+                GridViewRow encontrada = BuscarFilaVacia(hijo);
+                if (encontrada != null)
+                    return encontrada;
+            }
+            return null;
         }
 
         private string TextoTraducido(string clave, string porDefecto)

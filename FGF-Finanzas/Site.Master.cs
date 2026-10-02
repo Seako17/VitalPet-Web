@@ -113,11 +113,18 @@ namespace FGF_Finanzas
             rptIdiomas.DataBind();
 
             var actual = lista.Find(i => i.Codigo == IdiomaManager.Instancia.IdiomaActual);
+            if (actual == null)
+            {
+                IdiomaManager.Instancia.IdiomaActual = BLLTraduccion.IDIOMA_POR_DEFECTO;
+                actual = lista.Find(i => i.Codigo == BLLTraduccion.IDIOMA_POR_DEFECTO);
+            }
+
             if (actual != null)
             {
                 lblIdiomaSeleccionado.Text = actual.Nombre;
             }
         }
+
         private void Limpiar_Session()
         {
             SessionManager.LogOut();

@@ -20,13 +20,13 @@ namespace FGF_Finanzas
             cargarGrilla(bllEvento.ObtenerEventos());
         }
 
-        protected void Page_PreRender(object sender, EventArgs e)
+        protected void Page_PreRenderComplete(object sender, EventArgs e)
         {
-            GridViewEventos.Columns[0].HeaderText = TextoTraducido("GridViewEventos_Header_Usuario", "Usuario");
-            GridViewEventos.Columns[1].HeaderText = TextoTraducido("GridViewEventos_Header_FechaHora", "Fecha y Hora");
-            GridViewEventos.Columns[2].HeaderText = TextoTraducido("GridViewEventos_Header_Modulo", "Módulo");
-            GridViewEventos.Columns[3].HeaderText = TextoTraducido("GridViewEventos_Header_Evento", "Evento");
-            GridViewEventos.Columns[4].HeaderText = TextoTraducido("GridViewEventos_Header_Criticidad", "Criticidad");
+            TraducirColumna(GridViewEventos, 0, "GridViewEventos_Header_Usuario", "Usuario");
+            TraducirColumna(GridViewEventos, 1, "GridViewEventos_Header_FechaHora", "Fecha y Hora");
+            TraducirColumna(GridViewEventos, 2, "GridViewEventos_Header_Modulo", "Módulo");
+            TraducirColumna(GridViewEventos, 3, "GridViewEventos_Header_Evento", "Evento");
+            TraducirColumna(GridViewEventos, 4, "GridViewEventos_Header_Criticidad", "Criticidad");
 
             TraducirOpciones(moduloFiltro,
                 new[] { "moduloFiltro_Modulo", "moduloFiltro_Usuarios", "moduloFiltro_Administrador", "moduloFiltro_Clientes", "moduloFiltro_EnDesarrollo" },
@@ -45,6 +45,15 @@ namespace FGF_Finanzas
         {
             string texto = IdiomaManager.Instancia.ObtenerTexto(NombreFormulario, clave);
             return texto == "[" + clave + "]" ? porDefecto : texto;
+        }
+
+        private void TraducirColumna(GridView grilla, int columna, string clave, string porDefecto)
+        {
+            string texto = TextoTraducido(clave, porDefecto);
+            grilla.Columns[columna].HeaderText = texto;
+
+            if (grilla.HeaderRow != null && columna < grilla.HeaderRow.Cells.Count)
+                grilla.HeaderRow.Cells[columna].Text = texto;
         }
 
         private void TraducirOpciones(HtmlSelect control, string[] claves, string[] textosPorDefecto)

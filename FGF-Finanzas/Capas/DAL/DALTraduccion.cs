@@ -245,18 +245,5 @@ namespace FGF_Finanzas.Capas.DAL
                 cmd.ExecuteNonQuery();
             }
         }
-
-        public int ContarUsuariosConIdioma(string codigo)
-        {
-            const string query = "SELECT COUNT(1) FROM Usuario WHERE idioma = @Idioma";
-
-            using (var con = new SqlConnection(_conexion))
-            using (var cmd = new SqlCommand(query, con))
-            {
-                cmd.Parameters.AddWithValue("@Idioma", codigo);
-                con.Open();
-                return Convert.ToInt32(cmd.ExecuteScalar());
-            }
-        }
     }
 }
