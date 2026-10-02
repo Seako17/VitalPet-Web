@@ -74,6 +74,7 @@
     <Content Include="Content\BackupRestore\clip.png" />
     <Content Include="Content\BackupRestore\BackupStyles.css" />
     <Content Include="Content\DV_Styles.css" />
+    <Content Include="Content\Estilos-Gestion-Idioma.css" />
     <Content Include="Content\Estilos.css" />
     <Content Include="Content\EventosStyles.css" />
     <Content Include="Content\GestionUsuarios\CambiarContraseñaStyles.css" />
@@ -85,6 +86,7 @@
     <Content Include="Content\registrarMascotasStyles.css" />
     <Content Include="Content\RegistrarStyles.css" />
     <Content Include="Default.aspx" />
+    <Content Include="Gestion-Idioma.aspx" />
     <Content Include="Gestion-Usuarios.aspx" />
     <Content Include="DV_Form.aspx" />
     <Content Include="Global.asax" />
@@ -120,8 +122,10 @@
       <DependentUpon>Cambiar-Contraseña.aspx</DependentUpon>
     </Compile>
     <Compile Include="Capas\BE\BEEvento.cs" />
+    <Compile Include="Capas\BE\BEEtiqueta.cs" />
     <Compile Include="Capas\BE\BEIdioma.cs" />
     <Compile Include="Capas\BE\BEMascota.cs" />
+    <Compile Include="Capas\BE\BETraduccion.cs" />
     <Compile Include="Capas\BE\BEUsuario.cs" />
     <Compile Include="Capas\BE\BECustomException.cs" />
     <Compile Include="Capas\BLL\BLLBackupRestore.cs" />
@@ -129,6 +133,7 @@
     <Compile Include="Capas\BE\BEDigitoVerificador.cs" />
     <Compile Include="Capas\BLL\BLLDigitoVerificador.cs" />
     <Compile Include="Capas\BLL\BLLMascota.cs" />
+    <Compile Include="Capas\BLL\BLLTraduccion.cs" />
     <Compile Include="Capas\BLL\BLLUsuario.cs" />
     <Compile Include="Capas\DAL\DALAbstracta.cs" />
     <Compile Include="Capas\DAL\DALBackupRestore.cs" />
@@ -148,6 +153,13 @@
     </Compile>
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Gestion-Idioma.aspx.cs">
+      <DependentUpon>Gestion-Idioma.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Gestion-Idioma.aspx.designer.cs">
+      <DependentUpon>Gestion-Idioma.aspx</DependentUpon>
     </Compile>
     <Compile Include="Gestion-Usuarios.aspx.cs">
       <DependentUpon>Gestion-Usuarios.aspx</DependentUpon>

@@ -17,6 +17,7 @@
                 <li>Gestión Perfiles</li>
                 <li>Gestión Familias</li>
                 <li><a href="Backup-Restore.aspx">Backup/Restore</a></li>
+                <li><a href="Gestion-Idioma.aspx">Gestión Idiomas</a></li>
             </ul>
         </aside>
         <div class="eventos__container">
