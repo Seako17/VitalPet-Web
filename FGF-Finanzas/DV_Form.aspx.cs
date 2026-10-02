@@ -1,6 +1,7 @@
 ﻿using FGF_Finanzas.Capas.BE;
 using FGF_Finanzas.Capas.BLL;
 using FGF_Finanzas.Capas.Servicios;
+using FGF_Finanzas.Capas.Servicios.Cambio_Idioma;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,7 +12,7 @@ using System.Web.UI.WebControls;
 
 namespace FGF_Finanzas
 {
-    public partial class DV_Form : System.Web.UI.Page
+    public partial class DV_Form : BasePage
     {
         private BLLDigitoVerificador _bllDV = new BLLDigitoVerificador();
         private readonly BLLBackupRestore _bllBackupRestore = new BLLBackupRestore();
@@ -31,6 +32,19 @@ namespace FGF_Finanzas
                     Response.Redirect("~/Default.aspx");
                 }
             }
+        }
+
+        protected void Page_PreRender(object sender, EventArgs e)
+        {
+            GridInconsistencias.Columns[0].HeaderText = TextoTraducido("GridInconsistencias_Header_NombreTabla", "Tabla Afectada");
+            GridInconsistencias.Columns[1].HeaderText = TextoTraducido("GridInconsistencias_Header_IdRegistro", "ID Registro");
+            GridInconsistencias.Columns[2].HeaderText = TextoTraducido("GridInconsistencias_Header_TipoFalla", "Diagnóstico de la Inconsistencia");
+        }
+
+        private string TextoTraducido(string clave, string porDefecto)
+        {
+            string texto = IdiomaManager.Instancia.ObtenerTexto(NombreFormulario, clave);
+            return texto == "[" + clave + "]" ? porDefecto : texto;
         }
 
         protected void btnSalir_Click(object sender, EventArgs e)

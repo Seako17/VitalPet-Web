@@ -94,6 +94,7 @@
     <Content Include="RegistrarMascotas.aspx" />
     <Content Include="Registrarse.aspx" />
     <Content Include="Scripts\scripts.js" />
+    <None Include="Scripts\traducciones-formularios.sql" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

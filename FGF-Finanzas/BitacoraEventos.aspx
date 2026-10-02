@@ -5,23 +5,23 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <div class="barra-titulo">
-        <h2>Panel de Administrador</h2>
+        <h2><asp:Label ID="lblTituloPanel" runat="server" Text="Panel de Administrador" /></h2>
     </div>
 
     <div class="main-layout">
         <aside class="sidebar">
-            <h3>Menú</h3>
+            <h3><asp:Label ID="lblTituloMenu" runat="server" Text="Menú" /></h3>
             <ul>
-                <li><a href="Gestion-Usuarios.aspx">Gestión Usuarios</a></li>
-                <li class="active">Bitácora eventos</li>
-                <li>Gestión Perfiles</li>
-                <li>Gestión Familias</li>
-                <li><a href="Backup-Restore.aspx">Backup/Restore</a></li>
-                <li><a href="Gestion-Idioma.aspx">Gestión Idiomas</a></li>
+                <li><asp:HyperLink ID="lnkMenuUsuarios" runat="server" NavigateUrl="Gestion-Usuarios.aspx">Gestión Usuarios</asp:HyperLink></li>
+                <li class="active"><asp:Label ID="lblMenuBitacora" runat="server" Text="Bitácora eventos" /></li>
+                <li><asp:Label ID="lblMenuPerfiles" runat="server" Text="Gestión Perfiles" /></li>
+                <li><asp:Label ID="lblMenuFamilias" runat="server" Text="Gestión Familias" /></li>
+                <li><asp:HyperLink ID="lnkMenuBackup" runat="server" NavigateUrl="Backup-Restore.aspx">Backup/Restore</asp:HyperLink></li>
+                <li><asp:HyperLink ID="lnkMenuIdiomas" runat="server" NavigateUrl="Gestion-Idioma.aspx">Gestión Idiomas</asp:HyperLink></li>
             </ul>
         </aside>
         <div class="eventos__container">
-            <h3>Bitácora de Eventos</h3>
+            <h3><asp:Label ID="lblSubtituloEventos" runat="server" Text="Bitácora de Eventos" /></h3>
 
             <div class="table-responsive">
                 <asp:GridView ID="GridViewEventos" runat="server" AutoGenerateColumns="False" CssClass="table">

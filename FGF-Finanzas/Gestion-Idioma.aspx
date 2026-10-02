@@ -6,34 +6,34 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <div class="barra-titulo">
-        <h2>Gestión de Idiomas</h2>
+        <h2><asp:Label ID="lblTitulo" runat="server" Text="Gestión de Idiomas" /></h2>
     </div>
     <div id="contenedor-alertas"></div>
 
     <div class="main-layout">
         <aside class="sidebar">
-            <h3>Menú</h3>
+            <h3><asp:Label ID="lblTituloMenu" runat="server" Text="Menú" /></h3>
             <ul>
-                <li><a href="Gestion-Usuarios.aspx">Gestión Usuarios</a></li>
-                <li><a href="BitacoraEventos.aspx">Bitácora eventos</a></li>
-                <li><a href="Backup-Restore.aspx">Backup/Restore</a></li>
-                <li class="active">Gestión Idiomas</li>
+                <li><asp:HyperLink ID="lnkMenuUsuarios" runat="server" NavigateUrl="Gestion-Usuarios.aspx">Gestión Usuarios</asp:HyperLink></li>
+                <li><asp:HyperLink ID="lnkMenuBitacora" runat="server" NavigateUrl="BitacoraEventos.aspx">Bitácora eventos</asp:HyperLink></li>
+                <li><asp:HyperLink ID="lnkMenuBackup" runat="server" NavigateUrl="Backup-Restore.aspx">Backup/Restore</asp:HyperLink></li>
+                <li class="active"><asp:Label ID="lblMenuIdiomas" runat="server" Text="Gestión Idiomas" /></li>
             </ul>
         </aside>
 
         <div class="gestion-idioma__container">
-            <h3>Traducciones del sistema</h3>
+            <h3><asp:Label ID="lblSubtituloTraducciones" runat="server" Text="Traducciones del sistema" /></h3>
 
             <div class="area-datos">
                 <div class="selectores">
                     <div class="campo-selector">
-                        <label for="<%= ddlIdioma.ClientID %>">Idioma a editar:</label>
+                        <asp:Label ID="lblIdiomaEditar" runat="server" AssociatedControlID="ddlIdioma" Text="Idioma a editar:" />
                         <asp:DropDownList ID="ddlIdioma" runat="server" AutoPostBack="true"
                             OnSelectedIndexChanged="ddlIdioma_SelectedIndexChanged">
                         </asp:DropDownList>
                     </div>
                     <div class="campo-selector">
-                        <label for="<%= ddlFormulario.ClientID %>">Formulario:</label>
+                        <asp:Label ID="lblFormulario" runat="server" AssociatedControlID="ddlFormulario" Text="Formulario:" />
                         <asp:DropDownList ID="ddlFormulario" runat="server" AutoPostBack="true"
                             OnSelectedIndexChanged="ddlFormulario_SelectedIndexChanged">
                         </asp:DropDownList>
@@ -67,18 +67,17 @@
 
             <div class="paneles">
                 <section class="panel">
-                    <h4>Nuevo idioma</h4>
+                    <h4><asp:Label ID="lblTituloNuevoIdioma" runat="server" Text="Nuevo idioma" /></h4>
                     <p class="descripcion-panel">
-                        El idioma se crea copiando los textos en español por defecto
-                        (<asp:Literal ID="litIdiomaDefecto" runat="server" />), que luego se editan de forma independiente.
+                        <asp:Label ID="lblDescripcionNuevoIdioma" runat="server" Text="El idioma se crea copiando los textos en español por defecto (es-AR), que luego se editan de forma independiente." />
                     </p>
                     <div class="fila-campos">
                         <div class="campo">
-                            <label for="<%= txtCodigoIdioma.ClientID %>">Código:</label>
+                            <asp:Label ID="lblCodigoIdioma" runat="server" AssociatedControlID="txtCodigoIdioma" Text="Código:" />
                             <asp:TextBox ID="txtCodigoIdioma" runat="server" CssClass="input-campo" MaxLength="10" placeholder="pt-BR"></asp:TextBox>
                         </div>
                         <div class="campo">
-                            <label for="<%= txtNombreIdioma.ClientID %>">Nombre:</label>
+                            <asp:Label ID="lblNombreIdioma" runat="server" AssociatedControlID="txtNombreIdioma" Text="Nombre:" />
                             <asp:TextBox ID="txtNombreIdioma" runat="server" CssClass="input-campo" MaxLength="50" placeholder="Portugués"></asp:TextBox>
                         </div>
                         <asp:Button ID="btnCrearIdioma" runat="server" Text="Crear idioma" CssClass="btn-accion" OnClick="btnCrearIdioma_Click" CausesValidation="false" />
@@ -86,7 +85,7 @@
                 </section>
 
                 <section class="panel">
-                    <h4>Idiomas registrados</h4>
+                    <h4><asp:Label ID="lblTituloIdiomasRegistrados" runat="server" Text="Idiomas registrados" /></h4>
                     <div class="tabla-idiomas">
                         <asp:GridView ID="dgvIdiomas" runat="server" AutoGenerateColumns="False"
                             ShowHeaderWhenEmpty="true" EmptyDataText="No hay idiomas registrados."

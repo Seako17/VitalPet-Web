@@ -2,15 +2,17 @@
 using FGF_Finanzas.Capas.BLL;
 using FGF_Finanzas.Capas.DAL;
 using FGF_Finanzas.Capas.Servicios;
+using FGF_Finanzas.Capas.Servicios.Cambio_Idioma;
 using System;
 using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.UI;
+using System.Web.UI.WebControls;
 
 namespace FGF_Finanzas
 {
-    public partial class Gestion_Usuarios : System.Web.UI.Page
+    public partial class Gestion_Usuarios : BasePage
     {
         BLLUsuario bllUsuario = new BLLUsuario();
         BLLEvento bllEvento = new BLLEvento();
@@ -270,6 +272,35 @@ namespace FGF_Finanzas
 
                 MostrarAlerta(ex.Message, "error");
             }
+        }
+
+        protected void Page_PreRender(object sender, EventArgs e)
+        {
+            dgvUsuarios.Columns[0].HeaderText = TextoTraducido("dgvUsuarios_Header_Dni", "DNI");
+            dgvUsuarios.Columns[1].HeaderText = TextoTraducido("dgvUsuarios_Header_Nombre", "Nombre");
+            dgvUsuarios.Columns[2].HeaderText = TextoTraducido("dgvUsuarios_Header_Apellido", "Apellido");
+            dgvUsuarios.Columns[3].HeaderText = TextoTraducido("dgvUsuarios_Header_Mail", "Email");
+            dgvUsuarios.Columns[4].HeaderText = TextoTraducido("dgvUsuarios_Header_Usuario", "Usuario");
+            dgvUsuarios.Columns[5].HeaderText = TextoTraducido("dgvUsuarios_Header_Rol", "Rol");
+            ((CommandField)dgvUsuarios.Columns[6]).SelectText = TextoTraducido("dgvUsuarios_Seleccionar", "Seleccionar");
+            dgvUsuarios.EmptyDataText = TextoTraducido("dgvUsuarios_Vacio", "No hay usuarios para mostrar.");
+
+            TraducirItem(rblFiltroTodosActivos, "Bloqueados", "rblFiltroTodosActivos_Bloqueados", "Bloqueados");
+            TraducirItem(rblFiltroTodosActivos, "Todos", "rblFiltroTodosActivos_Todos", "Todos");
+            TraducirItem(ddlRol, string.Empty, "ddlRol_Seleccionar", "-- Seleccionar Rol --");
+        }
+
+        private string TextoTraducido(string clave, string porDefecto)
+        {
+            string texto = IdiomaManager.Instancia.ObtenerTexto(NombreFormulario, clave);
+            return texto == "[" + clave + "]" ? porDefecto : texto;
+        }
+
+        private void TraducirItem(ListControl control, string valor, string clave, string porDefecto)
+        {
+            ListItem item = control.Items.FindByValue(valor);
+            if (item != null)
+                item.Text = TextoTraducido(clave, porDefecto);
         }
 
         private void MostrarAlerta(string mensaje, string tipo = "exito")

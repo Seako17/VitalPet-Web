@@ -1,6 +1,7 @@
 ﻿using FGF_Finanzas.Capas.BE;
 using FGF_Finanzas.Capas.BLL;
 using FGF_Finanzas.Capas.Servicios;
+using FGF_Finanzas.Capas.Servicios.Cambio_Idioma;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -13,7 +14,7 @@ using System.Web.UI.WebControls;
 
 namespace FGF_Finanzas
 {
-    public partial class Default : System.Web.UI.Page
+    public partial class Default : BasePage
     {
         BLLUsuario bllUsuario = new BLLUsuario();
         protected void Page_Load(object sender, EventArgs e)
@@ -27,11 +28,8 @@ namespace FGF_Finanzas
                     ScriptManager.RegisterStartupScript(this, GetType(), "AlertaAccesoDenegado", script, true);
                 }
             }
-            lblBienvenida.Text = "¡Bienvenido!";
-            
             if(SessionManager.IsLogged())
             {
-                lblBienvenida.Text += $" {SessionManager.Instancia.Usuario.Usuario.ToString()}";
                 BEUsuario usuario = SessionManager.Instancia.Usuario;
                 string rolUsuario = "Cliente";
                 if (usuario != null)
@@ -51,6 +49,22 @@ namespace FGF_Finanzas
                 HttpCookie authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
                 Response.Cookies.Add(authCookie);
             }
+        }
+
+        protected void Page_PreRender(object sender, EventArgs e)
+        {
+            string saludo = TextoTraducido("lblBienvenida", "¡Bienvenido!");
+            if (SessionManager.IsLogged() && SessionManager.Instancia.Usuario != null)
+            {
+                saludo += $" {SessionManager.Instancia.Usuario.Usuario}";
+            }
+            lblBienvenida.Text = saludo;
+        }
+
+        private string TextoTraducido(string clave, string porDefecto)
+        {
+            string texto = IdiomaManager.Instancia.ObtenerTexto(NombreFormulario, clave);
+            return texto == "[" + clave + "]" ? porDefecto : texto;
         }
     }
 }

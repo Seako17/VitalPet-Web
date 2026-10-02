@@ -1,5 +1,6 @@
 ﻿using FGF_Finanzas.Capas.BE;
 using FGF_Finanzas.Capas.BLL;
+using FGF_Finanzas.Capas.Servicios.Cambio_Idioma;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,7 +11,7 @@ using System.Web.UI.WebControls;
 
 namespace FGF_Finanzas
 {
-    public partial class Gestion_Idioma : System.Web.UI.Page
+    public partial class Gestion_Idioma : BasePage
     {
         BLLTraduccion bllTraduccion = new BLLTraduccion();
         DataTable _traduccionesCargadas;
@@ -212,7 +213,21 @@ namespace FGF_Finanzas
 
         protected void Page_PreRender(object sender, EventArgs e)
         {
-            litIdiomaDefecto.Text = BLLTraduccion.IDIOMA_POR_DEFECTO;
+            dgvTraducciones.Columns[0].HeaderText = TextoTraducido("dgvTraducciones_Header_Control", "Control");
+            dgvTraducciones.Columns[1].HeaderText = TextoTraducido("dgvTraducciones_Header_TextoTraducido", "Texto traducido");
+            dgvTraducciones.Columns[2].HeaderText = TextoTraducido("dgvTraducciones_Header_Acciones", "Acciones");
+            dgvTraducciones.EmptyDataText = TextoTraducido("dgvTraducciones_Vacio", "No hay etiquetas para mostrar.");
+
+            dgvIdiomas.Columns[0].HeaderText = TextoTraducido("dgvIdiomas_Header_Codigo", "Código");
+            dgvIdiomas.Columns[1].HeaderText = TextoTraducido("dgvIdiomas_Header_Nombre", "Nombre");
+            dgvIdiomas.Columns[2].HeaderText = TextoTraducido("dgvIdiomas_Header_Acciones", "Acciones");
+            dgvIdiomas.EmptyDataText = TextoTraducido("dgvIdiomas_Vacio", "No hay idiomas registrados.");
+        }
+
+        private string TextoTraducido(string clave, string porDefecto)
+        {
+            string texto = IdiomaManager.Instancia.ObtenerTexto(NombreFormulario, clave);
+            return texto == "[" + clave + "]" ? porDefecto : texto;
         }
 
         private void MostrarAlerta(string mensaje, string tipo = "exito")

@@ -11,7 +11,7 @@ using System.Web.UI.WebControls;
 
 namespace FGF_Finanzas
 {
-    public partial class Backup_Restore : System.Web.UI.Page
+    public partial class Backup_Restore : BasePage
     {
         private readonly BLLBackupRestore _bllBackupRestore = new BLLBackupRestore();
         BLLEvento bllEvento;
