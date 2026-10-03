@@ -12,8 +12,12 @@ using System.Web.UI.WebControls;
 
 namespace FGF_Finanzas
 {
-    public partial class Gestion_Idioma : BasePage
+    public partial class Gestion_Idioma : PaginaSegura
     {
+        protected override Permiso PermisoRequerido
+        {
+            get { return CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "UsuarioGestionar"); }
+        }
         BLLTraduccion bllTraduccion = new BLLTraduccion();
         DataTable _traduccionesCargadas;
 

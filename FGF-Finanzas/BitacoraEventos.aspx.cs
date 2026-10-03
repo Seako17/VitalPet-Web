@@ -1,4 +1,5 @@
 ﻿using FGF_Finanzas.Capas.BLL;
+using FGF_Finanzas.Capas.Servicios;
 using FGF_Finanzas.Capas.Servicios.Cambio_Idioma;
 using Microsoft.SqlServer.Server;
 using System;
@@ -12,8 +13,12 @@ using System.Web.UI.WebControls;
 
 namespace FGF_Finanzas
 {
-    public partial class BitacoraEventos : BasePage
+    public partial class BitacoraEventos : PaginaSegura
     {
+        protected override Permiso PermisoRequerido
+        {
+            get { return CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "BitacoraVer"); }
+        }
         BLLEvento bllEvento = new BLLEvento();
         protected void Page_Load(object sender, EventArgs e)
         {

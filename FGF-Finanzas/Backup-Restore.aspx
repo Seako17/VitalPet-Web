@@ -14,8 +14,8 @@
             <ul>
                 <li><asp:HyperLink ID="lnkMenuUsuarios" runat="server" NavigateUrl="Gestion-Usuarios.aspx">Gestión Usuarios</asp:HyperLink></li>
                 <li><asp:HyperLink ID="lnkMenuBitacora" runat="server" NavigateUrl="BitacoraEventos.aspx">Bitácora eventos</asp:HyperLink></li>
-                <li><asp:Label ID="lblMenuPerfiles" runat="server" Text="Gestión Perfiles" /></li>
-                <li><asp:Label ID="lblMenuFamilias" runat="server" Text="Gestión Familias" /></li>
+                <li><a href="Gestion-Perfiles.aspx"><asp:Label ID="lblMenuPerfiles" runat="server" Text="Gestión Perfiles" /></a></li>
+                <li><a href="Gestion-Familias.aspx"><asp:Label ID="lblMenuFamilias" runat="server" Text="Gestión Familias" /></a></li>
                 <li class="active"><asp:Label ID="lblMenuBackup" runat="server" Text="Backup/Restore" /></li>
             </ul>
         </aside>
@@ -40,7 +40,7 @@
                         <span><asp:Label ID="lblSubirBak" runat="server" Text="Subir .BAK" /></span>
                     </asp:Label>
 
-                    <asp:FileUpload ID="fileRestore" runat="server" Style="display: none;" onchange="updateFileName(this)" accept=".bak"/>
+                    <asp:FileUpload ID="fileRestore" runat="server" Style="display: none;" onchange="updateFileName(this)" accept=".bak" />
                     <span id="fileNameLabel" class="file-name-text"></span>
 
                     <asp:Button ID="btnRestore" runat="server" Text="Restaurar" CssClass="btn-action" OnClick="btnRestore_Click" />

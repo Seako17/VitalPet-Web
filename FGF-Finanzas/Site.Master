@@ -36,7 +36,7 @@
                     <li id="WebMaster" runat="server">
                         <asp:HyperLink runat="server" ID="lnkWebMaster" NavigateUrl="Backup-Restore.aspx" Text="Web Master" /></li>
 
-                    <% if (FGF_Finanzas.Capas.Servicios.SessionManager.Instancia != null)
+                    <% if (FGF_Finanzas.Capas.Servicios.SessionManager.Instancia != null && FGF_Finanzas.Capas.Servicios.SessionManager.Instancia.Usuario.Rol.TienePermiso(FGF_Finanzas.Capas.Servicios.CodigosPermiso.ObtenerPermisos().Find(x =>x.Nombre == "ContrasenaCambiar")))
                         { %>
                     <li>
                         <asp:HyperLink runat="server" ID="lnkCambiarPass" NavigateUrl="Cambiar-Contraseña.aspx" Text="Cambiar Contraseña" /></li>
