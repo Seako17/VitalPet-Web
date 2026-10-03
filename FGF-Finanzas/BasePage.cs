@@ -4,7 +4,9 @@ using FGF_Finanzas.Capas.Servicios.Cambio_Idioma;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Web.UI;
+using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
 namespace FGF_Finanzas
@@ -39,7 +41,7 @@ namespace FGF_Finanzas
             AplicarTraducciones(this.Controls, traducciones);
         }
 
-        private void AplicarTraducciones(ControlCollection controls, IDictionary<string, string> traducciones)
+        internal static void AplicarTraducciones(ControlCollection controls, IDictionary<string, string> traducciones)
         {
             foreach (Control c in controls)
             {
@@ -78,6 +80,95 @@ namespace FGF_Finanzas
                     AplicarTraducciones(c.Controls, traducciones);
                 }
             }
+        }
+
+        protected string TextoTraducido(string clave, string porDefecto)
+        {
+            string texto = IdiomaManager.Instancia.ObtenerTexto(NombreFormulario, clave);
+            return texto == "[" + clave + "]" ? porDefecto : texto;
+        }
+
+        protected void TraducirColumna(GridView grilla, int columna, string clave, string porDefecto)
+        {
+            string texto = TextoTraducido(clave, porDefecto);
+            grilla.Columns[columna].HeaderText = texto;
+
+            if (grilla.HeaderRow != null && columna < grilla.HeaderRow.Cells.Count)
+                grilla.HeaderRow.Cells[columna].Text = texto;
+        }
+
+        protected void TraducirSinDatos(GridView grilla, string clave, string porDefecto)
+        {
+            string texto = TextoTraducido(clave, porDefecto);
+            grilla.EmptyDataText = texto;
+
+            GridViewRow filaVacia = BuscarFilaVacia(grilla);
+            if (filaVacia != null && filaVacia.Cells.Count > 0)
+                filaVacia.Cells[0].Text = texto;
+        }
+
+        protected void TraducirBotonFila(GridView grilla, string idBoton, string clave, string porDefecto)
+        {
+            string texto = TextoTraducido(clave, porDefecto);
+
+            foreach (GridViewRow fila in grilla.Rows)
+            {
+                if (fila.RowType != DataControlRowType.DataRow)
+                    continue;
+
+                LinkButton boton = fila.FindControl(idBoton) as LinkButton;
+                if (boton != null)
+                    boton.Text = texto;
+            }
+        }
+
+        protected void TraducirBotonSeleccion(GridView grilla, int columna, string clave, string porDefecto)
+        {
+            string texto = TextoTraducido(clave, porDefecto);
+
+            if (grilla.Columns[columna] is CommandField campo)
+                campo.SelectText = texto;
+
+            foreach (GridViewRow fila in grilla.Rows)
+            {
+                if (fila.RowType != DataControlRowType.DataRow || columna >= fila.Cells.Count)
+                    continue;
+
+                LinkButton boton = fila.Cells[columna].Controls.OfType<LinkButton>()
+                    .FirstOrDefault(b => b.CommandName == "Select");
+
+                if (boton != null)
+                    boton.Text = texto;
+            }
+        }
+
+        protected void TraducirItem(ListControl control, string valor, string clave, string porDefecto)
+        {
+            ListItem item = control.Items.FindByValue(valor);
+            if (item != null)
+                item.Text = TextoTraducido(clave, porDefecto);
+        }
+
+        protected void TraducirOpciones(HtmlSelect control, string[] claves, string[] textosPorDefecto)
+        {
+            for (int i = 0; i < control.Items.Count && i < claves.Length; i++)
+            {
+                control.Items[i].Text = TextoTraducido(claves[i], textosPorDefecto[i]);
+            }
+        }
+
+        private GridViewRow BuscarFilaVacia(Control contenedor)
+        {
+            foreach (Control hijo in contenedor.Controls)
+            {
+                if (hijo is GridViewRow fila && fila.RowType == DataControlRowType.EmptyDataRow)
+                    return fila;
+
+                GridViewRow encontrada = BuscarFilaVacia(hijo);
+                if (encontrada != null)
+                    return encontrada;
+            }
+            return null;
         }
 
         public string ObtenerError(string codigoError, params object[] argumentos)

@@ -240,60 +240,6 @@ namespace FGF_Finanzas
             TraducirBotonFila(dgvIdiomas, "btnEliminarIdioma", "btnEliminarIdioma", "Eliminar");
         }
 
-        private void TraducirColumna(GridView grilla, int columna, string clave, string porDefecto)
-        {
-            string texto = TextoTraducido(clave, porDefecto);
-            grilla.Columns[columna].HeaderText = texto;
-
-            if (grilla.HeaderRow != null && columna < grilla.HeaderRow.Cells.Count)
-                grilla.HeaderRow.Cells[columna].Text = texto;
-        }
-
-        private void TraducirSinDatos(GridView grilla, string clave, string porDefecto)
-        {
-            string texto = TextoTraducido(clave, porDefecto);
-            grilla.EmptyDataText = texto;
-
-            GridViewRow filaVacia = BuscarFilaVacia(grilla);
-            if (filaVacia != null && filaVacia.Cells.Count > 0)
-                filaVacia.Cells[0].Text = texto;
-        }
-
-        private GridViewRow BuscarFilaVacia(Control contenedor)
-        {
-            foreach (Control hijo in contenedor.Controls)
-            {
-                if (hijo is GridViewRow fila && fila.RowType == DataControlRowType.EmptyDataRow)
-                    return fila;
-
-                GridViewRow encontrada = BuscarFilaVacia(hijo);
-                if (encontrada != null)
-                    return encontrada;
-            }
-            return null;
-        }
-
-        private void TraducirBotonFila(GridView grilla, string idBoton, string clave, string porDefecto)
-        {
-            string texto = TextoTraducido(clave, porDefecto);
-
-            foreach (GridViewRow fila in grilla.Rows)
-            {
-                if (fila.RowType != DataControlRowType.DataRow)
-                    continue;
-
-                LinkButton boton = fila.FindControl(idBoton) as LinkButton;
-                if (boton != null)
-                    boton.Text = texto;
-            }
-        }
-
-        private string TextoTraducido(string clave, string porDefecto)
-        {
-            string texto = IdiomaManager.Instancia.ObtenerTexto(NombreFormulario, clave);
-            return texto == "[" + clave + "]" ? porDefecto : texto;
-        }
-
         private void MostrarAlertaPendiente()
         {
             if (Session["GestionIdioma_Alerta"] is string[] alerta)

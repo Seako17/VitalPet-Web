@@ -61,11 +61,5 @@ namespace FGF_Finanzas
             }
             lblBienvenida.Text = saludo;
         }
-
-        private string TextoTraducido(string clave, string porDefecto)
-        {
-            string texto = IdiomaManager.Instancia.ObtenerTexto(NombreFormulario, clave);
-            return texto == "[" + clave + "]" ? porDefecto : texto;
-        }
     }
 }

@@ -70,7 +70,7 @@ namespace FGF_Finanzas.Capas.Servicios.Cambio_Idioma
 
         public List<BEIdioma> ObtenerIdiomasDisponibles()
         {
-            return _dalTraduccion.ObtenerIdiomasDisponibles();
+            return _dalTraduccion.ObtenerIdiomas();
         }
     }
 }

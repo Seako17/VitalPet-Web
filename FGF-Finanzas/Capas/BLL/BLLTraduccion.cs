@@ -32,16 +32,6 @@ namespace FGF_Finanzas.Capas.BLL
             return _dalTraduccion.ObtenerFormularios();
         }
 
-        public List<BEEtiqueta> ObtenerEtiquetas(string formulario)
-        {
-            return _dalTraduccion.ObtenerEtiquetas(formulario);
-        }
-
-        public BEIdioma ObtenerIdioma(string codigo)
-        {
-            return _dalTraduccion.ObtenerIdiomaPorCodigo(codigo);
-        }
-
         public DataTable ObtenerEtiquetasConTraduccion(string formulario, string codigoIdioma)
         {
             if (string.IsNullOrWhiteSpace(formulario))

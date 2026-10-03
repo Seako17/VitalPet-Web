@@ -41,21 +41,6 @@ namespace FGF_Finanzas
             TraducirColumna(GridInconsistencias, 2, "GridInconsistencias_Header_TipoFalla", "Diagnóstico de la Inconsistencia");
         }
 
-        private string TextoTraducido(string clave, string porDefecto)
-        {
-            string texto = IdiomaManager.Instancia.ObtenerTexto(NombreFormulario, clave);
-            return texto == "[" + clave + "]" ? porDefecto : texto;
-        }
-
-        private void TraducirColumna(GridView grilla, int columna, string clave, string porDefecto)
-        {
-            string texto = TextoTraducido(clave, porDefecto);
-            grilla.Columns[columna].HeaderText = texto;
-
-            if (grilla.HeaderRow != null && columna < grilla.HeaderRow.Cells.Count)
-                grilla.HeaderRow.Cells[columna].Text = texto;
-        }
-
         protected void btnSalir_Click(object sender, EventArgs e)
         {
             SessionManager.LogOut();

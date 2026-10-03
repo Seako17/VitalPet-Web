@@ -153,33 +153,7 @@ namespace FGF_Finanzas
 
         public void ActualizarIdioma(string codigoIdioma, IDictionary<string, string> traducciones)
         {
-            AplicarTraducciones(this.Controls, traducciones);
-        }
-        private void AplicarTraducciones(ControlCollection controls, IDictionary<string, string> traducciones)
-        {
-            foreach (Control c in controls)
-            {
-                if (!string.IsNullOrEmpty(c.ID) && traducciones.TryGetValue(c.ID, out string texto))
-                {
-                    switch (c)
-                    {
-                        case HyperLink hl:
-                            hl.Text = texto;
-                            break;
-                        case Button btn:
-                            btn.Text = texto;
-                            break;
-                        case Label lbl:
-                            lbl.Text = texto;
-                            break;
-                    }
-                }
-
-                if (c.HasControls())
-                {
-                    AplicarTraducciones(c.Controls, traducciones);
-                }
-            }
+            BasePage.AplicarTraducciones(this.Controls, traducciones);
         }
 
         protected void rptIdiomas_ItemCommand(object source, RepeaterCommandEventArgs e)

@@ -41,29 +41,6 @@ namespace FGF_Finanzas
                 new[] { "Criticidad", "1 (Crítica)", "2 (Importante)", "3 (Media)", "4 (Baja)", "5 (Mínima)" });
         }
 
-        private string TextoTraducido(string clave, string porDefecto)
-        {
-            string texto = IdiomaManager.Instancia.ObtenerTexto(NombreFormulario, clave);
-            return texto == "[" + clave + "]" ? porDefecto : texto;
-        }
-
-        private void TraducirColumna(GridView grilla, int columna, string clave, string porDefecto)
-        {
-            string texto = TextoTraducido(clave, porDefecto);
-            grilla.Columns[columna].HeaderText = texto;
-
-            if (grilla.HeaderRow != null && columna < grilla.HeaderRow.Cells.Count)
-                grilla.HeaderRow.Cells[columna].Text = texto;
-        }
-
-        private void TraducirOpciones(HtmlSelect control, string[] claves, string[] textosPorDefecto)
-        {
-            for (int i = 0; i < control.Items.Count && i < claves.Length; i++)
-            {
-                control.Items[i].Text = TextoTraducido(claves[i], textosPorDefecto[i]);
-            }
-        }
-
         private void cargarGrilla(DataTable eventos)
         {
             GridViewEventos.DataSource = eventos;
