@@ -23,6 +23,9 @@ namespace FGF_Finanzas
                 List<InconsistenciaReporte> listaInconsistencias = _bllDV.CompararDigito();
                 if (listaInconsistencias.Count > 0)
                 {
+                    foreach (InconsistenciaReporte registro in listaInconsistencias)
+                        registro.TipoFalla = TraducirDiagnostico(registro.TipoFalla);
+
                     GridInconsistencias.DataSource = listaInconsistencias;
                     GridInconsistencias.DataBind();
                     GridInconsistencias.Visible = true;
@@ -39,6 +42,23 @@ namespace FGF_Finanzas
             TraducirColumna(GridInconsistencias, 0, "GridInconsistencias_Header_NombreTabla", "Tabla Afectada");
             TraducirColumna(GridInconsistencias, 1, "GridInconsistencias_Header_IdRegistro", "ID Registro");
             TraducirColumna(GridInconsistencias, 2, "GridInconsistencias_Header_TipoFalla", "Diagnóstico de la Inconsistencia");
+        }
+
+        private string TraducirDiagnostico(string clave)
+        {
+            switch (clave)
+            {
+                case "DV_FALLA_ALTA_NO_REGISTRADA":
+                    return TextoTraducido(clave, "Hubo un alta no registrada.");
+                case "DV_FALLA_ELIMINACION_NO_REGISTRADA":
+                    return TextoTraducido(clave, "Hubo una eliminación no registrada.");
+                case "DV_FALLA_MODIFICACION_REGISTRO":
+                    return TextoTraducido(clave, "Hubo una modificación en el registro.");
+                case "DV_FALLA_INTEGRIDAD_ESTRUCTURAL":
+                    return TextoTraducido(clave, "Falla de integridad estructural.");
+                default:
+                    return clave;
+            }
         }
 
         protected void btnSalir_Click(object sender, EventArgs e)
@@ -62,7 +82,7 @@ namespace FGF_Finanzas
         {
             try
             {
-                List<string> tablasAControlar = new List<string> { "Usuario", "Mascota" };
+                List<string> tablasAControlar = new List<string> { "Usuario", "Mascota", "Idioma", "Etiqueta", "Traduccion" };
 
                 foreach (string tabla in tablasAControlar)
                 {

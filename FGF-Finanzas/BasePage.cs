@@ -173,12 +173,12 @@ namespace FGF_Finanzas
 
         public string ObtenerError(string codigoError, params object[] argumentos)
         {
-            return FormatearMensaje("Errores", codigoError, argumentos);
+            return FormatearMensaje(new[] { "Errores" }, codigoError, argumentos);
         }
 
         public string ObtenerMensaje(string codigoMensaje, params object[] argumentos)
         {
-            return FormatearMensaje("Mensajes", codigoMensaje, argumentos);
+            return FormatearMensaje(new[] { NombreFormulario, "Mensajes" }, codigoMensaje, argumentos);
         }
 
         public string ObtenerError(BECustomException excepcion)
@@ -199,19 +199,24 @@ namespace FGF_Finanzas
                 : ex.Message;
         }
 
-        private string FormatearMensaje(string formulario, string clave, object[] argumentos)
+        private string FormatearMensaje(string[] formularios, string clave, object[] argumentos)
         {
-            string texto = IdiomaManager.Instancia.ObtenerTexto(formulario, clave);
+            foreach (string formulario in formularios)
+            {
+                string texto = IdiomaManager.Instancia.ObtenerTexto(formulario, clave);
 
-            if (texto == "[" + clave + "]")
-                texto = IdiomaManager.Instancia.ObtenerTexto(formulario, clave, BLLTraduccion.IDIOMA_POR_DEFECTO);
+                if (texto == "[" + clave + "]")
+                    texto = IdiomaManager.Instancia.ObtenerTexto(formulario, clave, BLLTraduccion.IDIOMA_POR_DEFECTO);
 
-            if (texto == "[" + clave + "]")
-                texto = clave;
+                if (texto != "[" + clave + "]")
+                {
+                    return argumentos != null && argumentos.Length > 0
+                        ? string.Format(texto, argumentos)
+                        : texto;
+                }
+            }
 
-            return argumentos != null && argumentos.Length > 0
-                ? string.Format(texto, argumentos)
-                : texto;
+            return clave;
         }
 
         protected void MostrarAlerta(string mensaje, string tipo = "exito")

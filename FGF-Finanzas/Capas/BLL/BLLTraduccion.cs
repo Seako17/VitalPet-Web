@@ -15,11 +15,13 @@ namespace FGF_Finanzas.Capas.BLL
 
         private readonly DALTraduccion _dalTraduccion;
         private readonly BLLEvento _bllEvento;
+        private readonly BLLDigitoVerificador _bllDigitoVerificador;
 
         public BLLTraduccion()
         {
             _dalTraduccion = new DALTraduccion();
             _bllEvento = new BLLEvento();
+            _bllDigitoVerificador = new BLLDigitoVerificador();
         }
 
         public List<BEIdioma> ObtenerIdiomas()
@@ -58,6 +60,7 @@ namespace FGF_Finanzas.Capas.BLL
             _dalTraduccion.GuardarTraduccion(new BETraduccion(idioma.IdIdioma, etiqueta.IdEtiqueta, texto ?? string.Empty));
 
             RegistrarEvento("Editar Traduccion", 2);
+            SincronizarDigitoVerificador("Traduccion");
         }
 
         public BEIdioma CrearIdioma(string codigo, string nombre)
@@ -88,6 +91,7 @@ namespace FGF_Finanzas.Capas.BLL
             _dalTraduccion.CopiarTraducciones(origen.IdIdioma, idIdiomaNuevo);
 
             RegistrarEvento("Crear Idioma", 4);
+            SincronizarDigitoVerificador("Idioma", "Traduccion");
 
             return new BEIdioma(idIdiomaNuevo, codigo, nombre);
         }
@@ -107,6 +111,7 @@ namespace FGF_Finanzas.Capas.BLL
             _dalTraduccion.EliminarIdioma(idioma.IdIdioma);
 
             RegistrarEvento("Eliminar Idioma", 2);
+            SincronizarDigitoVerificador("Idioma", "Traduccion");
         }
 
         private BEIdioma ObtenerIdiomaSeleccionado(string codigoIdioma)
@@ -119,6 +124,12 @@ namespace FGF_Finanzas.Capas.BLL
                 throw new BECustomException("ERR_IDIOMA_NO_REGISTRADO", codigoIdioma);
 
             return idioma;
+        }
+
+        private void SincronizarDigitoVerificador(params string[] tablas)
+        {
+            foreach (string tabla in tablas)
+                _bllDigitoVerificador.InicializarTablaCompleta(tabla);
         }
 
         private void RegistrarEvento(string evento, int criticidad)
