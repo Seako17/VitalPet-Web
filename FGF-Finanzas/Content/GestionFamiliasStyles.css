@@ -1,0 +1,420 @@
+﻿body {
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+
+/* =========================================================
+   BARRA DE TÍTULO
+   ========================================================= */
+
+.barra-titulo {
+    background-color: #81C4DE;
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+    margin-bottom: 30px;
+}
+
+    .barra-titulo h2 {
+        color: #ffffff;
+        font-size: 32px;
+        font-weight: 400;
+        margin: 0;
+    }
+
+
+/* =========================================================
+   LAYOUT PRINCIPAL
+   ========================================================= */
+
+.main-layout {
+    display: flex;
+    align-items: stretch;
+    gap: 20px;
+    padding: 0 20px;
+    max-width: 1200px;
+    margin: 20px auto;
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   MENÚ LATERAL
+   ========================================================= */
+
+.sidebar {
+    width: 220px;
+    background-color: #d2bc9e;
+    padding: 20px;
+    border-radius: 10px;
+    flex-shrink: 0;
+    box-sizing: border-box;
+}
+
+    .sidebar h3 {
+        margin-top: 0;
+        margin-bottom: 15px;
+        color: #ffffff;
+        font-size: 22px;
+        font-weight: 600;
+    }
+
+    .sidebar ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .sidebar li {
+        padding: 12px 0;
+        cursor: pointer;
+        color: #eeeeee;
+        border-bottom: 1px solid #c9b497;
+        transition: font-weight 0.1s ease;
+    }
+
+        .sidebar li.active {
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .sidebar li:hover {
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+    .sidebar ul li a {
+        color: inherit;
+        text-decoration: none !important;
+        display: inline-block;
+        width: 100%;
+        font-weight: normal !important;
+    }
+
+    .sidebar ul li:hover a,
+    .sidebar ul li.active a {
+        color: #ffffff !important;
+        font-weight: bold !important;
+    }
+
+
+/* =========================================================
+   CONTENEDOR PRINCIPAL
+   ========================================================= */
+
+.gestion-familias__container {
+    flex-grow: 1;
+    background-color: #d2bc9e;
+    padding: 25px;
+    border-radius: 15px;
+    box-sizing: border-box;
+    min-width: 0;
+    position: relative;
+}
+
+    .gestion-familias__container > h3 {
+        margin: 0 0 20px 0;
+        color: #ffffff;
+        text-decoration: underline;
+        font-size: 24px;
+        font-weight: 600;
+    }
+
+
+/* =========================================================
+   DISTRIBUCIÓN DE FAMILIAS / PERMISOS / BOTONES
+   ========================================================= */
+
+.familias-layout {
+    display: grid;
+    grid-template-columns: minmax(170px, 1fr) minmax(170px, 1fr) minmax(170px, 1fr) 150px;
+    gap: 20px;
+    width: 100%;
+    align-items: start;
+    box-sizing: border-box;
+}
+
+.columna-familia,
+.columna-permisos {
+    min-width: 0;
+}
+
+    .columna-familia h4,
+    .columna-permisos h4 {
+        margin: 0 0 8px 0;
+        color: #ffffff;
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+
+/* =========================================================
+   CONTENEDOR DE LOS LISTBOX
+   ========================================================= */
+
+.lista-contenedor {
+    width: 100%;
+    height: 360px;
+    background-color: #ffffff;
+    border: 1px solid #555555;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   LISTBOX
+   ========================================================= */
+
+.listbox-familias {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    border: none;
+    outline: none;
+    background-color: #ffffff;
+    color: #111111;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 15px;
+    padding: 6px;
+}
+
+    .listbox-familias option {
+        padding: 5px 6px;
+        cursor: pointer;
+    }
+
+        .listbox-familias option:checked {
+            background-color: #81C4DE;
+            color: #ffffff;
+        }
+
+    .listbox-familias:focus {
+        outline: none;
+    }
+
+
+/* =========================================================
+   BOTONERA
+   ========================================================= */
+
+.botones-operaciones {
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 29px;
+    box-sizing: border-box;
+}
+
+    .botones-operaciones input[type="submit"] {
+        width: 100%;
+        background-color: #ffffff;
+        color: #333333;
+        border: none;
+        padding: 9px 8px;
+        font-size: 12px;
+        font-weight: 600;
+        border-radius: 20px;
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+        transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+    }
+
+        .botones-operaciones input[type="submit"]:hover {
+            background-color: #f0f0f0;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.16);
+        }
+
+        .botones-operaciones input[type="submit"]:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+        }
+
+        .botones-operaciones input[type="submit"]:disabled {
+            background-color: #e0e0e0;
+            color: #999999;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+
+/* =========================================================
+   SEPARACIÓN ANTES DE AGREGAR FAMILIA
+   ========================================================= */
+
+.separador-botones {
+    height: 45px;
+}
+
+
+/* =========================================================
+   TEXTBOX NUEVA FAMILIA
+   ========================================================= */
+
+.txt-nombre-familia {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #dddddd;
+    outline: none;
+    padding: 8px 10px;
+    border-radius: 20px;
+    background-color: #ffffff;
+    color: #333333;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 12px;
+    text-align: center;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .txt-nombre-familia:focus {
+        border-color: #81C4DE;
+        box-shadow: 0 0 0 2px rgba(129, 196, 222, 0.2);
+    }
+
+    .txt-nombre-familia::placeholder {
+        color: #999999;
+    }
+
+
+/* =========================================================
+   ALERTAS
+   ========================================================= */
+
+#contenedor-alertas {
+    width: 100%;
+    max-width: 1200px;
+    margin: 15px auto 0 auto;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+
+.alerta-web {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 12px 20px;
+    margin-bottom: 15px;
+    border: 1px solid #c3e6cb;
+    border-radius: 5px;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 14px;
+    text-align: center;
+}
+
+.alerta-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+
+/* =========================================================
+   SCROLLBAR DE LOS LISTBOX
+   Chrome / Edge
+   ========================================================= */
+
+.listbox-familias::-webkit-scrollbar {
+    width: 8px;
+}
+
+.listbox-familias::-webkit-scrollbar-track {
+    background-color: #f2f2f2;
+}
+
+.listbox-familias::-webkit-scrollbar-thumb {
+    background-color: #b9a78f;
+    border-radius: 10px;
+}
+
+    .listbox-familias::-webkit-scrollbar-thumb:hover {
+        background-color: #9e8c74;
+    }
+
+
+/* =========================================================
+   RESPONSIVE - TABLETS
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+    .familias-layout {
+        grid-template-columns: minmax(180px, 1fr) minmax(180px, 1fr);
+        gap: 20px;
+    }
+
+    .botones-operaciones {
+        width: 100%;
+        padding-top: 0;
+    }
+
+    .separador-botones {
+        height: 15px;
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE - SIDEBAR ARRIBA
+   ========================================================= */
+
+@media (max-width: 950px) {
+
+    .main-layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+    }
+
+        .sidebar ul {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .sidebar li {
+            border-bottom: none;
+            padding: 8px 12px;
+        }
+}
+
+
+/* =========================================================
+   RESPONSIVE - CELULAR
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .familias-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .gestion-familias__container {
+        padding: 18px;
+    }
+
+    .lista-contenedor {
+        height: 280px;
+    }
+
+    .botones-operaciones {
+        width: 100%;
+    }
+
+        .botones-operaciones input[type="submit"] {
+            padding: 10px;
+        }
+
+    .separador-botones {
+        height: 10px;
+    }
+
+    .barra-titulo h2 {
+        font-size: 25px;
+    }
+}

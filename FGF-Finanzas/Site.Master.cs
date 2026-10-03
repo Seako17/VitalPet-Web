@@ -16,6 +16,7 @@ namespace FGF_Finanzas
     public partial class Site : System.Web.UI.MasterPage
     {
         BLLUsuario bllUsuario = new BLLUsuario(); BEUsuario usuario;
+        BLLRol BLLRol = new BLLRol();
         protected void Page_Load(object sender, EventArgs e)
         {
             
@@ -48,11 +49,12 @@ namespace FGF_Finanzas
             }
             if (SessionManager.IsLogged())
             {
+                
                 BLLDigitoVerificador bllDV = new BLLDigitoVerificador();
                 var lista = bllDV.CompararDigito();
                 if (lista != null && lista.Count > 0)
                 {
-                    if (SessionManager.Instancia.Usuario.Rol == "Web Master")
+                    if (SessionManager.Instancia.Usuario.Rol.TienePermiso(CodigosPermiso.ObtenerPermisos().Find(x =>x.Nombre == "DV")))
                     {
                         Session["InconsistenciasDetectadas"] = lista;
                         Response.Redirect("~/DV_Form.aspx", false);
@@ -71,15 +73,15 @@ namespace FGF_Finanzas
 
                 if(SessionManager.Instancia != null && SessionManager.Instancia.Usuario != null)
                 {
-                    if (SessionManager.Instancia.Usuario.Rol == "Admin")
+                    if (SessionManager.Instancia.Usuario.Rol.TienePermiso(CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "UsuarioGestionar")) || SessionManager.Instancia.Usuario.Rol.TienePermiso(CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "FamiliaGestionar")) || SessionManager.Instancia.Usuario.Rol.TienePermiso(CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "PerfilGestionar")))
                     {
                         Admin.Visible = true;
                     }
-                    if (SessionManager.Instancia.Usuario.Rol == "Web Master")
+                    if (SessionManager.Instancia.Usuario.Rol.TienePermiso(CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "BackUpRestore")))
                     {
                         WebMaster.Visible = true;
                     }
-                    if (SessionManager.Instancia.Usuario.Rol == "Cliente")
+                    if (SessionManager.Instancia.Usuario.Rol.TienePermiso(CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "MascotaRegistrar")))
                     {
                         Cliente.Visible = true;
                     }
