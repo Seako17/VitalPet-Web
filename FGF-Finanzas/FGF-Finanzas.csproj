@@ -76,6 +76,8 @@
     <Content Include="Content\DV_Styles.css" />
     <Content Include="Content\Estilos.css" />
     <Content Include="Content\EventosStyles.css" />
+    <Content Include="Content\GestionFamiliasStyles.css" />
+    <Content Include="Content\GestionPerfiles.css" />
     <Content Include="Content\GestionUsuarios\CambiarContraseñaStyles.css" />
     <Content Include="Content\GestionUsuarios\GestionUsuariosStyles.css" />
     <Content Include="Content\Login\ojoAbierto.png" />
@@ -85,6 +87,8 @@
     <Content Include="Content\registrarMascotasStyles.css" />
     <Content Include="Content\RegistrarStyles.css" />
     <Content Include="Default.aspx" />
+    <Content Include="Gestion-Familias.aspx" />
+    <Content Include="Gestion-Perfiles.aspx" />
     <Content Include="Gestion-Usuarios.aspx" />
     <Content Include="DV_Form.aspx" />
     <Content Include="Global.asax" />
@@ -127,6 +131,7 @@
     <Compile Include="Capas\BLL\BLLMascota.cs" />
     <Compile Include="Capas\BLL\BLLRol.cs" />
     <Compile Include="Capas\BLL\BLLUsuario.cs" />
+    <Compile Include="Capas\BLL\BLLPermiso.cs" />
     <Compile Include="Capas\DAL\DALAbstracta.cs" />
     <Compile Include="Capas\DAL\DALBackupRestore.cs" />
     <Compile Include="Capas\DAL\DALEvento.cs" />
@@ -149,6 +154,20 @@
     </Compile>
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Gestion-Familias.aspx.cs">
+      <DependentUpon>Gestion-Familias.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Gestion-Familias.aspx.designer.cs">
+      <DependentUpon>Gestion-Familias.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Gestion-Perfiles.aspx.cs">
+      <DependentUpon>Gestion-Perfiles.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Gestion-Perfiles.aspx.designer.cs">
+      <DependentUpon>Gestion-Perfiles.aspx</DependentUpon>
     </Compile>
     <Compile Include="Gestion-Usuarios.aspx.cs">
       <DependentUpon>Gestion-Usuarios.aspx</DependentUpon>

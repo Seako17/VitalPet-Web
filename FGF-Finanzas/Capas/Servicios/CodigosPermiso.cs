@@ -46,5 +46,26 @@ namespace FGF_Finanzas.Capas.Servicios
                 Nombre = "ContrasenaCambiar",
                 Descripcion = "Cambiar la contraseña"
             };
+        public static readonly Permiso FamiliaGestionar =
+            new Permiso
+            {
+                Id = 6,
+                Nombre = "FamiliaGestionar",
+                Descripcion = "Gestionar familias"
+            };
+        public static readonly Permiso PerfilGestionar =
+            new Permiso
+            {
+                Id = 7,
+                Nombre = "PerfilGestionar",
+                Descripcion = "Gestionar perfiles"
+            };
+        public static readonly Permiso DV =
+            new Permiso
+            {
+                Id = 8,
+                Nombre = "DV",
+                Descripcion = "Gestionar DV"
+            };
     }
 }

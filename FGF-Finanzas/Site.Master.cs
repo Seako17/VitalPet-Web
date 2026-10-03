@@ -54,8 +54,7 @@ namespace FGF_Finanzas
                 var lista = bllDV.CompararDigito();
                 if (lista != null && lista.Count > 0)
                 {
-                    //Cambiar por .rol.tienePermiso = Servicios.CodigoPermiso.DV
-                    if (SessionManager.Instancia.Usuario.Rol.Nombre == "Web Master")
+                    if (SessionManager.Instancia.Usuario.Rol.TienePermiso(CodigosPermiso.DV))
                     {
                         Session["InconsistenciasDetectadas"] = lista;
                         Response.Redirect("~/DV_Form.aspx", false);
@@ -74,18 +73,15 @@ namespace FGF_Finanzas
 
                 if(SessionManager.Instancia != null && SessionManager.Instancia.Usuario != null)
                 {
-                    //Cambiar por .rol.tienePermiso = Servicios.CodigoPermiso.admin ej
-                    if (SessionManager.Instancia.Usuario.Rol.Nombre == "Admin")
+                    if (SessionManager.Instancia.Usuario.Rol.TienePermiso(CodigosPermiso.UsuarioGestionar) || SessionManager.Instancia.Usuario.Rol.TienePermiso(CodigosPermiso.FamiliaGestionar) || SessionManager.Instancia.Usuario.Rol.TienePermiso(CodigosPermiso.PerfilGestionar))
                     {
                         Admin.Visible = true;
                     }
-                    //Cambiar por .rol.tienePermiso = Servicios.CodigoPermiso.DV ej
-                    if (SessionManager.Instancia.Usuario.Rol.Nombre == "Web Master")
+                    if (SessionManager.Instancia.Usuario.Rol.TienePermiso(CodigosPermiso.BackupRestore))
                     {
                         WebMaster.Visible = true;
                     }
-                    //Cambiar por .rol.tienePermiso = Servicios.CodigoPermiso.cliente ej
-                    if (SessionManager.Instancia.Usuario.Rol.Nombre == "Cliente")
+                    if (SessionManager.Instancia.Usuario.Rol.TienePermiso(CodigosPermiso.MascotaRegistrar))
                     {
                         Cliente.Visible = true;
                     }

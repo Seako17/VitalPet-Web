@@ -27,9 +27,9 @@ namespace FGF_Finanzas.Capas.DAL
                 {
                     Permiso permiso = new Permiso
                     {
-                        Id = Convert.ToInt32(reader["IdPermiso"]),
-                        Nombre = reader["Nombre"].ToString(),
-                        Descripcion = reader["Descripcion"].ToString(),
+                        Id = Convert.ToInt32(reader["id_permiso"]),
+                        Nombre = reader["nombre"].ToString(),
+                        Descripcion = reader["descripcion"].ToString(),
                     };
                     lista.Add(permiso);
                 }

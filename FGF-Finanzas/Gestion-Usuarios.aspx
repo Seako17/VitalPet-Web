@@ -14,8 +14,8 @@
             <ul>
                 <li class="active">Gestión Usuarios</li>
                 <li><a href="BitacoraEventos.aspx">Bitácora eventos</a></li>
-                <li>Gestión Perfiles</li>
-                <li>Gestión Familias</li>
+                <li> <a href="Gestion-Perfiles.aspx">Gestión Perfiles</a></li>
+                <li><a href="Gestion-Familias.aspx">Gestión Familias</a></li>
                 <li><a href="Backup-Restore.aspx">Backup/Restore</a></li>
             </ul>
         </aside>
@@ -95,8 +95,8 @@
                                 <asp:DropDownList ID="ddlRol" runat="server">
                                     <asp:ListItem Text="-- Seleccionar Rol --" Value=""></asp:ListItem>
                                     <asp:ListItem Text="Web Master" Value="1"></asp:ListItem>
-                                    <asp:ListItem Text="Admin" Value="2"></asp:ListItem>
-                                    <asp:ListItem Text="Cliente" Value="3"></asp:ListItem>
+                                    <asp:ListItem Text="Admin" Value="3"></asp:ListItem>
+                                    <asp:ListItem Text="Cliente" Value="2"></asp:ListItem>
                                 </asp:DropDownList>
                             </td>
                         </tr>
