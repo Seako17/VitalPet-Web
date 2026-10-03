@@ -14,9 +14,9 @@
             <ul>
                 <li><a href="Gestion-Usuarios.aspx">Gestión Usuarios</a></li>
                 <li><a href="BitacoraEventos.aspx">Bitácora eventos</a></li>
-                <li>Gestión Perfiles</li>
-                <li>Gestión Familias</li>
-                <li class="active">Backup/Restore</li>
+                <li class="active"><a href="Gestion-Perfiles.aspx">Gestión Perfiles</a></li>
+                <li><a href="Gestion-Familias.aspx">Gestión Familias</a></li>
+                <li><a href="Backup-Restore.aspx">Backup / Restore</a></li>
             </ul>
         </aside>
         <div class="backup-restore__container">
@@ -40,7 +40,7 @@
                         <span>Subir .BAK</span>
                     </label>
 
-                    <asp:FileUpload ID="fileRestore" runat="server" Style="display: none;" onchange="updateFileName(this)" accept=".bak"/>
+                    <asp:FileUpload ID="fileRestore" runat="server" Style="display: none;" onchange="updateFileName(this)" accept=".bak" />
                     <span id="fileNameLabel" class="file-name-text"></span>
 
                     <asp:Button ID="btnRestore" runat="server" Text="Restaurar" CssClass="btn-action" OnClick="btnRestore_Click" />

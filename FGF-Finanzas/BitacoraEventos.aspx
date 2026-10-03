@@ -13,10 +13,10 @@
             <h3>Menú</h3>
             <ul>
                 <li><a href="Gestion-Usuarios.aspx">Gestión Usuarios</a></li>
-                <li class="active">Bitácora eventos</li>
-                <li>Gestión Perfiles</li>
-                <li>Gestión Familias</li>
-                <li><a href="Backup-Restore.aspx">Backup/Restore</a></li>
+                <li><a href="BitacoraEventos.aspx">Bitácora eventos</a></li>
+                <li class="active"><a href="Gestion-Perfiles.aspx">Gestión Perfiles</a></li>
+                <li><a href="Gestion-Familias.aspx">Gestión Familias</a></li>
+                <li><a href="Backup-Restore.aspx">Backup / Restore</a></li>
             </ul>
         </aside>
         <div class="eventos__container">

@@ -40,7 +40,7 @@ namespace FGF_Finanzas.Capas.DAL
                 usuario.Intento,
                 usuario.Bloqueado,
                 Encriptacion.EncriptarAES(usuario.Mail),
-                usuario.Rol
+                usuario.Rol.Id
             });
 
             SqlDataAdapter adapter = new SqlDataAdapter("Select * from Usuario", _conexion);
@@ -65,7 +65,7 @@ namespace FGF_Finanzas.Capas.DAL
                 cmd.Parameters.AddWithValue("@Contraseña", usuario.Contraseña);
                 cmd.Parameters.AddWithValue("@Intento", usuario.Intento);
                 cmd.Parameters.AddWithValue("@Bloqueado", usuario.Bloqueado);
-                cmd.Parameters.AddWithValue("@Rol", usuario.Rol);
+                cmd.Parameters.AddWithValue("@Rol", usuario.Rol.Id);
                 cmd.Parameters.AddWithValue("@Nombre", Encriptacion.EncriptarAES(usuario.Nombre));
                 cmd.Parameters.AddWithValue("@Apellido", Encriptacion.EncriptarAES(usuario.Apellido));
                 cmd.Parameters.AddWithValue("@Usuario", Encriptacion.EncriptarAES(usuario.Usuario));

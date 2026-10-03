@@ -23,10 +23,28 @@ namespace FGF_Finanzas
         {
             if (!Page.IsPostBack)
             {
+                CargarRoles();
                 EstablecerEstado("Consulta");
                 CargarGrillaUsuarios();
             }
 
+        }
+        private void CargarRoles()
+        {
+            var roles = bllRol.ObtenerRoles();
+
+            ddlRol.DataSource = roles;
+            ddlRol.DataTextField = "Nombre";
+            ddlRol.DataValueField = "Id";
+            ddlRol.DataBind();
+
+            ddlRol.Items.Insert(
+                0,
+                new System.Web.UI.WebControls.ListItem(
+                    "-- Seleccionar Rol --",
+                    ""
+                )
+            );
         }
         private void CargarGrillaUsuarios()
         {
@@ -130,10 +148,15 @@ namespace FGF_Finanzas
 
         private void LlenarCamposForm()
         {
-            if (dgvUsuarios.SelectedRow == null) return;
+            if (dgvUsuarios.SelectedRow == null)
+                return;
+
             var cells = dgvUsuarios.SelectedRow.Cells;
+
             string dni = System.Web.HttpUtility.HtmlDecode(cells[0].Text).Trim();
-            BEUsuario usuarioReal = bllUsuario.ConsultaIndividual(dni);
+
+            BEUsuario usuarioReal =
+                bllUsuario.ConsultaIndividual(dni);
 
             if (usuarioReal != null)
             {
@@ -143,9 +166,19 @@ namespace FGF_Finanzas
                 txtEmail.Text = usuarioReal.Mail;
                 txtNombreUsuario.Text = usuarioReal.Usuario;
 
-                //Revisar esto no se bien q es
-                if (ddlRol.Items.FindByValue(usuarioReal.Rol.Nombre) != null)
-                    ddlRol.SelectedValue = usuarioReal.Rol.Nombre;
+                if (usuarioReal.Rol != null)
+                {
+                    string idRol = usuarioReal.Rol.Id.ToString();
+
+                    if (ddlRol.Items.FindByValue(idRol) != null)
+                    {
+                        ddlRol.SelectedValue = idRol;
+                    }
+                }
+                else
+                {
+                    ddlRol.SelectedIndex = 0;
+                }
             }
         }
 

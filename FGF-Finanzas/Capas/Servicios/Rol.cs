@@ -24,5 +24,9 @@ namespace FGF_Finanzas.Capas.Servicios
         {
             return Componentes.Any(x => x.TienePermiso(permiso));
         }
+        public override string ToString()
+        {
+            return Nombre;
+        }
     }
 }
