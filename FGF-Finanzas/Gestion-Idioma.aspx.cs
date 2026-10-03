@@ -86,14 +86,19 @@ namespace FGF_Finanzas
                 dgvTraducciones.DataBind();
 
                 int sinTraducir = etiquetas.Rows.Cast<DataRow>().Count(r => string.IsNullOrEmpty(r["Texto"] as string));
-                lblResumenTraduccion.Text = $"Editando <strong>{HttpUtility.HtmlEncode(ddlIdioma.SelectedItem.Text)}</strong> ({HttpUtility.HtmlEncode(ddlIdioma.SelectedValue)}) en <strong>{HttpUtility.HtmlEncode(ddlFormulario.SelectedValue)}</strong> &mdash; {etiquetas.Rows.Count} etiqueta(s), {sinTraducir} sin traducir.";
+                lblResumenTraduccion.Text = ObtenerMensaje("MSG_RESUMEN_TRADUCCION",
+                    HttpUtility.HtmlEncode(ddlIdioma.SelectedItem.Text),
+                    HttpUtility.HtmlEncode(ddlIdioma.SelectedValue),
+                    HttpUtility.HtmlEncode(ddlFormulario.SelectedValue),
+                    etiquetas.Rows.Count,
+                    sinTraducir);
             }
             catch (Exception ex)
             {
                 dgvTraducciones.DataSource = null;
                 dgvTraducciones.DataBind();
                 lblResumenTraduccion.Text = string.Empty;
-                MostrarAlerta(ex.Message, "error");
+                MostrarAlerta(TraducirError(ex), "error");
             }
         }
 
@@ -108,7 +113,7 @@ namespace FGF_Finanzas
             {
                 dgvIdiomas.DataSource = null;
                 dgvIdiomas.DataBind();
-                MostrarAlerta(ex.Message, "error");
+                MostrarAlerta(TraducirError(ex), "error");
             }
         }
 
@@ -154,7 +159,7 @@ namespace FGF_Finanzas
                 int indice = Convert.ToInt32(e.CommandArgument);
                 DataTable traducciones = ObtenerTraduccionesActuales();
                 if (traducciones == null || indice < 0 || indice >= traducciones.Rows.Count)
-                    throw new Exception("No se pudo identificar la etiqueta a actualizar.");
+                    throw new BECustomException("ERR_ETIQUETA_NO_IDENTIFICADA");
 
                 int idEtiqueta = Convert.ToInt32(traducciones.Rows[indice]["IdEtiqueta"]);
                 string controlId = traducciones.Rows[indice]["ControlId"].ToString();
@@ -162,12 +167,12 @@ namespace FGF_Finanzas
 
                 bllTraduccion.ActualizarTraduccion(ddlFormulario.SelectedValue, ddlIdioma.SelectedValue, idEtiqueta, texto);
 
-                RedirigirConAlerta($"Traducción de '{controlId}' guardada para '{ddlIdioma.SelectedValue}'.");
+                RedirigirConAlerta(ObtenerMensaje("MSG_TRADUCCION_GUARDADA", controlId, ddlIdioma.SelectedValue));
                 return;
             }
             catch (Exception ex)
             {
-                MostrarAlerta(ex.Message, "error");
+                MostrarAlerta(TraducirError(ex), "error");
             }
         }
 
@@ -183,12 +188,12 @@ namespace FGF_Finanzas
                 CargarIdiomas();
                 ddlIdioma.SelectedValue = idioma.Codigo;
 
-                RedirigirConAlerta($"Idioma '{idioma.Nombre}' creado con las traducciones por defecto.");
+                RedirigirConAlerta(ObtenerMensaje("MSG_IDIOMA_CREADO", idioma.Nombre));
                 return;
             }
             catch (Exception ex)
             {
-                MostrarAlerta(ex.Message, "error");
+                MostrarAlerta(TraducirError(ex), "error");
             }
         }
 
@@ -211,12 +216,12 @@ namespace FGF_Finanzas
                         SessionManager.Instancia.Usuario.Idioma = BLLTraduccion.IDIOMA_POR_DEFECTO;
                 }
 
-                RedirigirConAlerta($"Idioma '{codigo}' eliminado correctamente.");
+                RedirigirConAlerta(ObtenerMensaje("MSG_IDIOMA_ELIMINADO", codigo));
                 return;
             }
             catch (Exception ex)
             {
-                MostrarAlerta(ex.Message, "error");
+                MostrarAlerta(TraducirError(ex), "error");
             }
         }
 
@@ -304,13 +309,6 @@ namespace FGF_Finanzas
             string url = $"~/{NombreFormulario}?idioma={HttpUtility.UrlEncode(ddlIdioma.SelectedValue)}&formulario={HttpUtility.UrlEncode(ddlFormulario.SelectedValue)}";
             Response.Redirect(url, false);
             Context.ApplicationInstance.CompleteRequest();
-        }
-
-        private void MostrarAlerta(string mensaje, string tipo = "exito")
-        {
-            string mensajeFormateado = mensaje.Replace("'", "\\'");
-            string script = $"mostrarAlerta('{mensajeFormateado}', '{tipo}');";
-            ScriptManager.RegisterStartupScript(this, this.GetType(), Guid.NewGuid().ToString(), script, true);
         }
     }
 }

@@ -73,7 +73,8 @@ namespace FGF_Finanzas
                     {
                         Limpiar_Session();
                         FormsAuthentication.SignOut();
-                        string script= @"alert('El sistema se encuentra en mantenimiento.');  window.location.href = 'Default.aspx';";
+                        string mensaje = IdiomaManager.Instancia.ObtenerTexto("Errores", "ERR_SISTEMA_MANTENIMIENTO").Replace("'", "\\'");
+                        string script = "alert('" + mensaje + "');  window.location.href = 'Default.aspx';";
                         Page.ClientScript.RegisterStartupScript(this.GetType(), "AlertaInconsistencia", script, true);
                         return;
                     }

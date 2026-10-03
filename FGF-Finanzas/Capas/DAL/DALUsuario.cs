@@ -75,7 +75,7 @@ namespace FGF_Finanzas.Capas.DAL
             }
             catch (Exception e)
             {
-                throw new Exception("Error al actualizar usuario", e);
+                throw new BECustomException("ERR_ACTUALIZAR_USUARIO", e);
             }
             finally
             {
@@ -115,7 +115,7 @@ namespace FGF_Finanzas.Capas.DAL
             }
             catch (Exception e)
             {
-                throw new Exception("Error al consultar el usuario de forma individual", e);
+                throw new BECustomException("ERR_CONSULTAR_USUARIO", e);
             }
             finally
             {
@@ -139,7 +139,7 @@ namespace FGF_Finanzas.Capas.DAL
                 cmd.Parameters.AddWithValue("@Contraseña", nuevaContraseñaEncriptada);
                 cmd.ExecuteNonQuery();
             }
-            catch (Exception e) { throw new Exception("Error al actualizar la contraseña", e); }
+            catch (Exception e) { throw new BECustomException("ERR_ACTUALIZAR_PASSWORD", e); }
             finally { con.Close(); }
         }
 

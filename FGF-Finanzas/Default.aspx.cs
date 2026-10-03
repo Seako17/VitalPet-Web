@@ -23,7 +23,8 @@ namespace FGF_Finanzas
             {
                 if (Request.QueryString["ReturnUrl"] != null)
                 {
-                    string script = "alert('Acceso denegado: No tienes los permisos necesarios para ingresar a esta sección.');";
+                    string mensaje = ObtenerError("ERR_ACCESO_DENEGADO").Replace("'", "\\'");
+                    string script = "alert('" + mensaje + "');";
                     script += "window.history.replaceState({}, document.title, window.location.pathname);";
                     ScriptManager.RegisterStartupScript(this, GetType(), "AlertaAccesoDenegado", script, true);
                 }

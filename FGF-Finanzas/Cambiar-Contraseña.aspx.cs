@@ -1,4 +1,5 @@
-﻿using FGF_Finanzas.Capas.BLL;
+﻿using FGF_Finanzas.Capas.BE;
+using FGF_Finanzas.Capas.BLL;
 using FGF_Finanzas.Capas.Servicios;
 using System;
 using System.Collections.Generic;
@@ -33,8 +34,8 @@ namespace FGF_Finanzas
                 string nuevaContraseña = txtNuevaContraseña.Text;
                 string confirmarContraseña = txtConfirmarContraseña.Text;
 
-                if (string.IsNullOrWhiteSpace(contraseña) || string.IsNullOrWhiteSpace(nuevaContraseña) || string.IsNullOrWhiteSpace(confirmarContraseña)) throw new Exception("Debe completar todos los campos.");
-                if (nuevaContraseña != confirmarContraseña) throw new Exception("La contraseña nueva no coincide con la contraseña de confirmación.");
+                if (string.IsNullOrWhiteSpace(contraseña) || string.IsNullOrWhiteSpace(nuevaContraseña) || string.IsNullOrWhiteSpace(confirmarContraseña)) throw new BECustomException("ERR_CAMPOS_OBLIGATORIOS");
+                if (nuevaContraseña != confirmarContraseña) throw new BECustomException("ERR_CONFIRMACION_NO_COINCIDE");
                 bllUsuario.CambiarContraseña(contraseña, nuevaContraseña);
 
                 txtContraseñaActual.Text = "";
@@ -44,22 +45,15 @@ namespace FGF_Finanzas
                 txtNuevaContraseña.Attributes.Remove("value");
                 txtConfirmarContraseña.Attributes.Remove("value");
 
-                MostrarAlerta("La contraseña fue cambiada exitosamente.");
+                MostrarAlerta(ObtenerMensaje("MSG_CONTRASENA_CAMBIADA"));
             }
             catch (Exception ex)
             {
-                MostrarAlerta(ex.Message, "error");
+                MostrarAlerta(TraducirError(ex), "error");
                 txtContraseñaActual.Attributes.Add("value", txtContraseñaActual.Text);
                 txtNuevaContraseña.Attributes.Add("value", txtNuevaContraseña.Text);
                 txtConfirmarContraseña.Attributes.Add("value", txtConfirmarContraseña.Text);
             }
-        }
-
-        private void MostrarAlerta(string mensaje, string tipo = "exito")
-        {
-            string mensajeFormateado = mensaje.Replace("'", "\\'");
-            string script = $"mostrarAlerta('{mensajeFormateado}', '{tipo}');";
-            ScriptManager.RegisterStartupScript(this, this.GetType(), Guid.NewGuid().ToString(), script, true);
         }
 
     }

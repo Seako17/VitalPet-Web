@@ -33,7 +33,7 @@ namespace FGF_Finanzas
             }
             catch (Exception ex)
             {
-                lblError.Text = ex.Message;
+                lblError.Text = TraducirError(ex);
             }
         }
     }

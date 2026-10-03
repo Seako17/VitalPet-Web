@@ -29,7 +29,7 @@ namespace FGF_Finanzas
                 var nombre = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(txtNombre.Text.ToLower()).Trim();
                 if (Convert.ToDateTime(txtFechaNacimiento.Value) > DateTime.Now)
                 {
-                    throw new Exception("Fecha de nacimiento inválida");
+                    throw new BECustomException("ERR_FECHA_NACIMIENTO");
                 }
 
                 BEMascota mascota = new BEMascota(
@@ -41,12 +41,13 @@ namespace FGF_Finanzas
                 );
 
                 bllMascota.AgregarMascota(mascota);
-                string script = "alert('Mascota registrada correctamente.'); window.location.href = 'Default.aspx';";
+                string mensaje = ObtenerMensaje("MSG_MASCOTA_REGISTRADA").Replace("'", "\\'");
+                string script = "alert('" + mensaje + "'); window.location.href = 'Default.aspx';";
                 ScriptManager.RegisterStartupScript(this, GetType(), "MascotaRegistrada", script, true);
             }
             catch (Exception ex)
             {
-                lblError.Text = ex.Message;
+                lblError.Text = TraducirError(ex);
             }
         }
     }

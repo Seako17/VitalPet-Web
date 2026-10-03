@@ -41,7 +41,7 @@ namespace FGF_Finanzas
             }
             catch (BECustomException bex)
             {
-                lblError.Text = ObtenerError(bex.CodigoError);
+                lblError.Text = ObtenerError(bex);
             }
         }
     }

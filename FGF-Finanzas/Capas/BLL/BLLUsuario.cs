@@ -27,33 +27,33 @@ namespace FGF_Finanzas.Capas.BLL
 
         public void ValidarUsuario(string dni, string usuario, string nombre, string apellido, string contraseña, string confirmacion)
         {
-            if (string.IsNullOrWhiteSpace(dni)) throw new Exception("El campo de DNI es obligatorio.");
-            if (!Regex.IsMatch(dni, @"^\d{8}$")) throw new Exception("El DNI debe contener 8(ocho) dígitos.");
+            if (string.IsNullOrWhiteSpace(dni)) throw new BECustomException("ERR_DNI_OBLIGATORIO");
+            if (!Regex.IsMatch(dni, @"^\d{8}$")) throw new BECustomException("ERR_DNI_8_DIGITOS");
 
-            if (string.IsNullOrWhiteSpace(nombre)) throw new Exception("El campo de Nombre es obligatorio.");
-            if (!Regex.IsMatch(nombre, @"^[A-Za-z]{3,}(\s[A-Za-z]{3,})*$")) throw new Exception("Ingrese su/s nombre/s correctamente.");
+            if (string.IsNullOrWhiteSpace(nombre)) throw new BECustomException("ERR_NOMBRE_OBLIGATORIO");
+            if (!Regex.IsMatch(nombre, @"^[A-Za-z]{3,}(\s[A-Za-z]{3,})*$")) throw new BECustomException("ERR_NOMBRE_INVALIDO");
 
-            if (string.IsNullOrWhiteSpace(apellido)) throw new Exception("El campo de Apellido es obligatorio.");
-            if (!Regex.IsMatch(apellido, @"^[A-Za-z]{3,}(\s[A-Za-z]{3,})*$")) throw new Exception("Ingrese su/s apellido/s correctamente.");
+            if (string.IsNullOrWhiteSpace(apellido)) throw new BECustomException("ERR_APELLIDO_OBLIGATORIO");
+            if (!Regex.IsMatch(apellido, @"^[A-Za-z]{3,}(\s[A-Za-z]{3,})*$")) throw new BECustomException("ERR_APELLIDO_INVALIDO");
 
-            if (string.IsNullOrWhiteSpace(usuario)) throw new Exception("El campo de Usuario es obligatorio.");
+            if (string.IsNullOrWhiteSpace(usuario)) throw new BECustomException("ERR_USUARIO_OBLIGATORIO");
 
             if (!Regex.IsMatch(contraseña, @"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*\W).{8,20}$"))
             {
-                throw new Exception("La contraseña debe tener entre 8 y 20 caracteres, e incluir al menos una mayúscula, una minúscula, un número y un carácter especial (@*_/#$%).");
+                throw new BECustomException("ERR_PASSWORD_INVALIDA");
             }
-            if (contraseña != confirmacion) throw new Exception("La contraseña y la contraseña de confirmación no coinciden.");
+            if (contraseña != confirmacion) throw new BECustomException("ERR_PASSWORDS_NO_COINCIDEN");
 
             DataTable dt = ObtenerUsuarios();
             foreach (DataRow dr in dt.Rows)
             {
                 if (dr["dni"].ToString() == dni)
                 {
-                    throw new Exception("DNI ya registrado.");
+                    throw new BECustomException("ERR_DNI_YA_REGISTRADO");
                 }
                 if (dr[3].ToString() == usuario)
                 {
-                    throw new Exception("Usuario ya existente.");
+                    throw new BECustomException("ERR_USUARIO_YA_EXISTENTE");
                 }
             }
         }
@@ -130,7 +130,7 @@ namespace FGF_Finanzas.Capas.BLL
         {
             if (!bllDigitoVerificador.ValidarIntegridadDelSistema())
             {
-                throw new Exception("No se pueden registrar usuarios. El sistema se encuentra en mantenimiento.");
+                throw new BECustomException("ERR_SISTEMA_MANTENIMIENTO_REGISTRO");
             }
 
             string encriptado = Encriptacion.Encriptar(usuario.Contraseña);
@@ -151,7 +151,7 @@ namespace FGF_Finanzas.Capas.BLL
         {
             if (!bllDigitoVerificador.ValidarIntegridadDelSistema())
             {
-                throw new Exception("No se pueden actualizar datos. El sistema se encuentra en mantenimiento.");
+                throw new BECustomException("ERR_SISTEMA_MANTENIMIENTO_ACTUALIZACION");
             }
             dalUsuario.Actualizar(usuario);
             bllDigitoVerificador.InicializarTablaCompleta("Usuario");
@@ -161,18 +161,18 @@ namespace FGF_Finanzas.Capas.BLL
         {
             if (!bllDigitoVerificador.ValidarIntegridadDelSistema())
             {
-                throw new Exception("No se puede cambiar la contraseña. El sistema se encuentra en estado de inconsistencia.");
+                throw new BECustomException("ERR_SISTEMA_INCONSISTENCIA_PASSWORD");
             }
 
             if (!Regex.IsMatch(nuevaContraseña, @"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*\W).{8,20}$"))
             {
-                throw new Exception("La contraseña nueva debe tener entre 8 y 20 caracteres, e incluir al menos una mayúscula, una minúscula, un número y un carácter especial (@*_/#$%).");
+                throw new BECustomException("ERR_PASSWORD_NUEVA_INVALIDA");
             }
 
-            if (contraseñaActual == nuevaContraseña) throw new Exception("La nueva contraseña no puede ser igual a la actual.");
+            if (contraseñaActual == nuevaContraseña) throw new BECustomException("ERR_PASSWORD_IGUAL_A_ACTUAL");
 
             string actualEncriptada = Encriptacion.Encriptar(contraseñaActual);
-            if (actualEncriptada != SessionManager.Instancia.Usuario.Contraseña) throw new Exception("La contraseña actual es incorrecta.");
+            if (actualEncriptada != SessionManager.Instancia.Usuario.Contraseña) throw new BECustomException("ERR_PASSWORD_ACTUAL_INCORRECTA");
             string nuevaEncriptada = Encriptacion.Encriptar(nuevaContraseña);
             dalUsuario.ActualizarContraseña(SessionManager.Instancia.Usuario.DNI, nuevaEncriptada);
             SessionManager.Instancia.Usuario.Contraseña = nuevaEncriptada;

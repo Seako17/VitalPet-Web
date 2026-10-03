@@ -83,13 +83,13 @@ namespace FGF_Finanzas
                 {
                     _bllDV.InicializarTablaCompleta(tabla);
                 }
-                string mensajeScript = @"alert('Se han reestablecido los dígitos verificadores con éxito.'); 
-                                window.location.href = 'Default.aspx';";
+                string mensaje = ObtenerMensaje("MSG_DV_RESTABLECIDOS").Replace("'", "\\'");
+                string mensajeScript = "alert('" + mensaje + "'); window.location.href = 'Default.aspx';";
                 Page.ClientScript.RegisterStartupScript(this.GetType(), "AlertaInconsistencia", mensajeScript, true);
             }
             catch (Exception ex)
             {
-                lblMensaje.Text = $"Error al reestablecer dígitos: {ex.Message}";
+                lblMensaje.Text = TraducirError(ex, "ERR_REESTABLECER_DV");
                 lblMensaje.ForeColor = System.Drawing.Color.Red;
             }
         }
@@ -98,7 +98,7 @@ namespace FGF_Finanzas
         {
             if (!fileRestore.HasFile)
             {
-                lblMensaje.Text = "Debe seleccionar un archivo .bak en su computadora primero.";
+                lblMensaje.Text = ObtenerError("ERR_ARCHIVO_REQUERIDO");
                 lblMensaje.ForeColor = System.Drawing.Color.Orange;
                 return;
             }
@@ -106,7 +106,7 @@ namespace FGF_Finanzas
             string extension = System.IO.Path.GetExtension(fileRestore.FileName).ToLower();
             if (extension != ".bak")
             {
-                lblMensaje.Text = "Error: El archivo seleccionado debe tener la extensión .bak";
+                lblMensaje.Text = ObtenerError("ERR_ARCHIVO_EXTENSION_BAK");
                 lblMensaje.ForeColor = System.Drawing.Color.Red;
                 return;
             }
@@ -125,13 +125,13 @@ namespace FGF_Finanzas
                 rutaTemp = Path.Combine(carpetaTemp, nombreArchivo);
                 fileRestore.SaveAs(rutaTemp);
                 _bllBackupRestore.HacerRestore(rutaTemp);
-                string script = @"alert('Base de datos restaurada con éxito. El sistema volverá al inicio.'); 
-                                window.location.href = 'Default.aspx';";
+                string mensaje = ObtenerMensaje("MSG_BASE_RESTAURADA_INICIO").Replace("'", "\\'");
+                string script = "alert('" + mensaje + "'); window.location.href = 'Default.aspx';";
                 Page.ClientScript.RegisterStartupScript(this.GetType(), "AlertaRestoreExito", script, true);
             }
             catch (Exception ex)
             {
-                lblMensaje.Text = $"ERROR crítico en el proceso de restauración: {ex.Message}";
+                lblMensaje.Text = TraducirError(ex, "ERR_RESTORE_CRITICO");
                 lblMensaje.ForeColor = System.Drawing.Color.Red;
             }
         }

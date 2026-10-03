@@ -45,7 +45,7 @@ namespace FGF_Finanzas.Capas.BLL
         public DataTable ObtenerEtiquetasConTraduccion(string formulario, string codigoIdioma)
         {
             if (string.IsNullOrWhiteSpace(formulario))
-                throw new Exception("Debe seleccionar un formulario.");
+                throw new BECustomException("ERR_FORMULARIO_OBLIGATORIO");
 
             BEIdioma idioma = ObtenerIdiomaSeleccionado(codigoIdioma);
             return _dalTraduccion.ObtenerEtiquetasConTraduccion(formulario, idioma.IdIdioma);
@@ -54,7 +54,7 @@ namespace FGF_Finanzas.Capas.BLL
         public void ActualizarTraduccion(string formulario, string codigoIdioma, int idEtiqueta, string texto)
         {
             if (string.IsNullOrWhiteSpace(formulario))
-                throw new Exception("Debe seleccionar un formulario.");
+                throw new BECustomException("ERR_FORMULARIO_OBLIGATORIO");
 
             BEIdioma idioma = ObtenerIdiomaSeleccionado(codigoIdioma);
 
@@ -63,7 +63,7 @@ namespace FGF_Finanzas.Capas.BLL
                 .FirstOrDefault(x => x.IdEtiqueta == idEtiqueta);
 
             if (etiqueta == null)
-                throw new Exception("La etiqueta seleccionada no pertenece al formulario indicado.");
+                throw new BECustomException("ERR_ETIQUETA_NO_PERTENECE");
 
             _dalTraduccion.GuardarTraduccion(new BETraduccion(idioma.IdIdioma, etiqueta.IdEtiqueta, texto ?? string.Empty));
 
@@ -76,23 +76,23 @@ namespace FGF_Finanzas.Capas.BLL
             nombre = (nombre ?? string.Empty).Trim();
 
             if (string.IsNullOrWhiteSpace(codigo))
-                throw new Exception("El código del idioma es obligatorio.");
+                throw new BECustomException("ERR_CODIGO_IDIOMA_OBLIGATORIO");
 
             if (string.IsNullOrWhiteSpace(nombre))
-                throw new Exception("El nombre del idioma es obligatorio.");
+                throw new BECustomException("ERR_NOMBRE_IDIOMA_OBLIGATORIO");
 
             if (nombre.Length > 50)
-                throw new Exception("El nombre del idioma no puede superar los 50 caracteres.");
+                throw new BECustomException("ERR_NOMBRE_IDIOMA_LARGO");
 
             if (!Regex.IsMatch(codigo, @"^[a-zA-Z]{2,3}(-[a-zA-Z]{2,4})?$"))
-                throw new Exception("El código debe tener el formato 'es-AR' o 'en-US' (por ejemplo: pt-BR).");
+                throw new BECustomException("ERR_CODIGO_IDIOMA_FORMATO");
 
             if (_dalTraduccion.ObtenerIdiomaPorCodigo(codigo) != null)
-                throw new Exception($"El código de idioma '{codigo}' ya se encuentra registrado.");
+                throw new BECustomException("ERR_CODIGO_IDIOMA_DUPLICADO", codigo);
 
             BEIdioma origen = _dalTraduccion.ObtenerIdiomaPorCodigo(IDIOMA_POR_DEFECTO);
             if (origen == null)
-                throw new Exception($"No se encontró el idioma por defecto '{IDIOMA_POR_DEFECTO}' necesario para copiar las traducciones.");
+                throw new BECustomException("ERR_IDIOMA_POR_DEFECTO_FALTANTE", IDIOMA_POR_DEFECTO);
 
             int idIdiomaNuevo = _dalTraduccion.AgregarIdioma(new BEIdioma(codigo, nombre));
             _dalTraduccion.CopiarTraducciones(origen.IdIdioma, idIdiomaNuevo);
@@ -105,14 +105,14 @@ namespace FGF_Finanzas.Capas.BLL
         public void EliminarIdioma(string codigo)
         {
             if (string.IsNullOrWhiteSpace(codigo))
-                throw new Exception("Debe seleccionar un idioma.");
+                throw new BECustomException("ERR_IDIOMA_NO_SELECCIONADO");
 
             BEIdioma idioma = _dalTraduccion.ObtenerIdiomaPorCodigo(codigo);
             if (idioma == null)
-                throw new Exception("El idioma que intenta eliminar no existe.");
+                throw new BECustomException("ERR_IDIOMA_NO_EXISTE");
 
             if (idioma.Codigo.Equals(IDIOMA_POR_DEFECTO, StringComparison.OrdinalIgnoreCase))
-                throw new Exception($"No se puede eliminar el idioma por defecto '{IDIOMA_POR_DEFECTO}'.");
+                throw new BECustomException("ERR_IDIOMA_POR_DEFECTO", IDIOMA_POR_DEFECTO);
 
             _dalTraduccion.EliminarIdioma(idioma.IdIdioma);
 
@@ -122,11 +122,11 @@ namespace FGF_Finanzas.Capas.BLL
         private BEIdioma ObtenerIdiomaSeleccionado(string codigoIdioma)
         {
             if (string.IsNullOrWhiteSpace(codigoIdioma))
-                throw new Exception("Debe seleccionar un idioma.");
+                throw new BECustomException("ERR_IDIOMA_NO_SELECCIONADO");
 
             BEIdioma idioma = _dalTraduccion.ObtenerIdiomaPorCodigo(codigoIdioma);
             if (idioma == null)
-                throw new Exception($"El idioma '{codigoIdioma}' no se encuentra registrado.");
+                throw new BECustomException("ERR_IDIOMA_NO_REGISTRADO", codigoIdioma);
 
             return idioma;
         }

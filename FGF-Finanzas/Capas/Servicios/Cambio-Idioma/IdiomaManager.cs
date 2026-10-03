@@ -56,7 +56,12 @@ namespace FGF_Finanzas.Capas.Servicios.Cambio_Idioma
         }
         public string ObtenerTexto(string formulario, string clave)
         {
-            var textos = _dalTraduccion.ObtenerTraducciones(formulario, IdiomaActual);
+            return ObtenerTexto(formulario, clave, IdiomaActual);
+        }
+
+        public string ObtenerTexto(string formulario, string clave, string codigoIdioma)
+        {
+            var textos = _dalTraduccion.ObtenerTraducciones(formulario, codigoIdioma);
             if (textos.TryGetValue(clave, out string texto))
                 return texto;
 

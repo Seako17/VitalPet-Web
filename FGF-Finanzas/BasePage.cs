@@ -1,4 +1,6 @@
-﻿using FGF_Finanzas.Capas.Servicios.Cambio_Idioma;
+﻿using FGF_Finanzas.Capas.BE;
+using FGF_Finanzas.Capas.BLL;
+using FGF_Finanzas.Capas.Servicios.Cambio_Idioma;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -78,9 +80,54 @@ namespace FGF_Finanzas
             }
         }
 
-        public string ObtenerError(string codigoError)
+        public string ObtenerError(string codigoError, params object[] argumentos)
         {
-            return IdiomaManager.Instancia.ObtenerTexto("Errores", codigoError);
+            return FormatearMensaje("Errores", codigoError, argumentos);
+        }
+
+        public string ObtenerMensaje(string codigoMensaje, params object[] argumentos)
+        {
+            return FormatearMensaje("Mensajes", codigoMensaje, argumentos);
+        }
+
+        public string ObtenerError(BECustomException excepcion)
+        {
+            return ObtenerError(excepcion.CodigoError, excepcion.Argumentos);
+        }
+
+        protected string TraducirError(Exception ex, string codigoTecnico = null)
+        {
+            if (ex is BECustomException bex)
+                return ObtenerError(bex);
+
+            if (!string.IsNullOrWhiteSpace(codigoTecnico))
+                return ObtenerError(codigoTecnico, ex.Message);
+
+            return string.IsNullOrWhiteSpace(ex.Message)
+                ? ObtenerError("ERR_INESPERADO")
+                : ex.Message;
+        }
+
+        private string FormatearMensaje(string formulario, string clave, object[] argumentos)
+        {
+            string texto = IdiomaManager.Instancia.ObtenerTexto(formulario, clave);
+
+            if (texto == "[" + clave + "]")
+                texto = IdiomaManager.Instancia.ObtenerTexto(formulario, clave, BLLTraduccion.IDIOMA_POR_DEFECTO);
+
+            if (texto == "[" + clave + "]")
+                texto = clave;
+
+            return argumentos != null && argumentos.Length > 0
+                ? string.Format(texto, argumentos)
+                : texto;
+        }
+
+        protected void MostrarAlerta(string mensaje, string tipo = "exito")
+        {
+            string mensajeFormateado = mensaje.Replace("'", "\\'");
+            string script = $"mostrarAlerta('{mensajeFormateado}', '{tipo}');";
+            ScriptManager.RegisterStartupScript(this, GetType(), Guid.NewGuid().ToString(), script, true);
         }
     }
 }
