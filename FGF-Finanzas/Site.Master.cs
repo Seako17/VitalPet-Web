@@ -27,6 +27,7 @@ namespace FGF_Finanzas
             Admin.Visible = false;
             WebMaster.Visible = false;
             Cliente.Visible = false;
+            dropdownList.Visible = false;
             HttpCookie cookie = Request.Cookies["UserSessionFGF"];
             if (cookie != null)
             {
@@ -82,6 +83,7 @@ namespace FGF_Finanzas
                     if (SessionManager.Instancia.Usuario.Rol == "Cliente")
                     {
                         Cliente.Visible = true;
+                        dropdownList.Visible = true;
                     }
                 }
             }

@@ -31,9 +31,15 @@
                     <li id="Cliente" runat="server"><a href="RegistrarMascotas.aspx">Mis mascotas</a></li>
 
                     <li id="dropdownList" runat="server" class="dropdown">
-                        <ul class="dropdown-menu"> 
-                            <li> <a href="Consulta.aspx">Nueva consulta</a> </li> 
-                            <li> <a href="MisConsultas.aspx">Mis consultas</a> </li> 
+                        <a href="javascript:void(0);" class="dropdown-btn" onclick="toggleDropdown(event)">Consultas</a>
+
+                        <ul class="dropdown-menu" id="consultas-menu">
+                            <li>
+                                <a href="Consulta.aspx">Nueva consulta</a>
+                            </li>
+                            <li>
+                                <a href="MisConsultas.aspx">Mis consultas</a>
+                            </li>
                         </ul>
                     </li>
 
@@ -51,7 +57,7 @@
                     <span></span>
                     <span></span>
                 </div>
-                </nav>
+            </nav>
         </header>
 
         <div class="container body-content">
