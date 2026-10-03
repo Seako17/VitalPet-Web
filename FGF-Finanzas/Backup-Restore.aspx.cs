@@ -11,8 +11,12 @@ using System.Web.UI.WebControls;
 
 namespace FGF_Finanzas
 {
-    public partial class Backup_Restore : BasePage
+    public partial class Backup_Restore : PaginaSegura
     {
+        protected override Permiso PermisoRequerido
+        {
+            get { return CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "BackUpRestore"); }
+        }
         private readonly BLLBackupRestore _bllBackupRestore = new BLLBackupRestore();
         BLLEvento bllEvento;
         protected void Page_Load(object sender, EventArgs e)

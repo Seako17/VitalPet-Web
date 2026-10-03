@@ -14,8 +14,8 @@
             <ul>
                 <li><asp:HyperLink ID="lnkMenuUsuarios" runat="server" NavigateUrl="Gestion-Usuarios.aspx">Gestión Usuarios</asp:HyperLink></li>
                 <li class="active"><asp:Label ID="lblMenuBitacora" runat="server" Text="Bitácora eventos" /></li>
-                <li><asp:Label ID="lblMenuPerfiles" runat="server" Text="Gestión Perfiles" /></li>
-                <li><asp:Label ID="lblMenuFamilias" runat="server" Text="Gestión Familias" /></li>
+                <li><a href="Gestion-Perfiles.aspx"><asp:Label ID="lblMenuPerfiles" runat="server" Text="Gestión Perfiles" /></a></li>
+                <li><a href="Gestion-Familias.aspx"><asp:Label ID="lblMenuFamilias" runat="server" Text="Gestión Familias" /></a></li>
                 <li><asp:HyperLink ID="lnkMenuBackup" runat="server" NavigateUrl="Backup-Restore.aspx">Backup/Restore</asp:HyperLink></li>
                 <li><asp:HyperLink ID="lnkMenuIdiomas" runat="server" NavigateUrl="Gestion-Idioma.aspx">Gestión Idiomas</asp:HyperLink></li>
             </ul>

@@ -12,18 +12,41 @@ using System.Web.UI.WebControls;
 
 namespace FGF_Finanzas
 {
-    public partial class Gestion_Usuarios : BasePage
+    public partial class Gestion_Usuarios : PaginaSegura
     {
+        protected override Permiso PermisoRequerido
+        {
+            get { return CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "UsuarioGestionar"); }
+        }
         BLLUsuario bllUsuario = new BLLUsuario();
         BLLEvento bllEvento = new BLLEvento();
+        BLLRol bllRol = new BLLRol();
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!Page.IsPostBack)
             {
+                CargarRoles();
                 EstablecerEstado("Consulta");
                 CargarGrillaUsuarios();
             }
 
+        }
+        private void CargarRoles()
+        {
+            var roles = bllRol.ObtenerRoles();
+
+            ddlRol.DataSource = roles;
+            ddlRol.DataTextField = "Nombre";
+            ddlRol.DataValueField = "Id";
+            ddlRol.DataBind();
+
+            ddlRol.Items.Insert(
+                0,
+                new System.Web.UI.WebControls.ListItem(
+                    "-- Seleccionar Rol --",
+                    ""
+                )
+            );
         }
         private void CargarGrillaUsuarios()
         {
@@ -127,10 +150,15 @@ namespace FGF_Finanzas
 
         private void LlenarCamposForm()
         {
-            if (dgvUsuarios.SelectedRow == null) return;
+            if (dgvUsuarios.SelectedRow == null)
+                return;
+
             var cells = dgvUsuarios.SelectedRow.Cells;
+
             string dni = System.Web.HttpUtility.HtmlDecode(cells[0].Text).Trim();
-            BEUsuario usuarioReal = bllUsuario.ConsultaIndividual(dni);
+
+            BEUsuario usuarioReal =
+                bllUsuario.ConsultaIndividual(dni);
 
             if (usuarioReal != null)
             {
@@ -140,8 +168,19 @@ namespace FGF_Finanzas
                 txtEmail.Text = usuarioReal.Mail;
                 txtNombreUsuario.Text = usuarioReal.Usuario;
 
-                if (ddlRol.Items.FindByValue(usuarioReal.Rol) != null)
-                    ddlRol.SelectedValue = usuarioReal.Rol;
+                if (usuarioReal.Rol != null)
+                {
+                    string idRol = usuarioReal.Rol.Id.ToString();
+
+                    if (ddlRol.Items.FindByValue(idRol) != null)
+                    {
+                        ddlRol.SelectedValue = idRol;
+                    }
+                }
+                else
+                {
+                    ddlRol.SelectedIndex = 0;
+                }
             }
         }
 
@@ -192,12 +231,12 @@ namespace FGF_Finanzas
                         string username = dni + nombre;
                         string password = dni + apellido;
                         string email = txtEmail.Text;
-                        string rol = ddlRol.SelectedValue;
+                        int rol = int.Parse(ddlRol.SelectedValue);
                         if (string.IsNullOrWhiteSpace(dni) ||
                             string.IsNullOrWhiteSpace(apellido) ||
                             string.IsNullOrWhiteSpace(nombre) ||
                             string.IsNullOrWhiteSpace(email) ||
-                            string.IsNullOrEmpty(rol))
+                            string.IsNullOrEmpty(rol.ToString()))
                         {
                             throw new BECustomException("ERR_USUARIO_CAMPOS_CREAR");
                         }
@@ -207,7 +246,7 @@ namespace FGF_Finanzas
                         if (dtUsuarios.AsEnumerable().Any(row => row.Field<string>("DNI") == dni)) throw new BECustomException("ERR_DNI_EN_USO");
                         if (dtUsuarios.AsEnumerable().Any(row => row.Field<string>("mail").Equals(email, StringComparison.OrdinalIgnoreCase))) throw new BECustomException("ERR_EMAIL_EN_USO");
 
-                        bllUsuario.AgregarUsuario(new BEUsuario(dni, nombre, apellido, username, password, email, rol));
+                        bllUsuario.AgregarUsuario(new BEUsuario(dni, nombre, apellido, username, password, email, bllRol.ObtenerCompleto(new Rol(rol))));
                         MostrarAlerta(ObtenerMensaje("MSG_USUARIO_AGREGADO"));
                         CargarGrillaUsuarios();
                         EstablecerEstado("Consulta");
@@ -235,13 +274,13 @@ namespace FGF_Finanzas
                         string nombreModificar = txtNombre.Text.Trim();
                         string emailModificar = txtEmail.Text.Trim();
                         string usernameModificar = txtNombreUsuario.Text.Trim();
-                        string rolModificar = ddlRol.SelectedValue;
+                        int rolModificar = int.Parse(ddlRol.SelectedValue);
 
                         if (string.IsNullOrWhiteSpace(dniModificar) ||
                             string.IsNullOrWhiteSpace(apellidoModificar) ||
                             string.IsNullOrWhiteSpace(nombreModificar) ||
                             string.IsNullOrWhiteSpace(emailModificar) ||
-                            string.IsNullOrEmpty(rolModificar) ||
+                            string.IsNullOrEmpty(rolModificar.ToString()) ||
                             string.IsNullOrEmpty(usernameModificar))
                         {
                             throw new BECustomException("ERR_USUARIO_CAMPOS_MODIFICAR");
@@ -257,7 +296,7 @@ namespace FGF_Finanzas
                         usuarioModificar.Nombre = nombreModificar;
                         usuarioModificar.Apellido = apellidoModificar;
                         usuarioModificar.Mail = emailModificar;
-                        usuarioModificar.Rol = rolModificar;
+                        usuarioModificar.Rol = bllRol.ObtenerCompleto(new Rol(rolModificar));
                         usuarioModificar.Usuario = usernameModificar;
                         bllUsuario.ActualizarUsuario(usuarioModificar);
                         bllEvento.AgregarEvento(new BEEvento(SessionManager.Instancia.Usuario, DateTime.Now, "Usuarios", "Modificar Usuario", 2));

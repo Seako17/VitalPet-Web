@@ -10,11 +10,30 @@ using System.Web.UI.WebControls;
 
 namespace FGF_Finanzas
 {
-    public partial class Cambiar_Contraseña : BasePage
+    public partial class Cambiar_Contraseña : PaginaSegura
     {
         public override string NombreFormulario => "Cambiar-Contraseña.aspx";
 
+        protected override Permiso PermisoRequerido
+        {
+            get { return CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "ContrasenaCambiar"); }
+        }
         BLLUsuario bllUsuario = new BLLUsuario();
+        protected override void OnInit(EventArgs e)
+        {
+            base.OnInit(e);
+
+            if (!SessionManager.IsLogged())
+            {
+                Response.Redirect(
+                    "~/Default.aspx?ReturnUrl=" +
+                    Server.UrlEncode(Request.RawUrl)
+                );
+
+                return;
+            }
+
+        }
         protected void Page_Load(object sender, EventArgs e)
         {
             Response.Cache.SetCacheability(HttpCacheability.NoCache);

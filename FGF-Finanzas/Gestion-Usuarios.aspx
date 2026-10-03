@@ -14,8 +14,8 @@
             <ul>
                 <li class="active"><asp:Label ID="lblMenuUsuarios" runat="server" Text="Gestión Usuarios" /></li>
                 <li><asp:HyperLink ID="lnkMenuBitacora" runat="server" NavigateUrl="BitacoraEventos.aspx">Bitácora eventos</asp:HyperLink></li>
-                <li><asp:Label ID="lblMenuPerfiles" runat="server" Text="Gestión Perfiles" /></li>
-                <li><asp:Label ID="lblMenuFamilias" runat="server" Text="Gestión Familias" /></li>
+                <li><a href="Gestion-Perfiles.aspx"><asp:Label ID="lblMenuPerfiles" runat="server" Text="Gestión Perfiles" /></a></li>
+                <li><a href="Gestion-Familias.aspx"><asp:Label ID="lblMenuFamilias" runat="server" Text="Gestión Familias" /></a></li>
                 <li><asp:HyperLink ID="lnkMenuBackup" runat="server" NavigateUrl="Backup-Restore.aspx">Backup/Restore</asp:HyperLink></li>
                 <li><asp:HyperLink ID="lnkMenuIdiomas" runat="server" NavigateUrl="Gestion-Idioma.aspx">Gestión Idiomas</asp:HyperLink></li>
             </ul>
@@ -95,9 +95,9 @@
                             <td>
                                 <asp:DropDownList ID="ddlRol" runat="server">
                                     <asp:ListItem Text="-- Seleccionar Rol --" Value=""></asp:ListItem>
-                                    <asp:ListItem Text="Web Master" Value="Web Master"></asp:ListItem>
-                                    <asp:ListItem Text="Admin" Value="Admin"></asp:ListItem>
-                                    <asp:ListItem Text="Cliente" Value="Cliente"></asp:ListItem>
+                                    <asp:ListItem Text="Web Master" Value="1"></asp:ListItem>
+                                    <asp:ListItem Text="Admin" Value="3"></asp:ListItem>
+                                    <asp:ListItem Text="Cliente" Value="2"></asp:ListItem>
                                 </asp:DropDownList>
                             </td>
                         </tr>

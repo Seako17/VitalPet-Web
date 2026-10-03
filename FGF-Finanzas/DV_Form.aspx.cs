@@ -12,8 +12,12 @@ using System.Web.UI.WebControls;
 
 namespace FGF_Finanzas
 {
-    public partial class DV_Form : BasePage
+    public partial class DV_Form : PaginaSegura
     {
+        protected override Permiso PermisoRequerido
+        {
+            get { return CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "DV"); }
+        }
         private BLLDigitoVerificador _bllDV = new BLLDigitoVerificador();
         private readonly BLLBackupRestore _bllBackupRestore = new BLLBackupRestore();
         protected void Page_Load(object sender, EventArgs e)
