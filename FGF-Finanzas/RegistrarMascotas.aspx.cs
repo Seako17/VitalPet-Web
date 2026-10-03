@@ -17,7 +17,7 @@ namespace FGF_Finanzas
     {
         protected override Permiso PermisoRequerido
         {
-            get { return CodigosPermiso.MascotaRegistrar; }
+            get { return CodigosPermiso.ObtenerPermisos().Find(x=>x.Nombre == "MascotaRegistrar"); }
         }
         BLLMascota bllMascota = new BLLMascota();
         protected void Page_Load(object sender, EventArgs e)

@@ -12,7 +12,7 @@ namespace FGF_Finanzas
     {
         protected override Permiso PermisoRequerido
         {
-            get { return CodigosPermiso.FamiliaGestionar; }
+            get { return CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "FamiliaGestionar"); }
         }
         BLLEvento bllEvento = new BLLEvento();
         BLLPermiso bLLPermiso = new BLLPermiso();

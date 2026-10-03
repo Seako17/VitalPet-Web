@@ -9,8 +9,12 @@ using System.Web.UI.WebControls;
 
 namespace FGF_Finanzas
 {
-    public partial class Cambiar_Contraseña : Page
+    public partial class Cambiar_Contraseña : PaginaSegura
     {
+        protected override Permiso PermisoRequerido
+        {
+            get { return CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "ContrasenaCambiar"); }
+        }
         BLLUsuario bllUsuario = new BLLUsuario();
         protected override void OnInit(EventArgs e)
         {

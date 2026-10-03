@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FGF_Finanzas.Capas.BLL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -7,65 +8,15 @@ namespace FGF_Finanzas.Capas.Servicios
 {
     public static class CodigosPermiso
     {
-        public static readonly Permiso BitacoraVer =
-        new Permiso
+        private static BLLPermiso bllPermiso = new BLLPermiso();
+        public static List<Permiso> ObtenerPermisos()
         {
-            Id = 1,
-            Nombre = "BitacoraVer",
-            Descripcion = "Ver la bitácora"
-        };
-
-        public static readonly Permiso UsuarioGestionar =
-            new Permiso
+            List<Permiso> permisos = new List<Permiso>();
+            foreach (var item in bllPermiso.ObtenerPermisos())
             {
-                Id = 2,
-                Nombre = "UsuarioGestionar",
-                Descripcion = "Gestionar usuarios"
-            };
-
-        public static readonly Permiso MascotaRegistrar =
-            new Permiso
-            {
-                Id = 3,
-                Nombre = "MascotaRegistrar",
-                Descripcion = "Registrar mascotas"
-            };
-
-        public static readonly Permiso BackupRestore =
-            new Permiso
-            {
-                Id = 4,
-                Nombre = "BackUpRestore",
-                Descripcion = "Realizar BackUp y Restore"
-            };
-
-        public static readonly Permiso CambiarContrasena =
-            new Permiso
-            {
-                Id = 5,
-                Nombre = "ContrasenaCambiar",
-                Descripcion = "Cambiar la contraseña"
-            };
-        public static readonly Permiso FamiliaGestionar =
-            new Permiso
-            {
-                Id = 6,
-                Nombre = "FamiliaGestionar",
-                Descripcion = "Gestionar familias"
-            };
-        public static readonly Permiso PerfilGestionar =
-            new Permiso
-            {
-                Id = 7,
-                Nombre = "PerfilGestionar",
-                Descripcion = "Gestionar perfiles"
-            };
-        public static readonly Permiso DV =
-            new Permiso
-            {
-                Id = 8,
-                Nombre = "DV",
-                Descripcion = "Gestionar DV"
-            };
+                permisos.Add(item);
+            }
+            return permisos;
+        }
     }
 }

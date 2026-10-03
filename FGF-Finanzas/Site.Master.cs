@@ -54,7 +54,7 @@ namespace FGF_Finanzas
                 var lista = bllDV.CompararDigito();
                 if (lista != null && lista.Count > 0)
                 {
-                    if (SessionManager.Instancia.Usuario.Rol.TienePermiso(CodigosPermiso.DV))
+                    if (SessionManager.Instancia.Usuario.Rol.TienePermiso(CodigosPermiso.ObtenerPermisos().Find(x =>x.Nombre == "DV")))
                     {
                         Session["InconsistenciasDetectadas"] = lista;
                         Response.Redirect("~/DV_Form.aspx", false);
@@ -73,15 +73,15 @@ namespace FGF_Finanzas
 
                 if(SessionManager.Instancia != null && SessionManager.Instancia.Usuario != null)
                 {
-                    if (SessionManager.Instancia.Usuario.Rol.TienePermiso(CodigosPermiso.UsuarioGestionar) || SessionManager.Instancia.Usuario.Rol.TienePermiso(CodigosPermiso.FamiliaGestionar) || SessionManager.Instancia.Usuario.Rol.TienePermiso(CodigosPermiso.PerfilGestionar))
+                    if (SessionManager.Instancia.Usuario.Rol.TienePermiso(CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "UsuarioGestionar")) || SessionManager.Instancia.Usuario.Rol.TienePermiso(CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "FamiliaGestionar")) || SessionManager.Instancia.Usuario.Rol.TienePermiso(CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "PerfilGestionar")))
                     {
                         Admin.Visible = true;
                     }
-                    if (SessionManager.Instancia.Usuario.Rol.TienePermiso(CodigosPermiso.BackupRestore))
+                    if (SessionManager.Instancia.Usuario.Rol.TienePermiso(CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "BackUpRestore")))
                     {
                         WebMaster.Visible = true;
                     }
-                    if (SessionManager.Instancia.Usuario.Rol.TienePermiso(CodigosPermiso.MascotaRegistrar))
+                    if (SessionManager.Instancia.Usuario.Rol.TienePermiso(CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "MascotaRegistrar")))
                     {
                         Cliente.Visible = true;
                     }

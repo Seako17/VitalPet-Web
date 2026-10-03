@@ -14,7 +14,7 @@ namespace FGF_Finanzas
     {
         protected override Permiso PermisoRequerido
         {
-            get { return CodigosPermiso.UsuarioGestionar; }
+            get { return CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "UsuarioGestionar"); }
         }
         BLLUsuario bllUsuario = new BLLUsuario();
         BLLEvento bllEvento = new BLLEvento();

@@ -15,7 +15,7 @@ namespace FGF_Finanzas
     {
         protected override Permiso PermisoRequerido
         {
-            get { return CodigosPermiso.BitacoraVer; }
+            get { return CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "BitacoraVer"); }
         }
         BLLEvento bllEvento = new BLLEvento();
         protected void Page_Load(object sender, EventArgs e)

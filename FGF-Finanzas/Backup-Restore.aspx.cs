@@ -15,7 +15,7 @@ namespace FGF_Finanzas
     {
         protected override Permiso PermisoRequerido
         {
-            get { return CodigosPermiso.BackupRestore; }
+            get { return CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "BackUpRestore"); }
         }
         private readonly BLLBackupRestore _bllBackupRestore = new BLLBackupRestore();
         BLLEvento bllEvento;
