@@ -53,7 +53,7 @@
             <div class="form-buttons">
                 <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" CssClass="btn btn-cancelar"
                     UseSubmitBehavior="false" CausesValidation="false" OnClick="btnCancelar_Click" />
-                <asp:Button ID="btnAgendar" runat="server" Text="Registrar" CssClass="btn btn-registrar" OnClick="btnAgendar_Click" />
+                <asp:Button ID="btnAgendar" runat="server" Text="Agendar" CssClass="btn btn-registrar" OnClick="btnAgendar_Click" />
             </div>
         </div>
     </div>

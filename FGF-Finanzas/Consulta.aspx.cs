@@ -71,7 +71,13 @@ namespace FGF_Finanzas
                 ActualizarDisponibilidadSinBorrarMensaje();
             }
         }
+        protected void btnCancelar_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("~/Default.aspx", false);
+            Context.ApplicationInstance.CompleteRequest();
+        }
 
+        #region Funciones
         private void CargarMascotas()
         {
             DataTable dt = bllMascota.ObtenerMascotasDeUsuario(SessionManager.Instancia.Usuario);
@@ -118,11 +124,6 @@ namespace FGF_Finanzas
             if (string.IsNullOrEmpty(lblError.Text)) lblError.Text = mensaje;
         }
 
-        protected void btnCancelar_Click(object sender, EventArgs e)
-        {
-            Response.Redirect("~/Default.aspx", false);
-            Context.ApplicationInstance.CompleteRequest();
-        }
 
         private bool TryObtenerFechaHora(out DateTime fechaHora)
         {
@@ -173,5 +174,6 @@ namespace FGF_Finanzas
                 return false;
             }
         }
+        #endregion
     }
 }
