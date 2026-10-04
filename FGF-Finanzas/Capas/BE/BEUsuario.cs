@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FGF_Finanzas.Capas.Servicios;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -16,12 +17,12 @@ namespace FGF_Finanzas.Capas.BE
         public string Contraseña { get; set; }
         public int Intento { get; set; }
         public bool Bloqueado { get; set; }
-        public string Rol { get; set; }
+        public Rol Rol { get; set; }
         public BEUsuario()
         {
 
         }
-        public BEUsuario(string dni, string nombre, string apellido, string username, string password, string mail, string rol)
+        public BEUsuario(string dni, string nombre, string apellido, string username, string password, string mail, Rol rol)
         {
             DNI = dni;
             Nombre = nombre;
@@ -44,7 +45,7 @@ namespace FGF_Finanzas.Capas.BE
             Intento = int.Parse(dr[5].ToString());
             Bloqueado = Convert.ToBoolean(dr[6]);
             Mail = dr[7].ToString();
-            Rol = dr[8].ToString();
+            Rol = dr["rol"] as Rol;
         }
     }
 }

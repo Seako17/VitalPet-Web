@@ -17,11 +17,13 @@ namespace FGF_Finanzas.Capas.BLL
         DALUsuario dalUsuario;
         BLLEvento bllEvento;
         BLLDigitoVerificador bllDigitoVerificador;
+        BLLRol bllRol;
         public BLLUsuario()
         {
             dalUsuario = new DALUsuario();
             bllEvento = new BLLEvento();
             bllDigitoVerificador = new BLLDigitoVerificador();
+            bllRol = new BLLRol();
         }
 
         public void ValidarUsuario(string dni, string usuario, string nombre, string apellido, string contraseña, string confirmacion)
@@ -59,7 +61,27 @@ namespace FGF_Finanzas.Capas.BLL
 
         public DataTable ObtenerUsuarios()
         {
-            return dalUsuario.ObtenerUsuarios();
+            DataTable usuarios = dalUsuario.ObtenerUsuarios();
+
+            usuarios.Columns.Add("RolTemp", typeof(Rol));
+
+            foreach (DataRow item in usuarios.Rows)
+            {
+                if (item["rol"] != DBNull.Value)
+                {
+                    int idRol = Convert.ToInt32(item["rol"]);
+
+                    Rol rol = bllRol.ObtenerCompleto(new Rol(idRol));
+
+                    item["RolTemp"] = rol;
+                }
+            }
+
+            usuarios.Columns.Remove("rol");
+
+            usuarios.Columns["RolTemp"].ColumnName = "rol";
+
+            return usuarios;
         }
 
 
@@ -78,7 +100,7 @@ namespace FGF_Finanzas.Capas.BLL
             if (SessionManager.IsLogged()) throw new Exception("Ya ha iniciado sesión.");
 
             BEUsuario user = null;
-            foreach (DataRow item in dalUsuario.ObtenerUsuarios().Rows)
+            foreach (DataRow item in ObtenerUsuarios().Rows)
             {
                 if (item["usuario"].ToString() == usuario)
                 {
@@ -176,7 +198,27 @@ namespace FGF_Finanzas.Capas.BLL
 
         public DataTable ObtenerUsuariosPuros()
         {
-            return dalUsuario.ObtenerUsuariosPuros();
+            DataTable usuarios = dalUsuario.ObtenerUsuariosPuros();
+
+            usuarios.Columns.Add("RolTemp", typeof(Rol));
+
+            foreach (DataRow item in usuarios.Rows)
+            {
+                if (item["rol"] != DBNull.Value)
+                {
+                    int idRol = Convert.ToInt32(item["rol"]);
+
+                    Rol rol = bllRol.ObtenerCompleto(new Rol(idRol));
+
+                    item["RolTemp"] = rol;
+                }
+            }
+
+            usuarios.Columns.Remove("rol");
+
+            usuarios.Columns["RolTemp"].ColumnName = "rol";
+
+            return usuarios;
         }
 
     }
