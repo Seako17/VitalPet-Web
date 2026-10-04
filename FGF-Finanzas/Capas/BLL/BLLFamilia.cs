@@ -1,4 +1,5 @@
-﻿using FGF_Finanzas.Capas.DAL;
+﻿using FGF_Finanzas.Capas.BE;
+using FGF_Finanzas.Capas.DAL;
 using FGF_Finanzas.Capas.Servicios;
 using System;
 using System.Collections.Generic;
@@ -25,30 +26,30 @@ namespace FGF_Finanzas.Capas.BLL
         public void AgregarFamilia(Familia familia)
         {
             if (familia == null)
-                throw new Exception("La familia no es válida.");
+                throw new BECustomException("ERR_FAMILIA_INVALIDA");
 
             if (string.IsNullOrWhiteSpace(familia.Nombre))
-                throw new Exception("Debe ingresar un nombre para la familia.");
+                throw new BECustomException("ERR_FAMILIA_NOMBRE_OBLIGATORIO");
 
             familia.Nombre = familia.Nombre.Trim();
 
             if (familiaDAL.ExisteFamilia(familia.Nombre))
-                throw new Exception("Ya existe una familia con ese nombre.");
+                throw new BECustomException("ERR_FAMILIA_NOMBRE_DUPLICADO");
 
             familiaDAL.AgregarFamilia(familia);
         }
         public void AsignarPermiso(Familia familia,Permiso permiso)
         {
             if (familia == null)
-                throw new Exception("Debe seleccionar una familia.");
+                throw new BECustomException("ERR_FAMILIA_SELECCIONAR");
 
             if (permiso == null)
-                throw new Exception("Debe seleccionar un permiso.");
+                throw new BECustomException("ERR_FAMILIA_SELECCIONAR_PERMISO");
 
             Familia familiaCompleta = ObtenerCompleta(familia);
 
             if (familiaCompleta == null)
-                throw new Exception("La familia seleccionada no existe.");
+                throw new BECustomException("ERR_FAMILIA_NO_EXISTE");
 
             List<Permiso> permisosActuales = ObtenerPermisosTotales(familiaCompleta);
 
@@ -56,7 +57,7 @@ namespace FGF_Finanzas.Capas.BLL
 
             if (permisoRepetido != null)
             {
-                throw new Exception("No se puede asignar el permiso " + permisoRepetido.Nombre + " porque ya existe dentro de la familia " +familiaCompleta.Nombre +" o en alguna de sus familias hijas.");
+                throw new BECustomException("ERR_FAMILIA_PERMISO_REPETIDO", permisoRepetido.Nombre, familiaCompleta.Nombre);
             }
 
             List<Familia> ancestros = new List<Familia>();
@@ -71,7 +72,7 @@ namespace FGF_Finanzas.Capas.BLL
 
                 if (repetidoEnAncestro != null)
                 {
-                    throw new Exception("No se puede asignar el permiso '" + repetidoEnAncestro.Nombre + "' a la familia '" + familiaCompleta.Nombre + "' porque ya existe en una familia superior: '" + ancestro.Nombre + "'.");
+                    throw new BECustomException("ERR_FAMILIA_PERMISO_EN_ANCESTRO", repetidoEnAncestro.Nombre, familiaCompleta.Nombre, ancestro.Nombre);
                 }
             }
 
@@ -80,7 +81,7 @@ namespace FGF_Finanzas.Capas.BLL
         public void EliminarPermiso(Familia familia, Permiso permiso)
         {
             if (familia == null || permiso == null)
-                throw new Exception("El componente seleccionado no es válido.");
+                throw new BECustomException("ERR_FAMILIA_COMPONENTE_INVALIDO");
 
             familiaDAL.EliminarPermiso(familia, permiso);
         }
@@ -98,30 +99,28 @@ namespace FGF_Finanzas.Capas.BLL
         public void AsignarFamilia(Familia padre, Familia hija)
         {
             if (padre == null || hija == null)
-                throw new Exception("Debe seleccionar ambas familias.");
+                throw new BECustomException("ERR_FAMILIA_SELECCIONAR_AMBAS");
 
             Familia padreCompleta = ObtenerCompleta(padre);
             Familia hijaCompleta = ObtenerCompleta(hija);
 
             if (padreCompleta == null)
-                throw new Exception("La familia base no existe.");
+                throw new BECustomException("ERR_FAMILIA_BASE_NO_EXISTE");
 
             if (hijaCompleta == null)
-                throw new Exception("La familia a agregar no existe.");
+                throw new BECustomException("ERR_FAMILIA_AGREGAR_NO_EXISTE");
 
             if (padreCompleta.Id == hijaCompleta.Id)
-                throw new Exception(
-                    "Una familia no puede agregarse a sí misma."
-                );
+                throw new BECustomException("ERR_FAMILIA_AUTOASIGNAR");
 
             if (familiaDAL.ExisteRelacionFamilias(padreCompleta,hijaCompleta))
             {
-                throw new Exception("La familia '" + hijaCompleta.Nombre + "' ya pertenece a la familia '" + padreCompleta.Nombre + "'.");
+                throw new BECustomException("ERR_FAMILIA_YA_PERTENECE", hijaCompleta.Nombre, padreCompleta.Nombre);
             }
 
             if (ContieneFamilia(hijaCompleta, padreCompleta.Id))
             {
-                throw new Exception("No se puede agregar la familia '" + hijaCompleta.Nombre + "' dentro de '" + padreCompleta.Nombre + "' porque se generaría un ciclo.");
+                throw new BECustomException("ERR_FAMILIA_CICLO", hijaCompleta.Nombre, padreCompleta.Nombre);
             }
 
             List<Permiso> permisosPadre = ObtenerPermisosTotales(padreCompleta);
@@ -132,7 +131,7 @@ namespace FGF_Finanzas.Capas.BLL
 
             if (permisoRepetido != null)
             {
-                throw new Exception("No se puede agregar la familia '" +hijaCompleta.Nombre + "' dentro de '" + padreCompleta.Nombre + "' porque ambas contienen el permiso '" + permisoRepetido.Nombre + "'.");
+                throw new BECustomException("ERR_FAMILIA_PERMISO_REPETIDO_ENTRE", hijaCompleta.Nombre, padreCompleta.Nombre, permisoRepetido.Nombre);
             }
 
             familiaDAL.AsignarFamilia(padreCompleta,hijaCompleta);
@@ -156,14 +155,14 @@ namespace FGF_Finanzas.Capas.BLL
         public void EliminarRelacionFamilias(Familia padre, Familia hija)
         {
             if (padre == null || hija == null)
-                throw new Exception("La relación seleccionada no es válida.");
+                throw new BECustomException("ERR_FAMILIA_RELACION_INVALIDA");
 
             familiaDAL.EliminarRelacionFamilias(padre,hija);
         }
         public void EliminarFamilia(Familia familia)
         {
             if (familia == null)
-                throw new Exception("Debe seleccionar una familia.");
+                throw new BECustomException("ERR_FAMILIA_SELECCIONAR");
 
             familiaDAL.EliminarFamilia(familia);
         }
