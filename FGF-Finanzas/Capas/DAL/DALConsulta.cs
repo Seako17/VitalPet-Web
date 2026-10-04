@@ -52,7 +52,7 @@ namespace FGF_Finanzas.Capas.DAL
 
         public void AgregarConsulta(BEConsulta consulta)
         {
-            const string query = @"INSERT INTO Consulta (id_mascota, DNI_Veterinario, motivo, fechaHora)
+            const string query = @"INSERT INTO Consulta (idMascota, DNI_Veterinario, motivo, fechaHora)
                                    VALUES (@IdMascota, @DniVeterinario, @Motivo, @FechaHora)";
 
             using (SqlConnection con = new SqlConnection(_conexion))

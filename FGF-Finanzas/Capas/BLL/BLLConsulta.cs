@@ -11,16 +11,17 @@ namespace FGF_Finanzas.Capas.BLL
 {
     public class BLLConsulta
     {
-        private const string ROL_VETERINARIO = "Veterinario";
         private const int HORA_INICIO = 8;      // 08:00
         private const int HORA_FIN = 20;        // 20:00
         private const int INTERVALO_MIN = 30;
+        private const string PERMISO_AGENDAR_CONSULTA = "ConsultaAtender";
 
         DALConsulta dalConsulta;
         BLLUsuario bllUsuario;
         BLLMascota bllMascota;
         BLLEvento bllEvento;
         BLLDigitoVerificador bllDigitoVerificador;
+        BLLPermiso bllPermiso;
 
         public BLLConsulta()
         {
@@ -29,6 +30,7 @@ namespace FGF_Finanzas.Capas.BLL
             bllMascota = new BLLMascota();
             bllEvento = new BLLEvento();
             bllDigitoVerificador = new BLLDigitoVerificador();
+            bllPermiso = new BLLPermiso();
         }
 
         public List<string> ObtenerHorarios()
@@ -53,10 +55,20 @@ namespace FGF_Finanzas.Capas.BLL
 
         public DataTable ObtenerVeterinarios()
         {
+            Permiso permisoAgendar = bllPermiso.ObtenerPermisos()
+                .Find(p => p.Nombre == PERMISO_AGENDAR_CONSULTA);
+
+            if (permisoAgendar == null)
+                throw new Exception("No se encontró el permiso '" + PERMISO_AGENDAR_CONSULTA + "' en el sistema.");
+
+  
             DataTable usuarios = bllUsuario.ObtenerUsuarios();
 
-            var filas = usuarios.AsEnumerable()
-                .Where(u => u["rol"].ToString() == ROL_VETERINARIO);
+            var filas = usuarios.AsEnumerable().Where(u =>
+            {
+                Rol rol = u["rol"] as Rol;
+                return rol != null && rol.TienePermiso(permisoAgendar);
+            });
 
             DataTable veterinarios = filas.Any() ? filas.CopyToDataTable() : usuarios.Clone();
 
