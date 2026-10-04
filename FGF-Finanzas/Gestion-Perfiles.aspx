@@ -5,26 +5,27 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <div class="barra-titulo">
-        <h2>Panel de Administrador</h2>
+        <h2><asp:Label ID="lblTituloPanel" runat="server" Text="Panel de Administrador" /></h2>
     </div>
     <div id="contenedor-alertas"></div>
     <div class="main-layout">
         <aside class="sidebar">
-            <h3>Menú</h3>
+            <h3><asp:Label ID="lblTituloMenu" runat="server" Text="Menú" /></h3>
             <ul>
-                <li><a href="Gestion-Usuarios.aspx">Gestión Usuarios</a></li>
-                <li><a href="BitacoraEventos.aspx">Bitácora eventos</a></li>
-                <li class="active"><a href="Gestion-Perfiles.aspx">Gestión Perfiles</a></li>
-                <li><a href="Gestion-Familias.aspx">Gestión Familias</a></li>
-                <li><a href="Backup-Restore.aspx">Backup / Restore</a></li>
+                <li><a href="Gestion-Usuarios.aspx"><asp:Label ID="lblMenuUsuarios" runat="server" Text="Gestión Usuarios" /></a></li>
+                <li><asp:HyperLink ID="lnkMenuBitacora" runat="server" NavigateUrl="BitacoraEventos.aspx">Bitácora eventos</asp:HyperLink></li>
+                <li class="active"><asp:Label ID="lblMenuPerfiles" runat="server" Text="Gestión Perfiles" /></li>
+                <li><a href="Gestion-Familias.aspx"><asp:Label ID="lblMenuFamilias" runat="server" Text="Gestión Familias" /></a></li>
+                <li><asp:HyperLink ID="lnkMenuBackup" runat="server" NavigateUrl="Backup-Restore.aspx">Backup/Restore</asp:HyperLink></li>
+                <li><asp:HyperLink ID="lnkMenuIdiomas" runat="server" NavigateUrl="Gestion-Idioma.aspx">Gestión Idiomas</asp:HyperLink></li>
             </ul>
 
         </aside>
         <section class="gestion-perfiles__container">
-            <h3>Gestión de Perfiles</h3>
+            <h3><asp:Label ID="lblTituloPerfiles" runat="server" Text="Gestión de Perfiles" /></h3>
             <div class="perfiles-layout">
                 <div class="columna-lista">
-                    <h4>Perfiles</h4>
+                    <h4><asp:Label ID="lblPerfiles" runat="server" Text="Perfiles" /></h4>
                     <div class="lista-contenedor">
                         <asp:ListBox
                             ID="lstPerfiles"
@@ -34,7 +35,7 @@
                     </div>
                 </div>
                 <div class="columna-lista">
-                    <h4>Familias</h4>
+                    <h4><asp:Label ID="lblFamilias" runat="server" Text="Familias" /></h4>
                     <div class="lista-contenedor">
                         <asp:ListBox
                             ID="lstFamilias"
@@ -43,7 +44,7 @@
                     </div>
                 </div>
                 <div class="columna-lista">
-                    <h4>Permisos</h4>
+                    <h4><asp:Label ID="lblPermisos" runat="server" Text="Permisos" /></h4>
                     <div class="lista-contenedor">
                         <asp:ListBox
                             ID="lstPermisos"
