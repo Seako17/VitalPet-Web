@@ -33,18 +33,13 @@ namespace FGF_Finanzas
             {
                 lblBienvenida.Text += $" {SessionManager.Instancia.Usuario.Usuario.ToString()}";
                 BEUsuario usuario = SessionManager.Instancia.Usuario;
-                string rolUsuario = "Cliente";
-                if (usuario != null)
-                {
-                    rolUsuario = usuario.Rol;
-                }
                 FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(
                     1,
                     usuario.Usuario,
                     DateTime.Now,
                     DateTime.Now.AddMinutes(30),
                     true,
-                    rolUsuario
+                    ""
                 );
 
                 string encryptedTicket = FormsAuthentication.Encrypt(ticket);
