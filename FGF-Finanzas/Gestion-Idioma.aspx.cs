@@ -16,7 +16,7 @@ namespace FGF_Finanzas
     {
         protected override Permiso PermisoRequerido
         {
-            get { return CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "UsuarioGestionar"); }
+            get { return CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "IdiomaGestionar"); }
         }
         BLLTraduccion bllTraduccion = new BLLTraduccion();
         DataTable _traduccionesCargadas;
