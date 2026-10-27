@@ -47,12 +47,6 @@ namespace FGF_Finanzas.Capas.BLL
             return horarios;
         }
 
-
-        public DataTable ObtenerConsultas()
-        {
-            return dalConsulta.ObtenerConsultas();
-        }
-
         public DataTable ObtenerVeterinarios()
         {
             Permiso permisoAgendar = bllPermiso.ObtenerPermisos()
@@ -89,7 +83,7 @@ namespace FGF_Finanzas.Capas.BLL
                 .Where(c => Convert.ToDateTime(c["fechaHora"]) == fechaHora)
                 .ToList();
 
-            if (enEseHorario.Any(c => Convert.ToInt32(c["id_mascota"]) == idMascota))
+            if (enEseHorario.Any(c => Convert.ToInt32(c["idMascota"]) == idMascota))
             {
                 throw new Exception(string.Format(
                     "La mascota ya tiene una consulta agendada el {0:dd/MM/yyyy} a las {0:HH:mm}. No es posible agendar en ese horario.",
