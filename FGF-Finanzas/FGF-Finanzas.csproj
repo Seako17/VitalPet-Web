@@ -71,8 +71,10 @@
     <Content Include="Backup-Restore.aspx" />
     <Content Include="BitacoraEventos.aspx" />
     <Content Include="Cambiar-Contraseña.aspx" />
+    <Content Include="Consulta.aspx" />
     <Content Include="Content\BackupRestore\clip.png" />
     <Content Include="Content\BackupRestore\BackupStyles.css" />
+    <Content Include="Content\Consultas\Consultas.css" />
     <Content Include="Content\DV_Styles.css" />
     <Content Include="Content\Estilos.css" />
     <Content Include="Content\EventosStyles.css" />
@@ -120,10 +122,12 @@
     <Compile Include="Cambiar-Contraseña.aspx.designer.cs">
       <DependentUpon>Cambiar-Contraseña.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Capas\BE\BEConsulta.cs" />
     <Compile Include="Capas\BE\BEEvento.cs" />
     <Compile Include="Capas\BE\BEMascota.cs" />
     <Compile Include="Capas\BE\BEUsuario.cs" />
     <Compile Include="Capas\BLL\BLLBackupRestore.cs" />
+    <Compile Include="Capas\BLL\BLLConsulta.cs" />
     <Compile Include="Capas\BLL\BLLEvento.cs" />
     <Compile Include="Capas\BE\BEDigitoVerificador.cs" />
     <Compile Include="Capas\BLL\BLLDigitoVerificador.cs" />
@@ -134,6 +138,7 @@
     <Compile Include="Capas\BLL\BLLPermiso.cs" />
     <Compile Include="Capas\DAL\DALAbstracta.cs" />
     <Compile Include="Capas\DAL\DALBackupRestore.cs" />
+    <Compile Include="Capas\DAL\DALConsulta.cs" />
     <Compile Include="Capas\DAL\DALEvento.cs" />
     <Compile Include="Capas\DAL\DALDigitoVerificador.cs" />
     <Compile Include="Capas\DAL\DALFamilia.cs" />
@@ -148,6 +153,13 @@
     <Compile Include="Capas\Servicios\Permiso.cs" />
     <Compile Include="Capas\Servicios\Rol.cs" />
     <Compile Include="Capas\Servicios\SessionManager.cs" />
+    <Compile Include="Consulta.aspx.cs">
+      <DependentUpon>Consulta.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Consulta.aspx.designer.cs">
+      <DependentUpon>Consulta.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
