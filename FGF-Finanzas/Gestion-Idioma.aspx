@@ -53,7 +53,7 @@
                             <asp:BoundField DataField="ControlId" HeaderText="Control" />
                             <asp:TemplateField HeaderText="Texto traducido">
                                 <ItemTemplate>
-                                    <asp:TextBox ID="txtTexto" runat="server" Text='<%# Bind("Texto") %>' CssClass="input-texto" />
+                                    <asp:TextBox ID="txtTexto" runat="server" Text='<%# Bind("Texto") %>' CssClass="input-texto" ValidateRequestMode="Disabled" />
                                 </ItemTemplate>
                             </asp:TemplateField>
                             <asp:TemplateField HeaderText="Acciones">
@@ -99,8 +99,7 @@
                                     <ItemTemplate>
                                         <asp:LinkButton ID="btnEliminarIdioma" runat="server" CommandName="EliminarIdioma"
                                             CommandArgument='<%# Bind("Codigo") %>' CssClass="btn-tabla btn-tabla-eliminar"
-                                            CausesValidation="false"
-                                            OnClientClick='return confirm("¿Eliminar el idioma <%# Bind("Codigo") %>? Se perderán todas sus traducciones.");'>Eliminar</asp:LinkButton>
+                                            CausesValidation="false">Eliminar</asp:LinkButton>
                                     </ItemTemplate>
                                 </asp:TemplateField>
                             </Columns>

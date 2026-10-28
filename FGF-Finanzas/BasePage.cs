@@ -221,7 +221,7 @@ namespace FGF_Finanzas
 
         protected void MostrarAlerta(string mensaje, string tipo = "exito")
         {
-            string mensajeFormateado = mensaje.Replace("'", "\\'");
+            string mensajeFormateado = System.Web.HttpUtility.JavaScriptStringEncode(mensaje);
             string script = $"mostrarAlerta('{mensajeFormateado}', '{tipo}');";
             ScriptManager.RegisterStartupScript(this, GetType(), Guid.NewGuid().ToString(), script, true);
         }

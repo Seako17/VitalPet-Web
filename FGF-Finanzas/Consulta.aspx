@@ -7,25 +7,25 @@
 
     <div class="form-container-main">
         <div class="main-title">
-            <h2>AGENDAR CONSULTAS</h2>
+            <h2><asp:Label ID="lblTitulo" runat="server" Text="AGENDAR CONSULTAS" /></h2>
         </div>
         <div class="form-card">
-            <h2 class="form-subtitle">Datos para la Consulta</h2>
+            <h2 class="form-subtitle"><asp:Label ID="lblSubtitulo" runat="server" Text="Datos para la Consulta" /></h2>
 
             <div class="form-group">
-                <label for="dropMascota">Mascota:</label>
+                <label for="dropMascota"><asp:Label ID="lblMascota" runat="server" Text="Mascota:" /></label>
                 <asp:DropDownList runat="server" CssClass="form-input" ID="dropMascota"
                     AutoPostBack="true" OnSelectedIndexChanged="Horario_Changed">
                 </asp:DropDownList>
             </div>
 
             <div class="form-group">
-                <label for="txtMotivo">Motivo:</label>
+                <label for="txtMotivo"><asp:Label ID="lblMotivo" runat="server" Text="Motivo:" /></label>
                 <asp:TextBox ID="txtMotivo" runat="server" CssClass="form-input" Placeholder="Ej: Vacunación"></asp:TextBox>
             </div>
 
             <div class="form-group">
-                <label for="txtMotivo">Fecha y Hora:</label>
+                <label for="txtMotivo"><asp:Label ID="lblFechaHora" runat="server" Text="Fecha y Hora:" /></label>
                 <div class="fecha-hora-row">
                     <asp:TextBox ID="txtFecha" runat="server" TextMode="Date" CssClass="form-input"
                         AutoPostBack="true" OnTextChanged="Horario_Changed"></asp:TextBox>
@@ -43,7 +43,7 @@
 
 
             <div class="form-group">
-                <label for="ddlVeterinario">Veterinario/a:</label>
+                <label for="ddlVeterinario"><asp:Label ID="lblVeterinario" runat="server" Text="Veterinario/a:" /></label>
                 <asp:DropDownList runat="server" CssClass="form-input" ID="ddlVeterinario"></asp:DropDownList>
             </div>
 

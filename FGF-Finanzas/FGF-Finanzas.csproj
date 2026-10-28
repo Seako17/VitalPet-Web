@@ -100,6 +100,7 @@
     <Content Include="RegistrarMascotas.aspx" />
     <Content Include="Registrarse.aspx" />
     <Content Include="Scripts\scripts.js" />
+    <None Include="Scripts\Actualizar-Traducciones-Consulta.ps1" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

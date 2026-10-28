@@ -207,18 +207,25 @@ namespace FGF_Finanzas.Capas.DAL
             }
         }
 
-        public void EliminarIdioma(int idIdioma)
+        public void EliminarIdioma(int idIdioma, string codigoPorDefecto)
         {
             const string query = @"
+                UPDATE Usuario SET idioma = @CodigoPorDefecto
+                WHERE idioma = (SELECT Codigo FROM Idioma WHERE IdIdioma = @IdIdioma);
                 DELETE FROM Traduccion WHERE IdIdioma = @IdIdioma;
                 DELETE FROM Idioma WHERE IdIdioma = @IdIdioma;";
 
             using (var con = new SqlConnection(_conexion))
-            using (var cmd = new SqlCommand(query, con))
             {
-                cmd.Parameters.AddWithValue("@IdIdioma", idIdioma);
                 con.Open();
-                cmd.ExecuteNonQuery();
+                using (var transaction = con.BeginTransaction())
+                using (var cmd = new SqlCommand(query, con, transaction))
+                {
+                    cmd.Parameters.AddWithValue("@IdIdioma", idIdioma);
+                    cmd.Parameters.AddWithValue("@CodigoPorDefecto", codigoPorDefecto);
+                    cmd.ExecuteNonQuery();
+                    transaction.Commit();
+                }
             }
         }
     }
