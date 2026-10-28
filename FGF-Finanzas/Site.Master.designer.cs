@@ -13,6 +13,9 @@ namespace FGF_Finanzas
 
     public partial class Site
     {
+        protected global::System.Web.UI.WebControls.Label lblMenuConsultas;
+        protected global::System.Web.UI.WebControls.HyperLink lnkNuevaConsulta;
+        protected global::System.Web.UI.WebControls.HyperLink lnkMisConsultas;
 
         /// <summary>
         /// Control head.

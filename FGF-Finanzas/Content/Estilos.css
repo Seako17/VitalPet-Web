@@ -181,6 +181,10 @@ footer{
             background-color: #eaf4f8;
         }
 
+.dropdown {
+    position: relative;
+}
+
 .dropdown-menu {
     display: none;
     position: absolute;
@@ -195,7 +199,8 @@ footer{
     z-index: 1000;
 }
 
-.dropdown:hover .dropdown-menu {
+.dropdown:hover .dropdown-menu,
+.dropdown.open .dropdown-menu {
     display: block;
 }
 

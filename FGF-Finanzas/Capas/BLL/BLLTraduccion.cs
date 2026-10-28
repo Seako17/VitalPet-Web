@@ -45,6 +45,11 @@ namespace FGF_Finanzas.Capas.BLL
 
         public void ActualizarTraduccion(string formulario, string codigoIdioma, int idEtiqueta, string texto)
         {
+            // Este campo se valida aquí para informar el error sin una página de excepción de ASP.NET.
+            // Las traducciones se muestran como texto; no se admite marcado HTML ni referencias numéricas.
+            if (texto != null && (texto.Contains("<") || texto.Contains("&#")))
+                throw new BECustomException("ERR_TRADUCCION_SOLO_TEXTO");
+
             if (string.IsNullOrWhiteSpace(formulario))
                 throw new BECustomException("ERR_FORMULARIO_OBLIGATORIO");
 
@@ -108,10 +113,10 @@ namespace FGF_Finanzas.Capas.BLL
             if (idioma.Codigo.Equals(IDIOMA_POR_DEFECTO, StringComparison.OrdinalIgnoreCase))
                 throw new BECustomException("ERR_IDIOMA_POR_DEFECTO", IDIOMA_POR_DEFECTO);
 
-            _dalTraduccion.EliminarIdioma(idioma.IdIdioma);
+            _dalTraduccion.EliminarIdioma(idioma.IdIdioma, IDIOMA_POR_DEFECTO);
 
             RegistrarEvento("Eliminar Idioma", 2);
-            SincronizarDigitoVerificador("Idioma", "Traduccion");
+            SincronizarDigitoVerificador("Idioma", "Traduccion", "Usuario");
         }
 
         private BEIdioma ObtenerIdiomaSeleccionado(string codigoIdioma)

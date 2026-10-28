@@ -35,14 +35,14 @@
                         <asp:HyperLink runat="server" ID="lnkMascotas" NavigateUrl="RegistrarMascotas.aspx" Text="Mis mascotas" /></li>
 
                     <li id="dropdownList" runat="server" class="dropdown">
-                        <a href="javascript:void(0);" class="dropdown-btn" onclick="toggleDropdown(event)">Consultas</a>
+                        <a href="javascript:void(0);" class="dropdown-btn" onclick="toggleDropdown(event)"><asp:Label ID="lblMenuConsultas" runat="server" Text="Consultas" /></a>
 
                         <ul class="dropdown-menu" id="consultas-menu">
                             <li>
-                                <a href="Consulta.aspx">Nueva consulta</a>
+                                <asp:HyperLink ID="lnkNuevaConsulta" runat="server" NavigateUrl="Consulta.aspx" Text="Nueva consulta" />
                             </li>
                             <li>
-                                <a href="MisConsultas.aspx">Mis consultas</a>
+                                <asp:HyperLink ID="lnkMisConsultas" runat="server" NavigateUrl="MisConsultas.aspx" Text="Mis consultas" />
                             </li>
                         </ul>
                     </li>

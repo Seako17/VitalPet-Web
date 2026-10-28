@@ -53,7 +53,7 @@ namespace FGF_Finanzas.Capas.BLL
                 .Find(p => p.Nombre == PERMISO_AGENDAR_CONSULTA);
 
             if (permisoAgendar == null)
-                throw new Exception("No se encontró el permiso '" + PERMISO_AGENDAR_CONSULTA + "' en el sistema.");
+                throw new BECustomException("ERR_CONSULTA_PERMISO_FALTANTE", PERMISO_AGENDAR_CONSULTA);
 
   
             DataTable usuarios = bllUsuario.ObtenerUsuarios();
@@ -85,9 +85,7 @@ namespace FGF_Finanzas.Capas.BLL
 
             if (enEseHorario.Any(c => Convert.ToInt32(c["idMascota"]) == idMascota))
             {
-                throw new Exception(string.Format(
-                    "La mascota ya tiene una consulta agendada el {0:dd/MM/yyyy} a las {0:HH:mm}. No es posible agendar en ese horario.",
-                    fechaHora));
+                throw new BECustomException("ERR_CONSULTA_MASCOTA_OCUPADA", fechaHora);
             }
 
             var ocupados = new HashSet<string>(enEseHorario.Select(c => c["DNI_Veterinario"].ToString()));
@@ -98,9 +96,7 @@ namespace FGF_Finanzas.Capas.BLL
 
             if (!libres.Any())
             {
-                throw new Exception(string.Format(
-                    "El horario {0:dd/MM/yyyy} {0:HH:mm} ya está agendado y no hay veterinarios disponibles. No es posible agendar en ese horario.",
-                    fechaHora));
+                throw new BECustomException("ERR_CONSULTA_SIN_VETERINARIOS", fechaHora);
             }
 
             return libres.CopyToDataTable();
@@ -110,20 +106,20 @@ namespace FGF_Finanzas.Capas.BLL
         {
             if (!bllDigitoVerificador.ValidarIntegridadDelSistema())
             {
-                throw new Exception("No se pueden registrar consultas. El sistema se encuentra en mantenimiento.");
+                throw new BECustomException("ERR_CONSULTA_MANTENIMIENTO");
             }
 
             if (string.IsNullOrWhiteSpace(consulta.motivo))
-                throw new Exception("Ingrese el motivo de la consulta.");
+                throw new BECustomException("ERR_CONSULTA_MOTIVO");
 
             DataTable mascotas = bllMascota.ObtenerMascotasDeUsuario(SessionManager.Instancia.Usuario);
             string columnaId = mascotas.Columns[0].ColumnName;
             if (!mascotas.AsEnumerable().Any(m => Convert.ToInt32(m[columnaId]) == consulta.idMascota))
-                throw new Exception("La mascota seleccionada no es válida.");
+                throw new BECustomException("ERR_CONSULTA_MASCOTA_INVALIDA");
 
             DataTable libres = ObtenerVeterinariosDisponibles(consulta.idMascota, consulta.fechaHora);
             if (!libres.AsEnumerable().Any(v => v["DNI"].ToString() == consulta.veterinario.DNI))
-                throw new Exception("El veterinario/a elegido ya no está disponible en ese horario.");
+                throw new BECustomException("ERR_CONSULTA_VETERINARIO_OCUPADO");
 
             dalConsulta.AgregarConsulta(consulta);
             bllEvento.AgregarEvento(new BEEvento(SessionManager.Instancia.Usuario, DateTime.Now, "Consultas", "Agendar Consulta", 4));
@@ -134,10 +130,10 @@ namespace FGF_Finanzas.Capas.BLL
         private void ValidarHorario(DateTime fechaHora)
         {
             if (fechaHora <= DateTime.Now)
-                throw new Exception("No se puede agendar una consulta en una fecha y hora pasadas.");
+                throw new BECustomException("ERR_CONSULTA_FECHA_PASADA");
 
             if (!ObtenerHorarios().Contains(fechaHora.ToString("HH:mm")))
-                throw new Exception("El horario elegido está fuera de la agenda de atención.");
+                throw new BECustomException("ERR_CONSULTA_FUERA_HORARIO");
         }
     }
 }

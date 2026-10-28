@@ -231,6 +231,31 @@ namespace FGF_Finanzas
 
         protected void Page_PreRenderComplete(object sender, EventArgs e)
         {
+            // Se calcula con el idioma actual sin volver a enlazar la grilla ni perder ediciones.
+            try
+            {
+                DataTable etiquetas = ObtenerTraduccionesActuales();
+                lblResumenTraduccion.Text = etiquetas == null ? string.Empty : ObtenerMensaje("MSG_RESUMEN_TRADUCCION",
+                    HttpUtility.HtmlEncode(ddlIdioma.SelectedItem.Text),
+                    HttpUtility.HtmlEncode(ddlIdioma.SelectedValue),
+                    HttpUtility.HtmlEncode(ddlFormulario.SelectedValue),
+                    etiquetas.Rows.Count,
+                    etiquetas.Rows.Cast<DataRow>().Count(r => string.IsNullOrEmpty(r["Texto"] as string)));
+            }
+            catch (Exception ex)
+            {
+                lblResumenTraduccion.Text = string.Empty;
+                MostrarAlerta(TraducirError(ex), "error");
+            }
+
+            foreach (GridViewRow fila in dgvIdiomas.Rows)
+            {
+                LinkButton boton = fila.FindControl("btnEliminarIdioma") as LinkButton;
+                if (boton == null) continue;
+                string mensaje = ObtenerMensaje("MSG_CONFIRMAR_ELIMINAR_IDIOMA", boton.CommandArgument);
+                boton.OnClientClick = "return confirm(" + HttpUtility.JavaScriptStringEncode(mensaje, true) + ");";
+            }
+
             TraducirColumna(dgvTraducciones, 0, "dgvTraducciones_Header_Control", "Control");
             TraducirColumna(dgvTraducciones, 1, "dgvTraducciones_Header_TextoTraducido", "Texto traducido");
             TraducirColumna(dgvTraducciones, 2, "dgvTraducciones_Header_Acciones", "Acciones");
