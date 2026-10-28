@@ -43,3 +43,27 @@ function mostrarAlerta(mensaje, tipo) {
         }, 5000);
     }
 }
+
+function toggleDropdown(event) {
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    var dropdown = event.currentTarget ? event.currentTarget.parentElement : null;
+    if (!dropdown) {
+        dropdown = event.target ? event.target.closest('.dropdown') : null;
+    }
+    if (!dropdown) {
+        return;
+    }
+    dropdown.classList.toggle('open');
+}
+
+document.addEventListener('click', function (e) {
+    var dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach(function (dropdown) {
+        if (!dropdown.contains(e.target)) {
+            dropdown.classList.remove('open');
+        }
+    });
+});
