@@ -33,6 +33,20 @@
                         <asp:HyperLink runat="server" ID="lnkAdmin" NavigateUrl="Gestion-Usuarios.aspx" Text="Administrador" /></li>
                     <li id="Cliente" runat="server">
                         <asp:HyperLink runat="server" ID="lnkMascotas" NavigateUrl="RegistrarMascotas.aspx" Text="Mis mascotas" /></li>
+
+                    <li id="dropdownList" runat="server" class="dropdown">
+                        <a href="javascript:void(0);" class="dropdown-btn" onclick="toggleDropdown(event)">Consultas</a>
+
+                        <ul class="dropdown-menu" id="consultas-menu">
+                            <li>
+                                <a href="Consulta.aspx">Nueva consulta</a>
+                            </li>
+                            <li>
+                                <a href="MisConsultas.aspx">Mis consultas</a>
+                            </li>
+                        </ul>
+                    </li>
+
                     <li id="WebMaster" runat="server">
                         <asp:HyperLink runat="server" ID="lnkWebMaster" NavigateUrl="Backup-Restore.aspx" Text="Web Master" /></li>
 
