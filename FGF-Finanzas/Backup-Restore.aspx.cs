@@ -26,6 +26,7 @@ namespace FGF_Finanzas
 
         protected void btnBackup_Click(object sender, EventArgs e)
         {
+            LimpiarMensajeVisible(lblMensaje);
             string rutaFisicaServidor = string.Empty;
             try
             {
@@ -51,24 +52,25 @@ namespace FGF_Finanzas
                     File.Delete(rutaFisicaServidor);
                     Response.End();
 
-                    lblMensaje.Text = ObtenerMensaje("MSG_BACKUP_CREADO");
+                    MostrarMensajeVisible(lblMensaje, "MSG_BACKUP_CREADO");
                 }
             }
             catch (Exception ex)
             {
-                lblMensaje.Text = TraducirError(ex, "ERR_BACKUP");
+                MostrarErrorVisible(lblMensaje, ex, "ERR_BACKUP");
                 lblMensaje.ForeColor = System.Drawing.Color.Red;
             }
         }
 
         protected void btnRestore_Click(object sender, EventArgs e)
         {
+            LimpiarMensajeVisible(lblMensaje);
             if (fileRestore.HasFile)
             {
                 string extension = System.IO.Path.GetExtension(fileRestore.FileName).ToLower();
                 if (extension != ".bak")
                 {
-                    lblMensaje.Text = ObtenerError("ERR_ARCHIVO_EXTENSION_BAK");
+                    MostrarErrorVisible(lblMensaje, "ERR_ARCHIVO_EXTENSION_BAK");
                     lblMensaje.ForeColor = System.Drawing.Color.Red;
                     return;
                 }
@@ -88,18 +90,18 @@ namespace FGF_Finanzas
 
                     _bllBackupRestore.HacerRestore(rutaTemp);
 
-                    lblMensaje.Text = ObtenerMensaje("MSG_BASE_RESTAURADA");
+                    MostrarMensajeVisible(lblMensaje, "MSG_BASE_RESTAURADA");
                     lblMensaje.ForeColor = System.Drawing.Color.Green;
                 }
                 catch (Exception ex)
                 {
-                    lblMensaje.Text = TraducirError(ex, "ERR_RESTORE");
+                    MostrarErrorVisible(lblMensaje, ex, "ERR_RESTORE");
                     lblMensaje.ForeColor = System.Drawing.Color.Red;
                 }
             }
             else
             {
-                lblMensaje.Text = ObtenerError("ERR_ARCHIVO_REQUERIDO");
+                MostrarErrorVisible(lblMensaje, "ERR_ARCHIVO_REQUERIDO");
                 lblMensaje.ForeColor = System.Drawing.Color.Orange;
             }
         }

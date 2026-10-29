@@ -27,6 +27,7 @@ namespace FGF_Finanzas
 
         protected void btnRegistrar_Click(object sender, EventArgs e)
         {
+            LimpiarMensajeVisible(lblError);
             if (!Page.IsValid) return;
             try
             {
@@ -51,7 +52,7 @@ namespace FGF_Finanzas
             }
             catch (Exception ex)
             {
-                lblError.Text = TraducirError(ex);
+                MostrarErrorVisible(lblError, ex);
             }
         }
     }
