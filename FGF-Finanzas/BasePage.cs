@@ -1,5 +1,6 @@
 ﻿using FGF_Finanzas.Capas.BE;
 using FGF_Finanzas.Capas.BLL;
+using FGF_Finanzas.Capas.Servicios;
 using FGF_Finanzas.Capas.Servicios.Cambio_Idioma;
 using System;
 using System.Collections.Generic;
@@ -227,6 +228,7 @@ namespace FGF_Finanzas
         protected override void OnPreRenderComplete(EventArgs e)
         {
             base.OnPreRenderComplete(e);
+            MenuAdministracion.ActualizarEstadoMenu(Controls, SessionManager.Instancia?.Usuario?.Rol);
             // Se ejecuta despues del evento del selector de idioma y de los eventos de la pagina.
             ActualizarMensajesVisibles(Controls);
         }

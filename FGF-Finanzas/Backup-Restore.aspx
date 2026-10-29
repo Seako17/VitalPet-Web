@@ -2,6 +2,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link href="Content/BackupRestore/BackupStyles.css" rel="stylesheet" />
+    <link href="Content/MenuAdministracion.css?v=1" rel="stylesheet" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <div class="barra-titulo">
@@ -12,12 +13,12 @@
         <aside class="sidebar">
             <h3><asp:Label ID="lblTituloMenu" runat="server" Text="Menú" /></h3>
             <ul>
-                <li><asp:HyperLink ID="lnkMenuUsuarios" runat="server" NavigateUrl="Gestion-Usuarios.aspx">Gestión Usuarios</asp:HyperLink></li>
-                <li><asp:HyperLink ID="lnkMenuBitacora" runat="server" NavigateUrl="BitacoraEventos.aspx">Bitácora eventos</asp:HyperLink></li>
-                <li><a href="Gestion-Perfiles.aspx"><asp:Label ID="lblMenuPerfiles" runat="server" Text="Gestión Perfiles" /></a></li>
-                <li><a href="Gestion-Familias.aspx"><asp:Label ID="lblMenuFamilias" runat="server" Text="Gestión Familias" /></a></li>
-                <li class="active"><asp:Label ID="lblMenuBackup" runat="server" Text="Backup/Restore" /></li>
-                <li><asp:HyperLink ID="lnkMenuIdiomas" runat="server" NavigateUrl="Gestion-Idioma.aspx">Gestión Idiomas</asp:HyperLink></li>
+                <li runat="server" data-permiso="UsuarioGestionar"><asp:HyperLink ID="lnkMenuUsuarios" runat="server" NavigateUrl="Gestion-Usuarios.aspx">Gestión Usuarios</asp:HyperLink></li>
+                <li runat="server" data-permiso="BitacoraVer"><asp:HyperLink ID="lnkMenuBitacora" runat="server" NavigateUrl="BitacoraEventos.aspx">Bitácora eventos</asp:HyperLink></li>
+                <li runat="server" data-permiso="PerfilGestionar"><a runat="server" href="Gestion-Perfiles.aspx"><asp:Label ID="lblMenuPerfiles" runat="server" Text="Gestión Perfiles" /></a></li>
+                <li runat="server" data-permiso="FamiliaGestionar"><a runat="server" href="Gestion-Familias.aspx"><asp:Label ID="lblMenuFamilias" runat="server" Text="Gestión Familias" /></a></li>
+                <li class="active" runat="server" data-permiso="BackUpRestore"><asp:Label ID="lblMenuBackup" runat="server" Text="Backup/Restore" /></li>
+                <li runat="server" data-permiso="IdiomaGestionar"><asp:HyperLink ID="lnkMenuIdiomas" runat="server" NavigateUrl="Gestion-Idioma.aspx">Gestión Idiomas</asp:HyperLink></li>
             </ul>
         </aside>
         <div class="backup-restore__container">

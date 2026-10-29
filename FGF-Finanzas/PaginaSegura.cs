@@ -11,6 +11,12 @@ namespace FGF_Finanzas
     {
         protected virtual Permiso PermisoRequerido { get; }
 
+        protected virtual bool TieneAcceso(FGF_Finanzas.Capas.BE.BEUsuario usuario)
+        {
+            var permiso = PermisoRequerido;
+            return usuario?.Rol?.Componentes != null && permiso != null && usuario.Rol.TienePermiso(permiso);
+        }
+
         protected override void OnInit(EventArgs e)
         {
             base.OnInit(e);
@@ -25,7 +31,7 @@ namespace FGF_Finanzas
 
             var usuario = SessionManager.Instancia.Usuario;
 
-            if (usuario == null || !usuario.Rol.TienePermiso(PermisoRequerido))
+            if (!TieneAcceso(usuario))
             {
                 Response.Redirect("~/Default.aspx?ReturnUrl=" + Server.UrlEncode(Request.RawUrl));
                 return;

@@ -60,10 +60,20 @@ function toggleDropdown(event) {
 }
 
 document.addEventListener('click', function (e) {
+    var target = e.target;
+    if (!(target instanceof Node)) {
+        return;
+    }
+
     var dropdowns = document.querySelectorAll('.dropdown');
     dropdowns.forEach(function (dropdown) {
-        if (!dropdown.contains(e.target)) {
+        if (!dropdown.contains(target)) {
             dropdown.classList.remove('open');
         }
     });
+
+    var dropdownIdioma = document.getElementById('detailsIdioma');
+    if (dropdownIdioma && !dropdownIdioma.contains(target)) {
+        dropdownIdioma.removeAttribute('open');
+    }
 });

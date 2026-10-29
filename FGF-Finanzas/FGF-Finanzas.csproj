@@ -69,6 +69,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Backup-Restore.aspx" />
+    <Content Include="Administracion.aspx" />
+    <Content Include="Content\Administracion.css" />
+    <Content Include="Content\MenuAdministracion.css" />
     <Content Include="BitacoraEventos.aspx" />
     <Content Include="Cambiar-Contraseña.aspx" />
     <Content Include="Consulta.aspx" />
@@ -114,6 +117,14 @@
     <Compile Include="BasePage.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="Administracion.aspx.cs">
+      <DependentUpon>Administracion.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Administracion.aspx.designer.cs">
+      <DependentUpon>Administracion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Capas\Servicios\MenuAdministracion.cs" />
     <Compile Include="BitacoraEventos.aspx.cs">
       <DependentUpon>BitacoraEventos.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

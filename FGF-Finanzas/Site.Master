@@ -30,7 +30,7 @@
                     <li>
                         <asp:HyperLink runat="server" ID="lnkRegistro" NavigateUrl="/Registrarse.aspx" Text="Registrarse" /></li>
                     <li id="Admin" runat="server">
-                        <asp:HyperLink runat="server" ID="lnkAdmin" NavigateUrl="Gestion-Usuarios.aspx" Text="Administrador" /></li>
+                        <asp:HyperLink runat="server" ID="lnkAdmin" NavigateUrl="~/Administracion.aspx" Text="Administrador" /></li>
                     <li id="Cliente" runat="server">
                         <asp:HyperLink runat="server" ID="lnkMascotas" NavigateUrl="RegistrarMascotas.aspx" Text="Mis mascotas" /></li>
 
@@ -46,9 +46,6 @@
                             </li>
                         </ul>
                     </li>
-
-                    <li id="WebMaster" runat="server">
-                        <asp:HyperLink runat="server" ID="lnkWebMaster" NavigateUrl="Backup-Restore.aspx" Text="Web Master" /></li>
 
                     <% if (FGF_Finanzas.Capas.Servicios.SessionManager.Instancia != null && FGF_Finanzas.Capas.Servicios.SessionManager.Instancia.Usuario.Rol.TienePermiso(FGF_Finanzas.Capas.Servicios.CodigosPermiso.ObtenerPermisos().Find(x =>x.Nombre == "ContrasenaCambiar")))
                         { %>
@@ -103,13 +100,5 @@
             <p>&copy; <%: DateTime.Now.Year %> - Vital Pet</p>
         </footer>
     </form>
-    <script>
-    document.addEventListener('click', function (e) {
-        var dropdown = document.getElementById('detailsIdioma');
-        if (dropdown && !dropdown.contains(e.target)) {
-            dropdown.removeAttribute('open');
-        }
-    });
-</script>
 </body>
 </html>
