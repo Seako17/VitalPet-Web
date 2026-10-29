@@ -35,7 +35,6 @@ namespace FGF_Finanzas
             base.OnInit(e);
             IdiomaManager.Instancia.Suscribir(this);
             Admin.Visible = false;
-            WebMaster.Visible = false;
             Cliente.Visible = false;
             dropdownList.Visible = false;
             HttpCookie cookie = Request.Cookies["UserSessionFGF"];
@@ -84,14 +83,7 @@ namespace FGF_Finanzas
 
                 if(SessionManager.Instancia != null && SessionManager.Instancia.Usuario != null)
                 {
-                    if (SessionManager.Instancia.Usuario.Rol.TienePermiso(CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "UsuarioGestionar")) || SessionManager.Instancia.Usuario.Rol.TienePermiso(CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "FamiliaGestionar")) || SessionManager.Instancia.Usuario.Rol.TienePermiso(CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "PerfilGestionar")))
-                    {
-                        Admin.Visible = true;
-                    }
-                    if (SessionManager.Instancia.Usuario.Rol.TienePermiso(CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "BackUpRestore")))
-                    {
-                        WebMaster.Visible = true;
-                    }
+                    Admin.Visible = MenuAdministracion.TieneAcceso(SessionManager.Instancia.Usuario.Rol);
                     if (SessionManager.Instancia.Usuario.Rol.TienePermiso(CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "MascotaRegistrar")))
                     {
                         Cliente.Visible = true;

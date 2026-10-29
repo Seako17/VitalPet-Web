@@ -13,9 +13,6 @@ namespace FGF_Finanzas
 
     public partial class Site
     {
-        protected global::System.Web.UI.WebControls.Label lblMenuConsultas;
-        protected global::System.Web.UI.WebControls.HyperLink lnkNuevaConsulta;
-        protected global::System.Web.UI.WebControls.HyperLink lnkMisConsultas;
 
         /// <summary>
         /// Control head.
@@ -99,22 +96,31 @@ namespace FGF_Finanzas
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl dropdownList;
 
         /// <summary>
-        /// Control WebMaster.
+        /// Control lblMenuConsultas.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl WebMaster;
+        protected global::System.Web.UI.WebControls.Label lblMenuConsultas;
 
         /// <summary>
-        /// Control lnkWebMaster.
+        /// Control lnkNuevaConsulta.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkWebMaster;
+        protected global::System.Web.UI.WebControls.HyperLink lnkNuevaConsulta;
+
+        /// <summary>
+        /// Control lnkMisConsultas.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink lnkMisConsultas;
 
         /// <summary>
         /// Control lnkCambiarPass.

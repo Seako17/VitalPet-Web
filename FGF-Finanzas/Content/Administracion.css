@@ -1,0 +1,4 @@
+@media (max-width: 700px) {
+    .administracion-layout { flex-direction: column; }
+    .administracion-layout .sidebar { width: 100%; box-sizing: border-box; }
+}
