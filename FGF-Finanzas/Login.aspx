@@ -2,13 +2,12 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
     <link href="Content/Login/LoginStyles.css" rel="stylesheet" />
-    
 </asp:Content>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-
     <div class="login-container">
-        <h2>¡Bienvenido!</h2>
+        
+        <h2><asp:Label runat="server" ID="lblTituloLogin" Text="¡Bienvenido!" /></h2>
 
         <asp:PlaceHolder runat="server" ID="ErrorMessage" Visible="false">
             <p class="text-danger">
@@ -18,7 +17,8 @@
 
         <div class="input-group">
             <asp:TextBox runat="server" ID="UserName" CssClass="form-input" Placeholder="Usuario" />
-            <asp:RequiredFieldValidator runat="server" ControlToValidate="UserName"
+            
+            <asp:RequiredFieldValidator runat="server" ID="rfvUserName" ControlToValidate="UserName"
                 CssClass="validation-error" ErrorMessage="El campo de nombre de usuario es obligatorio." Display="Dynamic" />
         </div>
 
@@ -27,19 +27,20 @@
                 <asp:TextBox runat="server" ID="Password" TextMode="Password" CssClass="form-input" Placeholder="Contraseña" ClientIDMode="Static" />
                 <button type="button" id="togglePassword" class="mostrarContraseña" onclick="togglePasswordIcon('Password','togglePassword')"></button>
             </div>
-            <asp:RequiredFieldValidator runat="server" ControlToValidate="Password"
+            
+            <asp:RequiredFieldValidator runat="server" ID="rfvPassword" ControlToValidate="Password"
                 CssClass="validation-error" ErrorMessage="El campo de contraseña es obligatorio." Display="Dynamic" />
             <asp:Label runat="server" ID="lblError" CssClass="validation-error" />
         </div>
 
         <div class="remember-group">
-            <asp:CheckBox runat="server" ID="RememberMe" ClientIDMode="Static" />
-            <label for="RememberMe">Recordar cuenta</label>
+            
+            <asp:CheckBox runat="server" ID="chkRememberMe" Text="Recordar cuenta" ClientIDMode="Static" />
         </div>
 
         <div class="action-group">
-            <asp:Button class="btn-submit" runat="server" OnClick="LogIn" Text="Iniciar sesión" />
+            
+            <asp:Button runat="server" ID="btnLogin" class="btn-submit" OnClick="LogIn" Text="Iniciar sesión" />
         </div>
     </div>
-
 </asp:Content>

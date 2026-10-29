@@ -39,7 +39,7 @@ namespace FGF_Finanzas.Capas.BLL
         {
             if (!bllDigitoVerificador.ValidarIntegridadDelSistema())
             {
-                throw new Exception("No se pueden registrar mascotas. El sistema se encuentra en mantenimiento.");
+                throw new BECustomException("ERR_SISTEMA_MANTENIMIENTO_MASCOTA");
             }
             dalMascota.AgregarMascota(mascota);
             bllEvento.AgregarEvento(new BEEvento(SessionManager.Instancia.Usuario, DateTime.Now, "Clientes", "Registrar Mascota", 4));

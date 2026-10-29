@@ -2,25 +2,27 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link href="Content/EventosStyles.css" rel="stylesheet" />
+    <link href="Content/MenuAdministracion.css?v=1" rel="stylesheet" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <div class="barra-titulo">
-        <h2>Panel de Administrador</h2>
+        <h2><asp:Label ID="lblTituloPanel" runat="server" Text="Panel de Administrador" /></h2>
     </div>
 
     <div class="main-layout">
         <aside class="sidebar">
-            <h3>Menú</h3>
+            <h3><asp:Label ID="lblTituloMenu" runat="server" Text="Menú" /></h3>
             <ul>
-                <li><a href="Gestion-Usuarios.aspx">Gestión Usuarios</a></li>
-                <li><a href="BitacoraEventos.aspx">Bitácora eventos</a></li>
-                <li class="active"><a href="Gestion-Perfiles.aspx">Gestión Perfiles</a></li>
-                <li><a href="Gestion-Familias.aspx">Gestión Familias</a></li>
-                <li><a href="Backup-Restore.aspx">Backup / Restore</a></li>
+                <li runat="server" data-permiso="UsuarioGestionar"><asp:HyperLink ID="lnkMenuUsuarios" runat="server" NavigateUrl="Gestion-Usuarios.aspx">Gestión Usuarios</asp:HyperLink></li>
+                <li class="active" runat="server" data-permiso="BitacoraVer"><asp:Label ID="lblMenuBitacora" runat="server" Text="Bitácora eventos" /></li>
+                <li runat="server" data-permiso="PerfilGestionar"><a runat="server" href="Gestion-Perfiles.aspx"><asp:Label ID="lblMenuPerfiles" runat="server" Text="Gestión Perfiles" /></a></li>
+                <li runat="server" data-permiso="FamiliaGestionar"><a runat="server" href="Gestion-Familias.aspx"><asp:Label ID="lblMenuFamilias" runat="server" Text="Gestión Familias" /></a></li>
+                <li runat="server" data-permiso="BackUpRestore"><asp:HyperLink ID="lnkMenuBackup" runat="server" NavigateUrl="Backup-Restore.aspx">Backup/Restore</asp:HyperLink></li>
+                <li runat="server" data-permiso="IdiomaGestionar"><asp:HyperLink ID="lnkMenuIdiomas" runat="server" NavigateUrl="Gestion-Idioma.aspx">Gestión Idiomas</asp:HyperLink></li>
             </ul>
         </aside>
         <div class="eventos__container">
-            <h3>Bitácora de Eventos</h3>
+            <h3><asp:Label ID="lblSubtituloEventos" runat="server" Text="Bitácora de Eventos" /></h3>
 
             <div class="table-responsive">
                 <asp:GridView ID="GridViewEventos" runat="server" AutoGenerateColumns="False" CssClass="table">

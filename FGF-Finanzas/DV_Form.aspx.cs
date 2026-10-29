@@ -1,6 +1,7 @@
 ﻿using FGF_Finanzas.Capas.BE;
 using FGF_Finanzas.Capas.BLL;
 using FGF_Finanzas.Capas.Servicios;
+using FGF_Finanzas.Capas.Servicios.Cambio_Idioma;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,8 +12,12 @@ using System.Web.UI.WebControls;
 
 namespace FGF_Finanzas
 {
-    public partial class DV_Form : System.Web.UI.Page
+    public partial class DV_Form : PaginaSegura
     {
+        protected override Permiso PermisoRequerido
+        {
+            get { return CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "DV"); }
+        }
         private BLLDigitoVerificador _bllDV = new BLLDigitoVerificador();
         private readonly BLLBackupRestore _bllBackupRestore = new BLLBackupRestore();
         protected void Page_Load(object sender, EventArgs e)
@@ -22,6 +27,9 @@ namespace FGF_Finanzas
                 List<InconsistenciaReporte> listaInconsistencias = _bllDV.CompararDigito();
                 if (listaInconsistencias.Count > 0)
                 {
+                    foreach (InconsistenciaReporte registro in listaInconsistencias)
+                        registro.TipoFalla = TraducirDiagnostico(registro.TipoFalla);
+
                     GridInconsistencias.DataSource = listaInconsistencias;
                     GridInconsistencias.DataBind();
                     GridInconsistencias.Visible = true;
@@ -30,6 +38,30 @@ namespace FGF_Finanzas
                 {
                     Response.Redirect("~/Default.aspx");
                 }
+            }
+        }
+
+        protected void Page_PreRenderComplete(object sender, EventArgs e)
+        {
+            TraducirColumna(GridInconsistencias, 0, "GridInconsistencias_Header_NombreTabla", "Tabla Afectada");
+            TraducirColumna(GridInconsistencias, 1, "GridInconsistencias_Header_IdRegistro", "ID Registro");
+            TraducirColumna(GridInconsistencias, 2, "GridInconsistencias_Header_TipoFalla", "Diagnóstico de la Inconsistencia");
+        }
+
+        private string TraducirDiagnostico(string clave)
+        {
+            switch (clave)
+            {
+                case "DV_FALLA_ALTA_NO_REGISTRADA":
+                    return TextoTraducido(clave, "Hubo un alta no registrada.");
+                case "DV_FALLA_ELIMINACION_NO_REGISTRADA":
+                    return TextoTraducido(clave, "Hubo una eliminación no registrada.");
+                case "DV_FALLA_MODIFICACION_REGISTRO":
+                    return TextoTraducido(clave, "Hubo una modificación en el registro.");
+                case "DV_FALLA_INTEGRIDAD_ESTRUCTURAL":
+                    return TextoTraducido(clave, "Falla de integridad estructural.");
+                default:
+                    return clave;
             }
         }
 
@@ -54,19 +86,19 @@ namespace FGF_Finanzas
         {
             try
             {
-                List<string> tablasAControlar = new List<string> { "Usuario", "Mascota", "Consulta" };
+                List<string> tablasAControlar = new List<string> { "Usuario", "Mascota", "Idioma", "Etiqueta", "Traduccion", "Consulta" };
 
                 foreach (string tabla in tablasAControlar)
                 {
                     _bllDV.InicializarTablaCompleta(tabla);
                 }
-                string mensajeScript = @"alert('Se han reestablecido los dígitos verificadores con éxito.'); 
-                                window.location.href = 'Default.aspx';";
+                string mensaje = ObtenerMensaje("MSG_DV_RESTABLECIDOS").Replace("'", "\\'");
+                string mensajeScript = "alert('" + mensaje + "'); window.location.href = 'Default.aspx';";
                 Page.ClientScript.RegisterStartupScript(this.GetType(), "AlertaInconsistencia", mensajeScript, true);
             }
             catch (Exception ex)
             {
-                lblMensaje.Text = $"Error al reestablecer dígitos: {ex.Message}";
+                lblMensaje.Text = TraducirError(ex, "ERR_REESTABLECER_DV");
                 lblMensaje.ForeColor = System.Drawing.Color.Red;
             }
         }
@@ -75,7 +107,7 @@ namespace FGF_Finanzas
         {
             if (!fileRestore.HasFile)
             {
-                lblMensaje.Text = "Debe seleccionar un archivo .bak en su computadora primero.";
+                lblMensaje.Text = ObtenerError("ERR_ARCHIVO_REQUERIDO");
                 lblMensaje.ForeColor = System.Drawing.Color.Orange;
                 return;
             }
@@ -83,7 +115,7 @@ namespace FGF_Finanzas
             string extension = System.IO.Path.GetExtension(fileRestore.FileName).ToLower();
             if (extension != ".bak")
             {
-                lblMensaje.Text = "Error: El archivo seleccionado debe tener la extensión .bak";
+                lblMensaje.Text = ObtenerError("ERR_ARCHIVO_EXTENSION_BAK");
                 lblMensaje.ForeColor = System.Drawing.Color.Red;
                 return;
             }
@@ -102,13 +134,13 @@ namespace FGF_Finanzas
                 rutaTemp = Path.Combine(carpetaTemp, nombreArchivo);
                 fileRestore.SaveAs(rutaTemp);
                 _bllBackupRestore.HacerRestore(rutaTemp);
-                string script = @"alert('Base de datos restaurada con éxito. El sistema volverá al inicio.'); 
-                                window.location.href = 'Default.aspx';";
+                string mensaje = ObtenerMensaje("MSG_BASE_RESTAURADA_INICIO").Replace("'", "\\'");
+                string script = "alert('" + mensaje + "'); window.location.href = 'Default.aspx';";
                 Page.ClientScript.RegisterStartupScript(this.GetType(), "AlertaRestoreExito", script, true);
             }
             catch (Exception ex)
             {
-                lblMensaje.Text = $"ERROR crítico en el proceso de restauración: {ex.Message}";
+                lblMensaje.Text = TraducirError(ex, "ERR_RESTORE_CRITICO");
                 lblMensaje.ForeColor = System.Drawing.Color.Red;
             }
         }

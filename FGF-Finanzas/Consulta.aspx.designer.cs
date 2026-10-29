@@ -13,6 +13,12 @@ namespace FGF_Finanzas
 
     public partial class Consulta
     {
+        protected global::System.Web.UI.WebControls.Label lblTitulo;
+        protected global::System.Web.UI.WebControls.Label lblSubtitulo;
+        protected global::System.Web.UI.WebControls.Label lblMascota;
+        protected global::System.Web.UI.WebControls.Label lblMotivo;
+        protected global::System.Web.UI.WebControls.Label lblFechaHora;
+        protected global::System.Web.UI.WebControls.Label lblVeterinario;
 
         /// <summary>
         /// Control dropMascota.

@@ -11,7 +11,7 @@
 <body>
     <form id="form1" runat="server">
         <div class="barra-titulo">
-            <h2>¡Inconsistencia de Datos!</h2>
+            <h2><asp:Label ID="lblTituloInconsistencia" runat="server" Text="¡Inconsistencia de Datos!" /></h2>
         </div>
 
         <div class="table-responsive">
@@ -33,10 +33,10 @@
             <asp:Button ID="btnSalir" runat="server" Text="Salir" OnClick="btnSalir_Click" class="btn-action" />
             <asp:Button ID="btnInicializar" runat="server" Text="Recalcular" OnClick="btnRecalcular_Click" class="btn-action" />
             <asp:Button ID="btnRestore" runat="server" Text="Restaurar BD" OnClick="btnRestore_Click" class="btn-action" />
-            <label for="<%= fileRestore.ClientID %>" id="lblBak" class="btn-upload">
+            <asp:Label ID="lblBak" runat="server" AssociatedControlID="fileRestore" CssClass="btn-upload">
                 <asp:Image ID="imgClip" runat="server" ImageUrl="~/Content/BackupRestore/clip.png" CssClass="img-clip" AlternateText="Icono Clip" />
-                <span>Subir .BAK</span>
-            </label>
+                <span><asp:Label ID="lblSubirBak" runat="server" Text="Subir .BAK" /></span>
+            </asp:Label>
         </div>
 
     </form>

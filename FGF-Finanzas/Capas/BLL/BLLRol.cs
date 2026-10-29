@@ -1,4 +1,5 @@
-﻿using FGF_Finanzas.Capas.DAL;
+﻿using FGF_Finanzas.Capas.BE;
+using FGF_Finanzas.Capas.DAL;
 using FGF_Finanzas.Capas.Servicios;
 using System;
 using System.Collections.Generic;
@@ -58,15 +59,15 @@ namespace FGF_Finanzas.Capas.BLL
         public void AgregarRol(Rol rol)
         {
             if (rol == null)
-                throw new Exception("El perfil no es válido.");
+                throw new BECustomException("ERR_PERFIL_INVALIDO");
 
             if (string.IsNullOrWhiteSpace(rol.Nombre))
-                throw new Exception("Debe ingresar un nombre para el perfil.");
+                throw new BECustomException("ERR_PERFIL_NOMBRE_OBLIGATORIO");
 
             rol.Nombre = rol.Nombre.Trim();
 
             if (rolDAL.ExisteRol(rol.Nombre))
-                throw new Exception("Ya existe un perfil con ese nombre.");
+                throw new BECustomException("ERR_PERFIL_NOMBRE_DUPLICADO");
 
             rolDAL.AgregarRol(rol);
         }
@@ -117,15 +118,15 @@ namespace FGF_Finanzas.Capas.BLL
         public void AsignarPermiso(Rol rol, Permiso permiso)
         {
             if (rol == null)
-                throw new Exception("Debe seleccionar un perfil.");
+                throw new BECustomException("ERR_PERFIL_SELECCIONAR");
 
             if (permiso == null)
-                throw new Exception("Debe seleccionar un permiso.");
+                throw new BECustomException("ERR_PERFIL_SELECCIONAR_PERMISO");
 
             Rol rolCompleto = ObtenerCompleto(rol);
 
             if (rolCompleto == null)
-                throw new Exception("El perfil seleccionado no existe.");
+                throw new BECustomException("ERR_PERFIL_NO_EXISTE");
 
             List<Permiso> permisosActuales =
                 ObtenerPermisosTotales(rolCompleto);
@@ -134,7 +135,7 @@ namespace FGF_Finanzas.Capas.BLL
 
             if (repetido != null)
             {
-                throw new Exception("No se puede asignar el permiso '" + repetido.Nombre + "' porque el perfil '" + rolCompleto.Nombre + "' ya lo posee directamente o mediante una familia.");
+                throw new BECustomException("ERR_PERFIL_PERMISO_REPETIDO", repetido.Nombre, rolCompleto.Nombre);
             }
 
             rolDAL.AsignarPermiso(rolCompleto, permiso);
@@ -142,24 +143,24 @@ namespace FGF_Finanzas.Capas.BLL
         public void AsignarFamilia(Rol rol, Familia familia)
         {
             if (rol == null)
-                throw new Exception("Debe seleccionar un perfil.");
+                throw new BECustomException("ERR_PERFIL_SELECCIONAR");
 
             if (familia == null)
-                throw new Exception("Debe seleccionar una familia.");
+                throw new BECustomException("ERR_PERFIL_SELECCIONAR_FAMILIA");
 
             Rol rolCompleto = ObtenerCompleto(rol);
 
             Familia familiaCompleta = familiaBLL.ObtenerCompleta(familia);
 
             if (rolCompleto == null)
-                throw new Exception("El perfil seleccionado no existe.");
+                throw new BECustomException("ERR_PERFIL_NO_EXISTE");
 
             if (familiaCompleta == null)
-                throw new Exception("La familia seleccionada no existe.");
+                throw new BECustomException("ERR_PERFIL_FAMILIA_NO_EXISTE");
 
             if (rolDAL.ExisteFamiliaEnRol(rolCompleto, familiaCompleta))
             {
-                throw new Exception("La familia '" + familiaCompleta.Nombre + "' ya está asignada al perfil '" + rolCompleto.Nombre + "'.");
+                throw new BECustomException("ERR_PERFIL_FAMILIA_ASIGNADA", familiaCompleta.Nombre, rolCompleto.Nombre);
             }
 
             List<Permiso> permisosRol = ObtenerPermisosTotales(rolCompleto);
@@ -172,7 +173,7 @@ namespace FGF_Finanzas.Capas.BLL
 
             if (repetido != null)
             {
-                throw new Exception("No se puede asignar la familia '" + familiaCompleta.Nombre + "' al perfil '" + rolCompleto.Nombre + "' porque ambos contienen el permiso '" + repetido.Nombre + "'.");
+                throw new BECustomException("ERR_PERFIL_FAMILIA_PERMISO_REPETIDO", familiaCompleta.Nombre, rolCompleto.Nombre, repetido.Nombre);
             }
 
             rolDAL.AsignarFamilia(rolCompleto, familiaCompleta);
@@ -180,7 +181,7 @@ namespace FGF_Finanzas.Capas.BLL
         public void EliminarPermiso(Rol rol, Permiso permiso)
         {
             if (rol == null || permiso == null)
-                throw new Exception("El componente seleccionado no es válido.");
+                throw new BECustomException("ERR_PERFIL_COMPONENTE_INVALIDO");
 
             rolDAL.EliminarPermiso(rol, permiso);
         }
@@ -188,7 +189,7 @@ namespace FGF_Finanzas.Capas.BLL
         public void EliminarFamilia(Rol rol, Familia familia)
         {
             if (rol == null || familia == null)
-                throw new Exception("El componente seleccionado no es válido.");
+                throw new BECustomException("ERR_PERFIL_COMPONENTE_INVALIDO");
 
             rolDAL.EliminarFamilia(rol, familia);
         }
@@ -196,24 +197,16 @@ namespace FGF_Finanzas.Capas.BLL
         public void EliminarRol(Rol rol)
         {
             if (rol == null)
-                throw new Exception(
-                    "Debe seleccionar un perfil."
-                );
+                throw new BECustomException("ERR_PERFIL_SELECCIONAR");
 
             Rol completo = rolDAL.ObtenerRol(rol);
 
             if (completo == null)
-                throw new Exception(
-                    "El perfil seleccionado no existe."
-                );
+                throw new BECustomException("ERR_PERFIL_NO_EXISTE");
 
             if (rolDAL.EstaAsignadoAUsuarios(completo))
             {
-                throw new Exception(
-                    "No se puede eliminar el perfil '" +
-                    completo.Nombre +
-                    "' porque está asignado a uno o más usuarios."
-                );
+                throw new BECustomException("ERR_PERFIL_ELIMINAR_ASIGNADO", completo.Nombre);
             }
 
             rolDAL.EliminarRol(completo);

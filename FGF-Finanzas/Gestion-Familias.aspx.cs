@@ -121,21 +121,21 @@ namespace FGF_Finanzas
             try
             {
                 if (lstFamiliaBase.SelectedItem == null)
-                    throw new Exception(
-                        "Debe seleccionar una familia base."
+                    throw new BECustomException(
+                        "ERR_FAMILIA_SELECCIONAR_BASE"
                     );
 
                 if (lstPermisos.SelectedItem == null)
-                    throw new Exception(
-                        "Debe seleccionar un permiso."
+                    throw new BECustomException(
+                        "ERR_FAMILIA_SELECCIONAR_PERMISO"
                     );
 
                 string valor =
                     lstFamiliaBase.SelectedValue;
 
                 if (!valor.StartsWith("F-"))
-                    throw new Exception(
-                        "Debe seleccionar una familia, no un permiso."
+                    throw new BECustomException(
+                        "ERR_FAMILIA_SELECCIONAR_NO_PERMISO"
                     );
 
                 string[] partes =
@@ -169,13 +169,13 @@ namespace FGF_Finanzas
                 CargarFamiliasEnListBox();
 
                 MostrarMensaje(
-                    "Permiso asignado correctamente.",
+                    ObtenerMensaje("MSG_FAMILIA_PERMISO_ASIGNADO"),
                     false
                 );
             }
             catch (Exception ex)
             {
-                MostrarMensaje(ex.Message, true);
+                MostrarMensaje(TraducirError(ex), true);
             }
         }
 
@@ -184,21 +184,21 @@ namespace FGF_Finanzas
             try
             {
                 if (lstFamiliaBase.SelectedItem == null)
-                    throw new Exception(
-                        "Debe seleccionar una familia base."
+                    throw new BECustomException(
+                        "ERR_FAMILIA_SELECCIONAR_BASE"
                     );
 
                 if (lstFamiliaAgregar.SelectedItem == null)
-                    throw new Exception(
-                        "Debe seleccionar la familia que desea agregar."
+                    throw new BECustomException(
+                        "ERR_FAMILIA_SELECCIONAR_AGREGAR"
                     );
 
                 string valorBase =
                     lstFamiliaBase.SelectedValue;
 
                 if (!valorBase.StartsWith("F-"))
-                    throw new Exception(
-                        "Debe seleccionar una familia como familia base."
+                    throw new BECustomException(
+                        "ERR_FAMILIA_SELECCIONAR_BASE_FAMILIA"
                     );
 
                 string[] partes =
@@ -232,13 +232,13 @@ namespace FGF_Finanzas
                 CargarFamiliasEnListBox();
 
                 MostrarMensaje(
-                    "Familia asignada correctamente.",
+                    ObtenerMensaje("MSG_FAMILIA_ASIGNADA"),
                     false
                 );
             }
             catch (Exception ex)
             {
-                MostrarMensaje(ex.Message, true);
+                MostrarMensaje(TraducirError(ex), true);
             }
         }
 
@@ -247,16 +247,16 @@ namespace FGF_Finanzas
             try
             {
                 if (lstFamiliaBase.SelectedItem == null)
-                    throw new Exception(
-                        "Debe seleccionar una familia."
+                    throw new BECustomException(
+                        "ERR_FAMILIA_SELECCIONAR"
                     );
 
                 string valor =
                     lstFamiliaBase.SelectedValue;
 
                 if (!valor.StartsWith("F-"))
-                    throw new Exception(
-                        "Debe seleccionar una familia."
+                    throw new BECustomException(
+                        "ERR_FAMILIA_SELECCIONAR"
                     );
 
                 string[] partes =
@@ -277,13 +277,13 @@ namespace FGF_Finanzas
                 CargarFamiliasEnListBox();
 
                 MostrarMensaje(
-                    "Familia eliminada correctamente.",
+                    ObtenerMensaje("MSG_FAMILIA_ELIMINADA"),
                     false
                 );
             }
             catch (Exception ex)
             {
-                MostrarMensaje(ex.Message, true);
+                MostrarMensaje(TraducirError(ex), true);
             }
         }
 
@@ -292,8 +292,8 @@ namespace FGF_Finanzas
             try
             {
                 if (lstFamiliaBase.SelectedItem == null)
-                    throw new Exception(
-                        "Debe seleccionar un componente."
+                    throw new BECustomException(
+                        "ERR_FAMILIA_SELECCIONAR_COMPONENTE"
                     );
 
                 string valor =
@@ -356,22 +356,21 @@ namespace FGF_Finanzas
                 }
                 else
                 {
-                    throw new Exception(
-                        "La familia seleccionada es una familia raíz. " +
-                        "Utilice 'Eliminar familia' si desea eliminarla completamente."
+                    throw new BECustomException(
+                        "ERR_FAMILIA_RAIZ"
                     );
                 }
 
                 CargarFamiliasEnListBox();
 
                 MostrarMensaje(
-                    "Componente eliminado correctamente.",
+                    ObtenerMensaje("MSG_FAMILIA_COMPONENTE_ELIMINADO"),
                     false
                 );
             }
             catch (Exception ex)
             {
-                MostrarMensaje(ex.Message, true);
+                MostrarMensaje(TraducirError(ex), true);
             }
         }
 
@@ -393,13 +392,13 @@ namespace FGF_Finanzas
                 CargarFamiliasEnListBox();
 
                 MostrarMensaje(
-                    "Familia creada correctamente.",
+                    ObtenerMensaje("MSG_FAMILIA_CREADA"),
                     false
                 );
             }
             catch (Exception ex)
             {
-                MostrarMensaje(ex.Message, true);
+                MostrarMensaje(TraducirError(ex), true);
             }
         }
         private void MostrarMensaje(

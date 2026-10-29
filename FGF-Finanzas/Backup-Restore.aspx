@@ -2,21 +2,23 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link href="Content/BackupRestore/BackupStyles.css" rel="stylesheet" />
+    <link href="Content/MenuAdministracion.css?v=1" rel="stylesheet" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <div class="barra-titulo">
-        <h2>Panel de Administrador</h2>
+        <h2><asp:Label ID="lblTituloPanel" runat="server" Text="Panel de Administrador" /></h2>
     </div>
 
     <div class="main-layout">
         <aside class="sidebar">
-            <h3>Menú</h3>
+            <h3><asp:Label ID="lblTituloMenu" runat="server" Text="Menú" /></h3>
             <ul>
-                <li><a href="Gestion-Usuarios.aspx">Gestión Usuarios</a></li>
-                <li><a href="BitacoraEventos.aspx">Bitácora eventos</a></li>
-                <li class="active"><a href="Gestion-Perfiles.aspx">Gestión Perfiles</a></li>
-                <li><a href="Gestion-Familias.aspx">Gestión Familias</a></li>
-                <li><a href="Backup-Restore.aspx">Backup / Restore</a></li>
+                <li runat="server" data-permiso="UsuarioGestionar"><asp:HyperLink ID="lnkMenuUsuarios" runat="server" NavigateUrl="Gestion-Usuarios.aspx">Gestión Usuarios</asp:HyperLink></li>
+                <li runat="server" data-permiso="BitacoraVer"><asp:HyperLink ID="lnkMenuBitacora" runat="server" NavigateUrl="BitacoraEventos.aspx">Bitácora eventos</asp:HyperLink></li>
+                <li runat="server" data-permiso="PerfilGestionar"><a runat="server" href="Gestion-Perfiles.aspx"><asp:Label ID="lblMenuPerfiles" runat="server" Text="Gestión Perfiles" /></a></li>
+                <li runat="server" data-permiso="FamiliaGestionar"><a runat="server" href="Gestion-Familias.aspx"><asp:Label ID="lblMenuFamilias" runat="server" Text="Gestión Familias" /></a></li>
+                <li class="active" runat="server" data-permiso="BackUpRestore"><asp:Label ID="lblMenuBackup" runat="server" Text="Backup/Restore" /></li>
+                <li runat="server" data-permiso="IdiomaGestionar"><asp:HyperLink ID="lnkMenuIdiomas" runat="server" NavigateUrl="Gestion-Idioma.aspx">Gestión Idiomas</asp:HyperLink></li>
             </ul>
         </aside>
         <div class="backup-restore__container">
@@ -24,21 +26,21 @@
                 <asp:Label ID="lblMensaje" runat="server" CssClass="lbl-mensaje"></asp:Label>
             </div>
             <div class="backup-card">
-                <h3>Backup</h3>
-                <p>Pulse el botón para generar un backup de la base de datos y descargarlo en su computadora</p>
+                <h3><asp:Label ID="lblTituloBackup" runat="server" Text="Backup" /></h3>
+                <p><asp:Label ID="lblDescripcionBackup" runat="server" Text="Pulse el botón para generar un backup de la base de datos y descargarlo en su computadora" /></p>
                 <asp:Button ID="btnBackup" runat="server" Text="Descargar backup" OnClick="btnBackup_Click" CssClass="btn-action" />
             </div>
 
             <div class="restore-card">
-                <h3>Restore</h3>
-                <p>Suba un archivo ".bak" y pulse el botón para restaurar la base de datos a partir de ese backup.</p>
+                <h3><asp:Label ID="lblTituloRestore" runat="server" Text="Restore" /></h3>
+                <p><asp:Label ID="lblDescripcionRestore" runat="server" Text="Suba un archivo &quot;.bak&quot; y pulse el botón para restaurar la base de datos a partir de ese backup." /></p>
                 <div class="restore-actions">
-                    <label for="<%= fileRestore.ClientID %>" class="btn-upload">
+                    <asp:Label ID="lblBak" runat="server" AssociatedControlID="fileRestore" CssClass="btn-upload">
 
                         <asp:Image ID="imgClip" runat="server" ImageUrl="~/Content/BackupRestore/clip.png" CssClass="img-clip" AlternateText="Icono Clip" />
 
-                        <span>Subir .BAK</span>
-                    </label>
+                        <span><asp:Label ID="lblSubirBak" runat="server" Text="Subir .BAK" /></span>
+                    </asp:Label>
 
                     <asp:FileUpload ID="fileRestore" runat="server" Style="display: none;" onchange="updateFileName(this)" accept=".bak" />
                     <span id="fileNameLabel" class="file-name-text"></span>
