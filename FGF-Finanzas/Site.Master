@@ -25,31 +25,60 @@
                 </div>
 
                 <ul class="navbar-menu" id="nav-menu">
-                    <li><a href="/Login.aspx">Iniciar sesión</a></li>
-                    <li><a href="/Registrarse.aspx">Registrarse</a></li>
-                    <li id="Admin" runat="server"><a href="Gestion-Usuarios.aspx">Administrador</a></li>
-                    <li id="Cliente" runat="server"><a href="RegistrarMascotas.aspx">Mis mascotas</a></li>
+                    <li>
+                        <asp:HyperLink runat="server" ID="lnkLogin" NavigateUrl="/Login.aspx" Text="Iniciar sesión" /></li>
+                    <li>
+                        <asp:HyperLink runat="server" ID="lnkRegistro" NavigateUrl="/Registrarse.aspx" Text="Registrarse" /></li>
+                    <li id="Admin" runat="server">
+                        <asp:HyperLink runat="server" ID="lnkAdmin" NavigateUrl="~/Administracion.aspx" Text="Administrador" /></li>
+                    <li id="Cliente" runat="server">
+                        <asp:HyperLink runat="server" ID="lnkMascotas" NavigateUrl="RegistrarMascotas.aspx" Text="Mis mascotas" /></li>
 
                     <li id="dropdownList" runat="server" class="dropdown">
-                        <a href="javascript:void(0);" class="dropdown-btn" onclick="toggleDropdown(event)">Consultas</a>
+                        <a href="javascript:void(0);" class="dropdown-btn" onclick="toggleDropdown(event)"><asp:Label ID="lblMenuConsultas" runat="server" Text="Consultas" /></a>
 
                         <ul class="dropdown-menu" id="consultas-menu">
                             <li>
-                                <a href="Consulta.aspx">Nueva consulta</a>
+                                <asp:HyperLink ID="lnkNuevaConsulta" runat="server" NavigateUrl="Consulta.aspx" Text="Nueva consulta" />
                             </li>
                             <li>
-                                <a href="MisConsultas.aspx">Mis consultas</a>
+                                <asp:HyperLink ID="lnkMisConsultas" runat="server" NavigateUrl="MisConsultas.aspx" Text="Mis consultas" />
                             </li>
                         </ul>
                     </li>
 
-                    <li id="WebMaster" runat="server"><a href="Backup-Restore.aspx">Web Master</a></li>
                     <% if (FGF_Finanzas.Capas.Servicios.SessionManager.Instancia != null && FGF_Finanzas.Capas.Servicios.SessionManager.Instancia.Usuario.Rol.TienePermiso(FGF_Finanzas.Capas.Servicios.CodigosPermiso.ObtenerPermisos().Find(x =>x.Nombre == "ContrasenaCambiar")))
                         { %>
-                    <li><a href="Cambiar-Contraseña.aspx">Cambiar Contraseña</a></li>
                     <li>
-                        <asp:Button runat="server" OnClick="LogoutBtn_Click" ID="LogoutBtn" Text="Cerrar Sesión" class="btn-logout" CausesValidation="false" /></li>
+                        <asp:HyperLink runat="server" ID="lnkCambiarPass" NavigateUrl="Cambiar-Contraseña.aspx" Text="Cambiar Contraseña" /></li>
+                    <li>
+                        <asp:Button runat="server" OnClick="LogoutBtn_Click" ID="LogoutBtn" Text="Cerrar Sesión" class="btn-logout" CausesValidation="false" />
+                    </li>
                     <% } %>
+                    <li class="idioma-menu-css">
+                        <details class="idioma-dropdown" id="detailsIdioma">
+                            <summary class="idioma-boton-actual">
+                                <img src="Content/mundo.png" alt="Idioma" class="icono-mundo" />
+                                <asp:Label runat="server" ID="lblIdiomaSeleccionado" Text="Idioma" />
+                                <span class="flechita">&#9662;</span>
+                            </summary>
+
+                            <ul class="idioma-sublista">
+                                <asp:Repeater runat="server" ID="rptIdiomas" OnItemCommand="rptIdiomas_ItemCommand">
+                                    <ItemTemplate>
+                                        <li>
+                                            <asp:LinkButton runat="server"
+                                                CommandName="CambiarIdioma"
+                                                CommandArgument='<%# Eval("Codigo") %>'
+                                                CausesValidation="false">
+                            <%# Eval("Nombre") %>
+                                            </asp:LinkButton>
+                                        </li>
+                                    </ItemTemplate>
+                                </asp:Repeater>
+                            </ul>
+                        </details>
+                    </li>
                 </ul>
 
                 <div class="nav-toggle" id="mobile-menu">

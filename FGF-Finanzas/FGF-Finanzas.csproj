@@ -69,6 +69,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Backup-Restore.aspx" />
+    <Content Include="Administracion.aspx" />
+    <Content Include="Content\Administracion.css" />
+    <Content Include="Content\MenuAdministracion.css" />
     <Content Include="BitacoraEventos.aspx" />
     <Content Include="Cambiar-Contraseña.aspx" />
     <Content Include="Consulta.aspx" />
@@ -76,6 +79,7 @@
     <Content Include="Content\BackupRestore\BackupStyles.css" />
     <Content Include="Content\Consultas\Consultas.css" />
     <Content Include="Content\DV_Styles.css" />
+    <Content Include="Content\Estilos-Gestion-Idioma.css" />
     <Content Include="Content\Estilos.css" />
     <Content Include="Content\EventosStyles.css" />
     <Content Include="Content\GestionFamiliasStyles.css" />
@@ -91,6 +95,7 @@
     <Content Include="Default.aspx" />
     <Content Include="Gestion-Familias.aspx" />
     <Content Include="Gestion-Perfiles.aspx" />
+    <Content Include="Gestion-Idioma.aspx" />
     <Content Include="Gestion-Usuarios.aspx" />
     <Content Include="DV_Form.aspx" />
     <Content Include="Global.asax" />
@@ -98,6 +103,7 @@
     <Content Include="RegistrarMascotas.aspx" />
     <Content Include="Registrarse.aspx" />
     <Content Include="Scripts\scripts.js" />
+    <None Include="Scripts\Actualizar-Traducciones-Consulta.ps1" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -108,6 +114,17 @@
     <Compile Include="Backup-Restore.aspx.designer.cs">
       <DependentUpon>Backup-Restore.aspx</DependentUpon>
     </Compile>
+    <Compile Include="BasePage.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Administracion.aspx.cs">
+      <DependentUpon>Administracion.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Administracion.aspx.designer.cs">
+      <DependentUpon>Administracion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Capas\Servicios\MenuAdministracion.cs" />
     <Compile Include="BitacoraEventos.aspx.cs">
       <DependentUpon>BitacoraEventos.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -124,8 +141,12 @@
     </Compile>
     <Compile Include="Capas\BE\BEConsulta.cs" />
     <Compile Include="Capas\BE\BEEvento.cs" />
+    <Compile Include="Capas\BE\BEEtiqueta.cs" />
+    <Compile Include="Capas\BE\BEIdioma.cs" />
     <Compile Include="Capas\BE\BEMascota.cs" />
+    <Compile Include="Capas\BE\BETraduccion.cs" />
     <Compile Include="Capas\BE\BEUsuario.cs" />
+    <Compile Include="Capas\BE\BECustomException.cs" />
     <Compile Include="Capas\BLL\BLLBackupRestore.cs" />
     <Compile Include="Capas\BLL\BLLConsulta.cs" />
     <Compile Include="Capas\BLL\BLLEvento.cs" />
@@ -134,6 +155,7 @@
     <Compile Include="Capas\BLL\BLLFamilia.cs" />
     <Compile Include="Capas\BLL\BLLMascota.cs" />
     <Compile Include="Capas\BLL\BLLRol.cs" />
+    <Compile Include="Capas\BLL\BLLTraduccion.cs" />
     <Compile Include="Capas\BLL\BLLUsuario.cs" />
     <Compile Include="Capas\BLL\BLLPermiso.cs" />
     <Compile Include="Capas\DAL\DALAbstracta.cs" />
@@ -145,10 +167,14 @@
     <Compile Include="Capas\DAL\DALMascota.cs" />
     <Compile Include="Capas\DAL\DALPermiso.cs" />
     <Compile Include="Capas\DAL\DALRol.cs" />
+    <Compile Include="Capas\DAL\DALTraduccion.cs" />
     <Compile Include="Capas\DAL\DALUsuario.cs" />
     <Compile Include="Capas\Servicios\CodigosPermiso.cs" />
     <Compile Include="Capas\Servicios\Componente.cs" />
     <Compile Include="Capas\Servicios\Encriptacion.cs" />
+    <Compile Include="Capas\Servicios\Cambio-Idioma\IdiomaManager.cs" />
+    <Compile Include="Capas\Servicios\Cambio-Idioma\IIdiomaSubject.cs" />
+    <Compile Include="Capas\Servicios\Cambio-Idioma\IIdiomaObserver.cs" />
     <Compile Include="Capas\Servicios\Familia.cs" />
     <Compile Include="Capas\Servicios\Permiso.cs" />
     <Compile Include="Capas\Servicios\Rol.cs" />
@@ -166,6 +192,13 @@
     </Compile>
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Gestion-Idioma.aspx.cs">
+      <DependentUpon>Gestion-Idioma.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Gestion-Idioma.aspx.designer.cs">
+      <DependentUpon>Gestion-Idioma.aspx</DependentUpon>
     </Compile>
     <Compile Include="Gestion-Familias.aspx.cs">
       <DependentUpon>Gestion-Familias.aspx</DependentUpon>
