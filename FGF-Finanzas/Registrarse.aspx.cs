@@ -11,7 +11,7 @@ using System.Web.UI.WebControls;
 
 namespace FGF_Finanzas
 {
-    public partial class Registrarse : System.Web.UI.Page
+    public partial class Registrarse : BasePage
     {
         BLLUsuario bllUsuario = new BLLUsuario();
         BLLRol bllRol = new BLLRol();
@@ -22,6 +22,7 @@ namespace FGF_Finanzas
 
         protected void CreateUser_Click(object sender, EventArgs e)
         {
+            LimpiarMensajeVisible(lblError);
             if (!Page.IsValid) return;
             try
             {
@@ -35,7 +36,7 @@ namespace FGF_Finanzas
             }
             catch (Exception ex)
             {
-                lblError.Text = ex.Message;
+                MostrarErrorVisible(lblError, ex);
             }
         }
     }

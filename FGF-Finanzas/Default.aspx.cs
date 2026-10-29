@@ -1,6 +1,7 @@
 ﻿using FGF_Finanzas.Capas.BE;
 using FGF_Finanzas.Capas.BLL;
 using FGF_Finanzas.Capas.Servicios;
+using FGF_Finanzas.Capas.Servicios.Cambio_Idioma;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -13,7 +14,7 @@ using System.Web.UI.WebControls;
 
 namespace FGF_Finanzas
 {
-    public partial class Default : System.Web.UI.Page
+    public partial class Default : BasePage
     {
         BLLUsuario bllUsuario = new BLLUsuario();
         protected void Page_Load(object sender, EventArgs e)
@@ -22,16 +23,14 @@ namespace FGF_Finanzas
             {
                 if (Request.QueryString["ReturnUrl"] != null)
                 {
-                    string script = "alert('Acceso denegado: No tienes los permisos necesarios para ingresar a esta sección.');";
+                    string mensaje = ObtenerError("ERR_ACCESO_DENEGADO").Replace("'", "\\'");
+                    string script = "alert('" + mensaje + "');";
                     script += "window.history.replaceState({}, document.title, window.location.pathname);";
                     ScriptManager.RegisterStartupScript(this, GetType(), "AlertaAccesoDenegado", script, true);
                 }
             }
-            lblBienvenida.Text = "¡Bienvenido!";
-            
             if(SessionManager.IsLogged())
             {
-                lblBienvenida.Text += $" {SessionManager.Instancia.Usuario.Usuario.ToString()}";
                 BEUsuario usuario = SessionManager.Instancia.Usuario;
                 FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(
                     1,
@@ -46,6 +45,16 @@ namespace FGF_Finanzas
                 HttpCookie authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
                 Response.Cookies.Add(authCookie);
             }
+        }
+
+        protected void Page_PreRender(object sender, EventArgs e)
+        {
+            string saludo = TextoTraducido("lblBienvenida", "¡Bienvenido!");
+            if (SessionManager.IsLogged() && SessionManager.Instancia.Usuario != null)
+            {
+                saludo += $" {SessionManager.Instancia.Usuario.Usuario}";
+            }
+            lblBienvenida.Text = saludo;
         }
     }
 }

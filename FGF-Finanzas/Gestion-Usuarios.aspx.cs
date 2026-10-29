@@ -2,11 +2,13 @@
 using FGF_Finanzas.Capas.BLL;
 using FGF_Finanzas.Capas.DAL;
 using FGF_Finanzas.Capas.Servicios;
+using FGF_Finanzas.Capas.Servicios.Cambio_Idioma;
 using System;
 using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.UI;
+using System.Web.UI.WebControls;
 
 namespace FGF_Finanzas
 {
@@ -236,37 +238,37 @@ namespace FGF_Finanzas
                             string.IsNullOrWhiteSpace(email) ||
                             string.IsNullOrEmpty(rol.ToString()))
                         {
-                            throw new Exception("Todos los campos son obligatorios para crear el usuario.");
+                            throw new BECustomException("ERR_USUARIO_CAMPOS_CREAR");
                         }
-                        if (!Regex.IsMatch(dni, @"^\d{8}$")) throw new Exception("El DNI debe tener 8 digitos.");
+                        if (!Regex.IsMatch(dni, @"^\d{8}$")) throw new BECustomException("ERR_DNI_8_DIGITOS_USUARIO");
 
                         DataTable dtUsuarios = bllUsuario.ObtenerUsuarios();
-                        if (dtUsuarios.AsEnumerable().Any(row => row.Field<string>("DNI") == dni)) throw new Exception("El DNI ingresado ya se encuentra en uso.");
-                        if (dtUsuarios.AsEnumerable().Any(row => row.Field<string>("mail").Equals(email, StringComparison.OrdinalIgnoreCase))) throw new Exception("El Email ingresado ya se encuentra en uso.");
+                        if (dtUsuarios.AsEnumerable().Any(row => row.Field<string>("DNI") == dni)) throw new BECustomException("ERR_DNI_EN_USO");
+                        if (dtUsuarios.AsEnumerable().Any(row => row.Field<string>("mail").Equals(email, StringComparison.OrdinalIgnoreCase))) throw new BECustomException("ERR_EMAIL_EN_USO");
 
                         bllUsuario.AgregarUsuario(new BEUsuario(dni, nombre, apellido, username, password, email, bllRol.ObtenerCompleto(new Rol(rol))));
-                        MostrarAlerta("Usuario añadido correctamente.");
+                        MostrarAlerta(ObtenerMensaje("MSG_USUARIO_AGREGADO"));
                         CargarGrillaUsuarios();
                         EstablecerEstado("Consulta");
                         break;
                     case "Desbloquear":
-                        if (dgvUsuarios.SelectedRow == null) throw new Exception("Debe seleccionar un usuario de la lista para poder desbloquearlo.");
+                        if (dgvUsuarios.SelectedRow == null) throw new BECustomException("ERR_SELECCIONAR_USUARIO_DESBLOQUEAR");
                         string dnibloqueado = dgvUsuarios.SelectedRow.Cells[0].Text.Trim();
                         BEUsuario usuario = bllUsuario.ConsultaIndividual(dnibloqueado);
-                        if (usuario == null) throw new Exception("El usuario no existe.");
-                        if (!usuario.Bloqueado) throw new Exception("El usuario no está bloqueado.");
+                        if (usuario == null) throw new BECustomException("ERR_USUARIO_NO_EXISTE");
+                        if (!usuario.Bloqueado) throw new BECustomException("ERR_USUARIO_NO_BLOQUEADO");
                         usuario.Bloqueado = false;
                         usuario.Intento = 0;
                         string nuevaContraseña = usuario.DNI + usuario.Apellido;
                         usuario.Contraseña = Encriptacion.Encriptar(nuevaContraseña);
                         bllUsuario.ActualizarUsuario(usuario);
                         bllEvento.AgregarEvento(new BEEvento(SessionManager.Instancia.Usuario, DateTime.Now, "Usuarios", "Desbloquear Usuario", 2));
-                        MostrarAlerta("El usuario ha sido desbloqueado correctamente.");
+                        MostrarAlerta(ObtenerMensaje("MSG_USUARIO_DESBLOQUEADO"));
                         CargarGrillaUsuarios();
                         EstablecerEstado("Consulta");
                         break;
                     case "Modificar":
-                        if (dgvUsuarios.SelectedRow == null) throw new Exception("Debe seleccionar un usuario en la lista para poder modificarlo.");
+                        if (dgvUsuarios.SelectedRow == null) throw new BECustomException("ERR_SELECCIONAR_USUARIO_MODIFICAR");
                         string dniModificar = txtDni.Text.Trim();
                         string apellidoModificar = txtApellido.Text.Trim();
                         string nombreModificar = txtNombre.Text.Trim();
@@ -281,16 +283,16 @@ namespace FGF_Finanzas
                             string.IsNullOrEmpty(rolModificar.ToString()) ||
                             string.IsNullOrEmpty(usernameModificar))
                         {
-                            throw new Exception("Todos los campos son obligatorios para modificar el usuario.");
+                            throw new BECustomException("ERR_USUARIO_CAMPOS_MODIFICAR");
                         }
                         BEUsuario usuarioModificar = bllUsuario.ConsultaIndividual(dniModificar);
                         if (usuarioModificar == null)
                         {
-                            throw new Exception("El usuario que intenta modificar no existe.");
+                            throw new BECustomException("ERR_USUARIO_MODIFICAR_NO_EXISTE");
                         }
                         DataTable dtUsuariosM = bllUsuario.ObtenerUsuarios();
-                        if (dtUsuariosM.AsEnumerable().Any(row => row.Field<string>("mail").Equals(emailModificar, StringComparison.OrdinalIgnoreCase) && row.Field<string>("DNI") != dniModificar)) throw new Exception("El Email ingresado ya se encuentra en uso.");
-                        if (dtUsuariosM.AsEnumerable().Any(row => row.Field<string>("Usuario").Equals(usernameModificar, StringComparison.OrdinalIgnoreCase) && row.Field<string>("DNI") != dniModificar)) throw new Exception("El nombre de usuario ingresado ya se encuentra en uso.");
+                        if (dtUsuariosM.AsEnumerable().Any(row => row.Field<string>("mail").Equals(emailModificar, StringComparison.OrdinalIgnoreCase) && row.Field<string>("DNI") != dniModificar)) throw new BECustomException("ERR_EMAIL_EN_USO");
+                        if (dtUsuariosM.AsEnumerable().Any(row => row.Field<string>("Usuario").Equals(usernameModificar, StringComparison.OrdinalIgnoreCase) && row.Field<string>("DNI") != dniModificar)) throw new BECustomException("ERR_USERNAME_EN_USO");
                         usuarioModificar.Nombre = nombreModificar;
                         usuarioModificar.Apellido = apellidoModificar;
                         usuarioModificar.Mail = emailModificar;
@@ -298,7 +300,7 @@ namespace FGF_Finanzas
                         usuarioModificar.Usuario = usernameModificar;
                         bllUsuario.ActualizarUsuario(usuarioModificar);
                         bllEvento.AgregarEvento(new BEEvento(SessionManager.Instancia.Usuario, DateTime.Now, "Usuarios", "Modificar Usuario", 2));
-                        MostrarAlerta("Usuario modificado correctamente.");
+                        MostrarAlerta(ObtenerMensaje("MSG_USUARIO_MODIFICADO"));
                         CargarGrillaUsuarios();
                         EstablecerEstado("Consulta");
                         break;
@@ -307,15 +309,24 @@ namespace FGF_Finanzas
             catch (Exception ex)
             {
 
-                MostrarAlerta(ex.Message, "error");
+                MostrarAlerta(TraducirError(ex), "error");
             }
         }
 
-        private void MostrarAlerta(string mensaje, string tipo = "exito")
+        protected void Page_PreRenderComplete(object sender, EventArgs e)
         {
-            string mensajeFormateado = mensaje.Replace("'", "\\'");
-            string script = $"mostrarAlerta('{mensajeFormateado}', '{tipo}');";
-            ScriptManager.RegisterStartupScript(this, this.GetType(), Guid.NewGuid().ToString(), script, true);
+            TraducirColumna(dgvUsuarios, 0, "dgvUsuarios_Header_Dni", "DNI");
+            TraducirColumna(dgvUsuarios, 1, "dgvUsuarios_Header_Nombre", "Nombre");
+            TraducirColumna(dgvUsuarios, 2, "dgvUsuarios_Header_Apellido", "Apellido");
+            TraducirColumna(dgvUsuarios, 3, "dgvUsuarios_Header_Mail", "Email");
+            TraducirColumna(dgvUsuarios, 4, "dgvUsuarios_Header_Usuario", "Usuario");
+            TraducirColumna(dgvUsuarios, 5, "dgvUsuarios_Header_Rol", "Rol");
+            TraducirBotonSeleccion(dgvUsuarios, 6, "dgvUsuarios_Seleccionar", "Seleccionar");
+            TraducirSinDatos(dgvUsuarios, "dgvUsuarios_Vacio", "No hay usuarios para mostrar.");
+
+            TraducirItem(rblFiltroTodosActivos, "Bloqueados", "rblFiltroTodosActivos_Bloqueados", "Bloqueados");
+            TraducirItem(rblFiltroTodosActivos, "Todos", "rblFiltroTodosActivos_Todos", "Todos");
+            TraducirItem(ddlRol, string.Empty, "ddlRol_Seleccionar", "-- Seleccionar Rol --");
         }
 
         protected void rblFiltroTodosActivos_SelectedIndexChanged(object sender, EventArgs e)
@@ -328,7 +339,7 @@ namespace FGF_Finanzas
             }
             catch (Exception ex)
             {
-                MostrarAlerta("Error al filtrar la lista: " + ex.Message, "error");
+                MostrarAlerta(ObtenerError("ERR_FILTRAR_LISTA", ex.Message), "error");
             }
         }
         protected void chkVerEncriptado_CheckedChanged(object sender, EventArgs e)
@@ -341,7 +352,7 @@ namespace FGF_Finanzas
             }
             catch (Exception ex)
             {
-                MostrarAlerta("Error al cambiar visualización: " + ex.Message, "error");
+                MostrarAlerta(ObtenerError("ERR_CAMBIAR_VISUALIZACION", ex.Message), "error");
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using FGF_Finanzas.Capas.BLL;
+﻿using FGF_Finanzas.Capas.BE;
+using FGF_Finanzas.Capas.BLL;
 using FGF_Finanzas.Capas.Servicios;
 using System;
 using System.Collections.Generic;
@@ -147,21 +148,21 @@ namespace FGF_Finanzas
             try
             {
                 if (lstPerfiles.SelectedItem == null)
-                    throw new Exception(
-                        "Debe seleccionar un perfil."
+                    throw new BECustomException(
+                        "ERR_PERFIL_SELECCIONAR"
                     );
 
                 if (lstPermisos.SelectedItem == null)
-                    throw new Exception(
-                        "Debe seleccionar un permiso."
+                    throw new BECustomException(
+                        "ERR_PERFIL_SELECCIONAR_PERMISO"
                     );
 
                 string valor =
                     lstPerfiles.SelectedValue;
 
                 if (!valor.StartsWith("R-"))
-                    throw new Exception(
-                        "Debe seleccionar el perfil principal, no uno de sus componentes."
+                    throw new BECustomException(
+                        "ERR_PERFIL_SELECCIONAR_PRINCIPAL_COMPONENTE"
                     );
 
                 string[] partes =
@@ -194,14 +195,14 @@ namespace FGF_Finanzas
                 CargarPerfilesEnListBox();
 
                 MostrarMensaje(
-                    "Permiso asignado correctamente.",
+                    ObtenerMensaje("MSG_PERFIL_PERMISO_ASIGNADO"),
                     false
                 );
             }
             catch (Exception ex)
             {
                 MostrarMensaje(
-                    ex.Message,
+                    TraducirError(ex),
                     true
                 );
             }
@@ -212,21 +213,21 @@ namespace FGF_Finanzas
             try
             {
                 if (lstPerfiles.SelectedItem == null)
-                    throw new Exception(
-                        "Debe seleccionar un perfil."
+                    throw new BECustomException(
+                        "ERR_PERFIL_SELECCIONAR"
                     );
 
                 if (lstFamilias.SelectedItem == null)
-                    throw new Exception(
-                        "Debe seleccionar una familia."
+                    throw new BECustomException(
+                        "ERR_PERFIL_SELECCIONAR_FAMILIA"
                     );
 
                 string valor =
                     lstPerfiles.SelectedValue;
 
                 if (!valor.StartsWith("R-"))
-                    throw new Exception(
-                        "Debe seleccionar el perfil principal."
+                    throw new BECustomException(
+                        "ERR_PERFIL_SELECCIONAR_PRINCIPAL"
                     );
 
                 string[] partes =
@@ -258,14 +259,14 @@ namespace FGF_Finanzas
                 CargarPerfilesEnListBox();
 
                 MostrarMensaje(
-                    "Familia asignada correctamente.",
+                    ObtenerMensaje("MSG_PERFIL_FAMILIA_ASIGNADA"),
                     false
                 );
             }
             catch (Exception ex)
             {
                 MostrarMensaje(
-                    ex.Message,
+                    TraducirError(ex),
                     true
                 );
             }
@@ -276,16 +277,16 @@ namespace FGF_Finanzas
             try
             {
                 if (lstPerfiles.SelectedItem == null)
-                    throw new Exception(
-                        "Debe seleccionar un perfil."
+                    throw new BECustomException(
+                        "ERR_PERFIL_SELECCIONAR"
                     );
 
                 string valor =
                     lstPerfiles.SelectedValue;
 
                 if (!valor.StartsWith("R-"))
-                    throw new Exception(
-                        "Debe seleccionar el perfil principal que desea eliminar."
+                    throw new BECustomException(
+                        "ERR_PERFIL_SELECCIONAR_PRINCIPAL_ELIMINAR"
                     );
 
                 string[] partes =
@@ -304,14 +305,14 @@ namespace FGF_Finanzas
                 CargarPerfilesEnListBox();
 
                 MostrarMensaje(
-                    "Perfil eliminado correctamente.",
+                    ObtenerMensaje("MSG_PERFIL_ELIMINADO"),
                     false
                 );
             }
             catch (Exception ex)
             {
                 MostrarMensaje(
-                    ex.Message,
+                    TraducirError(ex),
                     true
                 );
             }
@@ -322,8 +323,8 @@ namespace FGF_Finanzas
             try
             {
                 if (lstPerfiles.SelectedItem == null)
-                    throw new Exception(
-                        "Debe seleccionar un componente."
+                    throw new BECustomException(
+                        "ERR_PERFIL_SELECCIONAR_COMPONENTE"
                     );
 
                 string valor =
@@ -365,29 +366,28 @@ namespace FGF_Finanzas
                 // Permiso que viene de una familia
                 else if (valor.StartsWith("PF-"))
                 {
-                    throw new Exception(
-                        "Ese permiso pertenece a una familia. " +
-                        "Debe modificarlo desde Gestión de Familias."
+                    throw new BECustomException(
+                        "ERR_PERFIL_PERMISO_DE_FAMILIA"
                     );
                 }
                 else
                 {
-                    throw new Exception(
-                        "Seleccione un permiso o una familia del perfil."
+                    throw new BECustomException(
+                        "ERR_PERFIL_SELECCIONAR_COMPONENTE_ALT"
                     );
                 }
 
                 CargarPerfilesEnListBox();
 
                 MostrarMensaje(
-                    "Componente eliminado correctamente.",
+                    ObtenerMensaje("MSG_PERFIL_COMPONENTE_ELIMINADO"),
                     false
                 );
             }
             catch (Exception ex)
             {
                 MostrarMensaje(
-                    ex.Message,
+                    TraducirError(ex),
                     true
                 );
             }
@@ -410,14 +410,14 @@ namespace FGF_Finanzas
                 CargarPerfilesEnListBox();
 
                 MostrarMensaje(
-                    "Perfil agregado correctamente.",
+                    ObtenerMensaje("MSG_PERFIL_CREADO"),
                     false
                 );
             }
             catch (Exception ex)
             {
                 MostrarMensaje(
-                    ex.Message,
+                    TraducirError(ex),
                     true
                 );
             }
