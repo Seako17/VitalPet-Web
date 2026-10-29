@@ -186,6 +186,71 @@ namespace FGF_Finanzas
             return ObtenerError(excepcion.CodigoError, excepcion.Argumentos);
         }
 
+        protected void MostrarErrorVisible(Label etiqueta, string codigo, params object[] argumentos)
+        {
+            GuardarMensajeVisible(etiqueta, codigo, true, argumentos);
+        }
+
+        protected void MostrarErrorVisible(Label etiqueta, Exception excepcion, string codigoTecnico = null)
+        {
+            if (excepcion is BECustomException error)
+                MostrarErrorVisible(etiqueta, error.CodigoError, error.Argumentos);
+            else if (!string.IsNullOrWhiteSpace(codigoTecnico))
+                MostrarErrorVisible(etiqueta, codigoTecnico, excepcion.Message);
+            else
+                MostrarErrorVisible(etiqueta, "ERR_INESPERADO");
+        }
+
+        protected void MostrarMensajeVisible(Label etiqueta, string codigo, params object[] argumentos)
+        {
+            GuardarMensajeVisible(etiqueta, codigo, false, argumentos);
+        }
+
+        private void GuardarMensajeVisible(Label etiqueta, string codigo, bool esError, object[] argumentos)
+        {
+            string clave = "MensajeVisible." + etiqueta.UniqueID;
+            ViewState[clave] = codigo;
+            ViewState[clave + ".Argumentos"] = argumentos;
+            ViewState[clave + ".EsError"] = esError;
+            etiqueta.Text = esError ? ObtenerError(codigo, argumentos) : ObtenerMensaje(codigo, argumentos);
+        }
+
+        protected void LimpiarMensajeVisible(Label etiqueta)
+        {
+            string clave = "MensajeVisible." + etiqueta.UniqueID;
+            ViewState.Remove(clave);
+            ViewState.Remove(clave + ".Argumentos");
+            ViewState.Remove(clave + ".EsError");
+            etiqueta.Text = string.Empty;
+        }
+
+        protected override void OnPreRenderComplete(EventArgs e)
+        {
+            base.OnPreRenderComplete(e);
+            // Se ejecuta despues del evento del selector de idioma y de los eventos de la pagina.
+            ActualizarMensajesVisibles(Controls);
+        }
+
+        private void ActualizarMensajesVisibles(ControlCollection controles)
+        {
+            foreach (Control control in controles)
+            {
+                if (control is Label etiqueta)
+                {
+                    string clave = "MensajeVisible." + etiqueta.UniqueID;
+                    string codigo = ViewState[clave] as string;
+                    if (!string.IsNullOrEmpty(codigo))
+                    {
+                        var argumentos = ViewState[clave + ".Argumentos"] as object[];
+                        etiqueta.Text = (bool)ViewState[clave + ".EsError"]
+                            ? ObtenerError(codigo, argumentos)
+                            : ObtenerMensaje(codigo, argumentos);
+                    }
+                }
+                if (control.HasControls()) ActualizarMensajesVisibles(control.Controls);
+            }
+        }
+
         protected string TraducirError(Exception ex, string codigoTecnico = null)
         {
             if (ex is BECustomException bex)

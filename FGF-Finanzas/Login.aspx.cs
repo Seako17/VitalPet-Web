@@ -22,6 +22,7 @@ namespace FGF_Finanzas
 
         protected void LogIn(object sender, EventArgs e)
         {
+            LimpiarMensajeVisible(lblError);
             try
             {
                 HttpCookie usuarioCookie = null;
@@ -41,7 +42,7 @@ namespace FGF_Finanzas
             }
             catch (BECustomException bex)
             {
-                lblError.Text = ObtenerError(bex);
+                MostrarErrorVisible(lblError, bex);
             }
         }
     }
