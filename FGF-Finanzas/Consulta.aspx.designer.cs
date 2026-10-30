@@ -24,12 +24,8 @@ namespace FGF_Finanzas
         protected global::System.Web.UI.WebControls.Label lblSubtitulo;
         protected global::System.Web.UI.WebControls.Label lblMascota;
         protected global::System.Web.UI.WebControls.Label lblMotivo;
-        protected global::System.Web.UI.WebControls.Label lblFecha;
+        protected global::System.Web.UI.WebControls.Label lblFechaHora;
         protected global::System.Web.UI.WebControls.Label lblVeterinario;
-        protected global::System.Web.UI.WebControls.Label lblHora;
-        protected global::System.Web.UI.WebControls.Panel pnlDisponibilidad;
-        protected global::System.Web.UI.WebControls.Label lblDisponibilidadTitulo;
-        protected global::System.Web.UI.WebControls.Label lblDisponibilidadAyuda;
 
         /// <summary>
         /// Control dropMascota.

@@ -22,6 +22,11 @@ namespace FGF_Finanzas
         public override string NombreFormulario => "Consulta.aspx";
         BLLMascota bllMascota = new BLLMascota();
         BLLConsulta bllConsulta = new BLLConsulta();
+        private string ClaveGuiaVeterinario
+        {
+            get { return (string)ViewState["ClaveGuiaVeterinario"] ?? "lblElijaFechaHora"; }
+            set { ViewState["ClaveGuiaVeterinario"] = value; }
+        }
 
         private void MostrarError(Exception ex)
         {
@@ -41,7 +46,10 @@ namespace FGF_Finanzas
             TraducirColumna(grillaPendientes, 1, "pendientesVeterinario", "Veterinario/a");
             TraducirColumna(grillaPendientes, 2, "pendientesMotivo", "Motivo");
             TraducirItem(ddlHora, "", "ddlHora_Seleccione", "Hora");
-            TraducirItem(ddlVeterinario, "", "ddlVeterinario_Seleccione", "Seleccione un veterinario/a");
+            string textoGuia = ClaveGuiaVeterinario == "ddlVeterinario_Seleccione"
+                ? "Seleccione un veterinario/a"
+                : ClaveGuiaVeterinario == "lblHorarioNoDisponible" ? "Horario no disponible" : "Elija fecha y hora";
+            TraducirItem(ddlVeterinario, "", ClaveGuiaVeterinario, textoGuia);
             string codigo = ViewState["CodigoErrorConsulta"] as string;
             if (!string.IsNullOrEmpty(codigo))
                 lblError.Text = ObtenerError(codigo, ViewState["ArgumentosErrorConsulta"] as object[]);
@@ -52,28 +60,10 @@ namespace FGF_Finanzas
             {
                 CargarMascotas();
                 CargarHorarios();
-                CargarVeterinarios();
                 txtFecha.Attributes["min"] = DateTime.Today.ToString("yyyy-MM-dd");
+                ReiniciarVeterinarios("lblElijaFechaHora");
                 txtMotivo.Attributes["placeholder"] = TextoTraducido("txtMotivo", "Ej: Vacunación");
             }
-
-            ConfigurarDisponibilidad();
-        }
-
-        private void ConfigurarDisponibilidad()
-        {
-            pnlDisponibilidad.Attributes["data-url"] =
-                ResolveUrl("~/WebServices/DisponibilidadService.asmx/ObtenerDisponibilidad");
-            pnlDisponibilidad.Attributes["data-msg-cantidad"] =
-                TextoTraducido("lblDisponibilidadCantidad", "Horarios libres: {0}");
-            pnlDisponibilidad.Attributes["data-msg-primero"] =
-                TextoTraducido("lblDisponibilidadPrimero", "Primer horario disponible: {0}");
-            pnlDisponibilidad.Attributes["data-msg-sin"] =
-                TextoTraducido("lblDisponibilidadSinHorarios", "Sin horarios disponibles");
-            pnlDisponibilidad.Attributes["data-msg-consultando"] =
-                TextoTraducido("lblDisponibilidadConsultando", "Consultando disponibilidad...");
-            pnlDisponibilidad.Attributes["data-msg-sesion"] = ObtenerError("ERR_SESION");
-            pnlDisponibilidad.Attributes["data-msg-error"] = ObtenerError("ERR_INESPERADO");
         }
 
         protected void btnAgendar_Click(object sender, EventArgs e)
@@ -152,6 +142,7 @@ namespace FGF_Finanzas
             catch (Exception ex)
             {
                 OcultarAviso();
+                ActualizarDisponibilidadSinBorrarMensaje();
                 MostrarError(ex);
             }
         }
@@ -190,16 +181,33 @@ namespace FGF_Finanzas
             }
         }
 
-        private void CargarVeterinarios()
+        private void ReiniciarVeterinarios(string clave)
         {
+            ClaveGuiaVeterinario = clave;
             ddlVeterinario.Items.Clear();
-            ddlVeterinario.DataSource = bllConsulta.ObtenerVeterinarios();
-            ddlVeterinario.DataTextField = "nombreCompleto";
-            ddlVeterinario.DataValueField = "dni";
-            ddlVeterinario.DataBind();
-            ddlVeterinario.Items.Insert(0,
-                new ListItem(TextoTraducido("ddlVeterinario_Seleccione", "Seleccione un veterinario/a"), ""));
+            ddlVeterinario.Items.Add(new ListItem(TextoTraducido(clave, "Elija fecha y hora"), ""));
+            ddlVeterinario.Enabled = false;
         }
+
+        protected void Horario_Changed(object sender, EventArgs e)
+        {
+            ActualizarDisponibilidad();
+        }
+
+        private void ActualizarDisponibilidadSinBorrarMensaje()
+        {
+            string mensaje = lblError.Text;
+            string veterinarioSeleccionado = ddlVeterinario.SelectedValue;
+            ActualizarDisponibilidad();
+            ListItem veterinario = ddlVeterinario.Items.FindByValue(veterinarioSeleccionado);
+            if (veterinario != null)
+            {
+                ddlVeterinario.ClearSelection();
+                veterinario.Selected = true;
+            }
+            if (string.IsNullOrEmpty(lblError.Text)) lblError.Text = mensaje;
+        }
+
 
         private bool TryObtenerFechaHora(out DateTime fechaHora)
         {
@@ -215,6 +223,48 @@ namespace FGF_Finanzas
 
             fechaHora = fecha.Date + TimeSpan.Parse(ddlHora.SelectedValue);
             return true;
+        }
+
+        private bool ActualizarDisponibilidad()
+        {
+            lblError.Text = "";
+            ViewState.Remove("CodigoErrorConsulta");
+            lblOk.Text = "";
+
+            if (dropMascota.Items.Count == 0)
+            {
+                MostrarError(new BECustomException("ERR_CONSULTA_SIN_MASCOTAS"));
+                return false;
+            }
+
+            DateTime fechaHora;
+            int idMascota;
+            if (!TryObtenerFechaHora(out fechaHora) || !int.TryParse(dropMascota.SelectedValue, out idMascota))
+            {
+                ReiniciarVeterinarios("lblElijaFechaHora");
+                return false;
+            }
+
+            try
+            {
+                DataTable libres = bllConsulta.ObtenerVeterinariosDisponibles(idMascota, fechaHora);
+
+                ddlVeterinario.Items.Clear();
+                ddlVeterinario.DataSource = libres;
+                ddlVeterinario.DataTextField = "nombreCompleto";
+                ddlVeterinario.DataValueField = "DNI";
+                ddlVeterinario.DataBind();
+                ddlVeterinario.Items.Insert(0, new ListItem(TextoTraducido("ddlVeterinario_Seleccione", "Seleccione un veterinario/a"), ""));
+                ddlVeterinario.Enabled = true;
+                ClaveGuiaVeterinario = "ddlVeterinario_Seleccione";
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MostrarError(ex);
+                ReiniciarVeterinarios("lblHorarioNoDisponible");
+                return false;
+            }
         }
         #endregion
     }

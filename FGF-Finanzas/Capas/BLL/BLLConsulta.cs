@@ -4,7 +4,6 @@ using FGF_Finanzas.Capas.Servicios;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Globalization;
 using System.Linq;
 using System.Web;
 
@@ -101,117 +100,6 @@ namespace FGF_Finanzas.Capas.BLL
             }
 
             return libres.CopyToDataTable();
-        }
-
-        /// <summary>
-        /// Calcula los horarios libres de un veterinario para una mascota en una fecha.
-        /// Excluye horarios pasados y reservas vigentes que ocupen a la mascota o al veterinario.
-        /// </summary>
-        public BEDisponibilidad ObtenerDisponibilidad(int idMascota, string dniVeterinario, DateTime fecha)
-        {
-            ValidarAccesoMascota(idMascota);
-            ValidarFecha(fecha);
-
-            DataRow veterinario = ObtenerVeterinario(dniVeterinario);
-
-            var disponibilidad = new BEDisponibilidad
-            {
-                IdMascota = idMascota,
-                DniVeterinario = dniVeterinario,
-                NombreVeterinario = (veterinario["nombre"] + " " + veterinario["apellido"]).Trim(),
-                Fecha = fecha.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
-                Ok = true
-            };
-
-            DateTime desde = fecha.Date;
-            DateTime hasta = desde.AddDays(1);
-
-            var reservas = dalConsulta.ObtenerConsultas().AsEnumerable()
-                .Where(c => c["estado"].ToString() != BEConsulta.Cancelada)
-                .Select(c => new
-                {
-                    FechaHora = Convert.ToDateTime(c["fechaHora"]),
-                    IdMascota = Convert.ToInt32(c["idMascota"]),
-                    DniVeterinario = c["DNI_Veterinario"].ToString()
-                })
-                .Where(c => c.FechaHora >= desde && c.FechaHora < hasta)
-                .ToList();
-
-            DateTime ahora = DateTime.Now;
-
-            foreach (string hora in ObtenerHorarios())
-            {
-                DateTime turno = desde + TimeSpan.Parse(hora, CultureInfo.InvariantCulture);
-
-                if (turno <= ahora)
-                    continue;
-
-                bool ocupado = reservas.Any(c => c.FechaHora == turno &&
-                    (c.IdMascota == idMascota || c.DniVeterinario == dniVeterinario));
-
-                if (!ocupado)
-                    disponibilidad.HorariosLibres.Add(hora);
-            }
-
-            disponibilidad.CantidadHorarios = disponibilidad.HorariosLibres.Count;
-            disponibilidad.PrimerHorarioDisponible = disponibilidad.HorariosLibres.FirstOrDefault();
-            return disponibilidad;
-        }
-
-        public bool PuedeConsultarMascota(BEUsuario usuario, int idMascota)
-        {
-            if (usuario?.Rol == null)
-                return false;
-
-            var permisos = bllPermiso.ObtenerPermisos();
-
-            var permisoAtender = permisos.Find(p => p.Nombre == PERMISO_AGENDAR_CONSULTA);
-            if (permisoAtender != null && usuario.Rol.TienePermiso(permisoAtender))
-                return true;
-
-            var permisoRegistrar = permisos.Find(p => p.Nombre == "MascotaRegistrar");
-            if (permisoRegistrar == null || !usuario.Rol.TienePermiso(permisoRegistrar))
-                return false;
-
-            DataTable mascotas = bllMascota.ObtenerMascotas();
-            var mascota = mascotas.AsEnumerable()
-                .FirstOrDefault(m => Convert.ToInt32(m[mascotas.Columns[0]]) == idMascota);
-
-            return mascota != null && mascota["DNI"].ToString() == usuario.Usuario;
-        }
-
-        private void ValidarAccesoMascota(int idMascota)
-        {
-            var usuario = SessionManager.Instancia?.Usuario;
-
-            if (usuario == null)
-                throw new BECustomException("ERR_SESION");
-
-            if (!PuedeConsultarMascota(usuario, idMascota))
-                throw new BECustomException("ERR_CONSULTA_ACCESO");
-        }
-
-        private void ValidarFecha(DateTime fecha)
-        {
-            if (fecha == DateTime.MinValue)
-                throw new BECustomException("ERR_CONSULTA_FECHA_HORA");
-
-            if (fecha.Date < DateTime.Today)
-                throw new BECustomException("ERR_CONSULTA_FECHA_PASADA");
-        }
-
-        private DataRow ObtenerVeterinario(string dni)
-        {
-            if (string.IsNullOrWhiteSpace(dni))
-                throw new BECustomException("ERR_CONSULTA_VETERINARIO");
-
-            var veterinario = ObtenerVeterinarios().AsEnumerable()
-                .FirstOrDefault(v => v["dni"].ToString() == dni);
-
-            if (veterinario == null)
-                throw new BECustomException("ERR_CONSULTA_VETERINARIO");
-
-            return veterinario;
         }
 
         public void Agendar(BEConsulta consulta)
