@@ -87,6 +87,24 @@ namespace FGF_Finanzas
         protected global::System.Web.UI.WebControls.HyperLink lnkMascotas;
 
         /// <summary>
+        /// Control Atencion.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Atencion;
+
+        /// <summary>
+        /// Control lnkAtenderConsultas.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink lnkAtenderConsultas;
+
+        /// <summary>
         /// Control dropdownList.
         /// </summary>
         /// <remarks>
