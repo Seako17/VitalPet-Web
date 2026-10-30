@@ -21,12 +21,19 @@ namespace FGF_Finanzas
             get
             {
                 int id;
-                return int.TryParse(Request.QueryString["idConsulta"], out id) ? id : 0;
+                return int.TryParse(Session["IdConsultaSeleccionada"]?.ToString(), out id) ? id : 0;
             }
         }
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["IdConsultaSeleccionada"] == null)
+            {
+                Response.Redirect("Atenciones.aspx", false);
+                Context.ApplicationInstance.CompleteRequest();
+                return;
+            }
+
             if (!IsPostBack)
             {
                 CargarAtencion();
@@ -78,6 +85,12 @@ namespace FGF_Finanzas
                 return;
             }
 
+            if (string.IsNullOrWhiteSpace(txtObservaciones.Text))
+            {
+                MostrarError("Ingrese las observaciones de la atención.");
+                return;
+            }
+
             try
             {
                 int idAtencion = Convert.ToInt32(ViewState["IdAtencion"] ?? 0);
@@ -100,8 +113,10 @@ namespace FGF_Finanzas
                     bllAtencion.Guardar(atencion);
                 }
 
-                Response.Redirect("Atenciones.aspx?guardado=1", false);
-                Context.ApplicationInstance.CompleteRequest();
+                Session.Remove("IdConsultaSeleccionada");
+
+                ScriptManager.RegisterStartupScript(this, GetType(), "AtencionGuardada", "alert('La atención se guardó correctamente.'); " +
+                    "window.location.href='Atenciones.aspx';", true);
             }
             catch (Exception ex)
             {
@@ -111,6 +126,7 @@ namespace FGF_Finanzas
 
         protected void btnCancelar_Click(object sender, EventArgs e)
         {
+            Session.Remove("IdConsultaSeleccionada");
             VolverALista();
         }
 

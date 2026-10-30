@@ -10,9 +10,9 @@
 
     <div class="main-layout">
         <div class="eventos__container">
-            <h3><asp:Label ID="lblSubtitulo" runat="server" Text="Consultas sin atender" /></h3>
+            <h3><asp:Label ID="lblSubtitulo" runat="server" class="lblSubtitle" Text="Consultas sin atender" /></h3>
 
-            <asp:Label ID="lblMensaje" runat="server" CssClass="lblOk" />
+            <asp:Label ID="lblMensaje" runat="server" class="lblError" />
 
             <div class="table-responsive">
                 <asp:GridView ID="gvConsultas" runat="server" AutoGenerateColumns="False" CssClass="table"
@@ -30,8 +30,8 @@
                 </asp:GridView>
             </div>
 
-            <div class="eventos__filtros">
-                <asp:Button ID="btnAtender" runat="server" Text="Atender" CssClass="btn-filtro" OnClick="btnAtender_Click" />
+            <div>
+                <asp:Button ID="btnAtender" class="btn" runat="server" Text="Atender" OnClick="btnAtender_Click" />
             </div>
         </div>
     </div>
