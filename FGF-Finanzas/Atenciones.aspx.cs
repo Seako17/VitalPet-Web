@@ -19,11 +19,6 @@ namespace FGF_Finanzas
             if (!IsPostBack)
             {
                 CargarConsultas();
-
-                if (Request.QueryString["guardado"] == "1")
-                {
-                    lblMensaje.Text = "La atención se guardó correctamente.";
-                }
             }
         }
 
@@ -35,7 +30,6 @@ namespace FGF_Finanzas
 
         protected void gvConsultas_SelectedIndexChanged(object sender, EventArgs e)
         {
-            lblMensaje.CssClass = "lblOk";
             lblMensaje.Text = string.Empty;
         }
 
@@ -43,14 +37,15 @@ namespace FGF_Finanzas
         {
             if (gvConsultas.SelectedIndex < 0)
             {
-                lblMensaje.CssClass = "lblError";
                 lblMensaje.Text = "Seleccione una consulta de la grilla para atenderla.";
                 return;
             }
 
             int idConsulta = Convert.ToInt32(gvConsultas.DataKeys[gvConsultas.SelectedIndex].Value);
 
-            Response.Redirect("AtenderConsulta.aspx?idConsulta=" + idConsulta, false);
+            Session["IdConsultaSeleccionada"] = idConsulta;
+
+            Response.Redirect("AtenderConsulta.aspx", false);
             Context.ApplicationInstance.CompleteRequest();
         }
     }

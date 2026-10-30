@@ -70,7 +70,7 @@ namespace FGF_Finanzas.Capas.DAL
             {
                 cmd.Parameters.AddWithValue("@IdConsulta", atencion.id_consulta);
                 cmd.Parameters.AddWithValue("@Diagnostico", Encriptacion.EncriptarAES(atencion.diagnostico));
-                cmd.Parameters.AddWithValue("@Observaciones", Encriptacion.EncriptarAES(atencion.observaciones);
+                cmd.Parameters.AddWithValue("@Observaciones", Encriptacion.EncriptarAES(atencion.observaciones));
                 cmd.Parameters.AddWithValue("@Atendido", atencion.atendido);
 
                 con.Open();
