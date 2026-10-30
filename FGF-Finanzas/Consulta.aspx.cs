@@ -38,6 +38,13 @@ namespace FGF_Finanzas
 
         protected void Page_PreRenderComplete(object sender, EventArgs e)
         {
+            lblAviso.Text = TextoTraducido("lblAviso", "La mascota ya tiene consultas agendadas");
+            lblConfirmarAviso.Text = TextoTraducido("lblConfirmarAviso", "¿Querés agendar igualmente una nueva consulta?");
+            btnVolver.Text = TextoTraducido("btnVolver", "Volver al formulario");
+            btnConfirmar.Text = TextoTraducido("btnConfirmar", "Agendar igualmente");
+            TraducirColumna(grillaPendientes, 0, "pendientesFecha", "Fecha y hora");
+            TraducirColumna(grillaPendientes, 1, "pendientesVeterinario", "Veterinario/a");
+            TraducirColumna(grillaPendientes, 2, "pendientesMotivo", "Motivo");
             TraducirItem(ddlHora, "", "ddlHora_Seleccione", "Hora");
             string textoGuia = ClaveGuiaVeterinario == "ddlVeterinario_Seleccione"
                 ? "Seleccione un veterinario/a"
@@ -60,6 +67,28 @@ namespace FGF_Finanzas
         }
 
         protected void btnAgendar_Click(object sender, EventArgs e)
+        {
+            AgendarConsulta(false);
+        }
+
+        protected void btnConfirmar_Click(object sender, EventArgs e)
+        {
+            if (pnlAviso.Visible) AgendarConsulta(true);
+        }
+
+        protected void btnVolver_Click(object sender, EventArgs e)
+        {
+            OcultarAviso();
+        }
+
+        private void OcultarAviso()
+        {
+            pnlAviso.Visible = false;
+            pnlFormulario.Visible = true;
+            ViewState.Remove("MascotaAvisada");
+        }
+
+        private void AgendarConsulta(bool confirmar)
         {
             lblError.Text = "";
             ViewState.Remove("CodigoErrorConsulta");
@@ -85,6 +114,24 @@ namespace FGF_Finanzas
 
             try
             {
+                if (string.IsNullOrWhiteSpace(txtMotivo.Text))
+                    throw new BECustomException("ERR_CONSULTA_MOTIVO");
+
+                if (!confirmar || !Equals(ViewState["MascotaAvisada"], idMascota))
+                {
+                    var pendientes = bllConsulta.ObtenerProximasConsultas(idMascota);
+                    if (pendientes.Count > 0)
+                    {
+                        grillaPendientes.DataSource = pendientes;
+                        grillaPendientes.DataBind();
+                        ViewState["MascotaAvisada"] = idMascota;
+                        pnlAviso.Visible = true;
+                        pnlFormulario.Visible = false;
+                        return;
+                    }
+                }
+
+                OcultarAviso();
                 var veterinario = new BEUsuario { DNI = ddlVeterinario.SelectedValue };
                 bllConsulta.Agendar(new BEConsulta(idMascota, veterinario, txtMotivo.Text.Trim(), fechaHora));
 
@@ -94,6 +141,7 @@ namespace FGF_Finanzas
             }
             catch (Exception ex)
             {
+                OcultarAviso();
                 ActualizarDisponibilidadSinBorrarMensaje();
                 MostrarError(ex);
             }

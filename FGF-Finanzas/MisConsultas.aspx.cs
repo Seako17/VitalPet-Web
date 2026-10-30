@@ -62,7 +62,9 @@ namespace FGF_Finanzas
         {
             if (e.Row.RowType != DataControlRowType.DataRow) return;
             var consulta = (BEConsulta)e.Row.DataItem;
-            ((Literal)e.Row.FindControl("litEstado")).Text = TextoTraducido("estado" + consulta.estado, consulta.estado);
+            ((Literal)e.Row.FindControl("litEstado")).Text = BLLConsulta.PendienteDeRegistro(consulta, DateTime.Now)
+                ? TextoTraducido("estadoPendienteRegistro", "Pendiente de registro")
+                : TextoTraducido("estado" + consulta.estado, consulta.estado);
             var detalle = (LinkButton)e.Row.FindControl("btnDetalle");
             detalle.Visible = consulta.estado == BEConsulta.Atendida;
             detalle.Text = TextoTraducido("btnDetalle", "Ver detalle");

@@ -159,3 +159,11 @@ body {
 .lblOk {
     color: #1b6e2d;
 }
+
+.datos-consulta { width: 100%; }
+.tabla-pendientes { overflow-x: auto; margin-bottom: 20px; }
+.turnos-pendientes { width: 100%; border-collapse: collapse; background: white; }
+.turnos-pendientes th { background: #8c7d6b; color: white; }
+.turnos-pendientes th, .turnos-pendientes td { padding: 10px; text-align: left; overflow-wrap: anywhere; }
+.turnos-pendientes td { border-bottom: 1px solid #ddd; }
+.datos-consulta .form-buttons { flex-wrap: wrap; }

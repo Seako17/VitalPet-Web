@@ -161,11 +161,23 @@ namespace FGF_Finanzas.Capas.BLL
                 .OrderByDescending(c => c.fechaHora).ToList();
         }
 
+        public List<BEConsulta> ObtenerProximasConsultas(int idMascota)
+        {
+            return ObtenerMisConsultas(BEConsulta.Agendada)
+                .Where(c => c.idMascota == idMascota && c.fechaHora > DateTime.Now)
+                .OrderBy(c => c.fechaHora).ToList();
+        }
+
         public BEConsulta ObtenerDetallePropio(int idConsulta)
         {
             var consulta = ObtenerMisConsultas().Find(c => c.idConsulta == idConsulta);
             if (consulta == null) throw new BECustomException("ERR_CONSULTA_NO_DISPONIBLE");
             return consulta;
+        }
+
+        public static bool PendienteDeRegistro(BEConsulta consulta, DateTime ahora)
+        {
+            return consulta != null && consulta.estado == BEConsulta.Agendada && consulta.fechaHora < ahora;
         }
 
         public static bool PuedeCancelar(BEConsulta consulta, DateTime ahora)
