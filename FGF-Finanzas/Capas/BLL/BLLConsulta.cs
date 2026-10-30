@@ -80,7 +80,7 @@ namespace FGF_Finanzas.Capas.BLL
 
             DataTable consultas = dalConsulta.ObtenerConsultas();
             var enEseHorario = consultas.AsEnumerable()
-                .Where(c => Convert.ToDateTime(c["fechaHora"]) == fechaHora)
+                .Where(c => c["estado"].ToString() != BEConsulta.Cancelada && Convert.ToDateTime(c["fechaHora"]) == fechaHora)
                 .ToList();
 
             if (enEseHorario.Any(c => Convert.ToInt32(c["idMascota"]) == idMascota))
@@ -134,6 +134,55 @@ namespace FGF_Finanzas.Capas.BLL
 
             if (!ObtenerHorarios().Contains(fechaHora.ToString("HH:mm")))
                 throw new BECustomException("ERR_CONSULTA_FUERA_HORARIO");
+        }
+
+        private BEUsuario ClienteActual()
+        {
+            var usuario = SessionManager.Instancia?.Usuario;
+            var permiso = bllPermiso.ObtenerPermisos().Find(p => p.Nombre == "MascotaRegistrar");
+            if (usuario?.Rol == null || permiso == null || !usuario.Rol.TienePermiso(permiso))
+                throw new BECustomException("ERR_CONSULTA_ACCESO");
+            return usuario;
+        }
+
+        public List<BEConsulta> ObtenerMisConsultas(string estado = "")
+        {
+            if (!string.IsNullOrEmpty(estado) && estado != BEConsulta.Agendada &&
+                estado != BEConsulta.Atendida && estado != BEConsulta.Cancelada)
+                throw new BECustomException("ERR_CONSULTA_ESTADO");
+            return dalConsulta.ObtenerConsultasDeCliente(ClienteActual().DNI).AsEnumerable()
+                .Select(f => new BEConsulta {
+                    idConsulta = Convert.ToInt32(f["idConsulta"]), idMascota = Convert.ToInt32(f["idMascota"]),
+                    fechaHora = Convert.ToDateTime(f["fechaHora"]), motivo = f["motivo"].ToString(),
+                    estado = f["estado"].ToString(), diagnostico = f["diagnostico"].ToString(),
+                    nombreMascota = f["nombreMascota"].ToString(),
+                    nombreVeterinario = f["nombreVeterinario"] + " " + f["apellidoVeterinario"]
+                }).Where(c => string.IsNullOrEmpty(estado) || c.estado == estado)
+                .OrderByDescending(c => c.fechaHora).ToList();
+        }
+
+        public BEConsulta ObtenerDetallePropio(int idConsulta)
+        {
+            var consulta = ObtenerMisConsultas().Find(c => c.idConsulta == idConsulta);
+            if (consulta == null) throw new BECustomException("ERR_CONSULTA_NO_DISPONIBLE");
+            return consulta;
+        }
+
+        public static bool PuedeCancelar(BEConsulta consulta, DateTime ahora)
+        {
+            return consulta != null && consulta.estado == BEConsulta.Agendada && consulta.fechaHora > ahora;
+        }
+
+        public void CancelarPropia(int idConsulta)
+        {
+            var usuario = ClienteActual();
+            if (!bllDigitoVerificador.ValidarIntegridadDelSistema())
+                throw new BECustomException("ERR_CONSULTA_MANTENIMIENTO");
+            if (!PuedeCancelar(ObtenerDetallePropio(idConsulta), DateTime.Now) ||
+                !dalConsulta.CancelarConsulta(idConsulta, usuario.DNI, DateTime.Now))
+                throw new BECustomException("ERR_CONSULTA_NO_CANCELABLE");
+            bllDigitoVerificador.InicializarTablaCompleta("Consulta");
+            bllEvento.AgregarEvento(new BEEvento(usuario, DateTime.Now, "Consultas", "Cancelar Consulta", 4));
         }
     }
 }

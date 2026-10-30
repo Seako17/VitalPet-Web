@@ -89,7 +89,7 @@ namespace FGF_Finanzas
                 bllConsulta.Agendar(new BEConsulta(idMascota, veterinario, txtMotivo.Text.Trim(), fechaHora));
 
                 string mensaje = HttpUtility.JavaScriptStringEncode(ObtenerMensaje("MSG_CONSULTA_AGENDADA"));
-                string script = "alert('" + mensaje + "'); window.location.href = 'Default.aspx';";
+                string script = "alert('" + mensaje + "'); window.location.href = 'MisConsultas.aspx';";
                 ScriptManager.RegisterStartupScript(this, GetType(), "ConsultaAgendada", script, true);
             }
             catch (Exception ex)

@@ -75,6 +75,8 @@
     <Content Include="BitacoraEventos.aspx" />
     <Content Include="Cambiar-Contraseña.aspx" />
     <Content Include="Consulta.aspx" />
+    <Content Include="MisConsultas.aspx" />
+    <Content Include="Content\Consultas\MisConsultas.css" />
     <Content Include="Content\BackupRestore\clip.png" />
     <Content Include="Content\BackupRestore\BackupStyles.css" />
     <Content Include="Content\Consultas\Consultas.css" />
@@ -179,6 +181,13 @@
     <Compile Include="Capas\Servicios\Permiso.cs" />
     <Compile Include="Capas\Servicios\Rol.cs" />
     <Compile Include="Capas\Servicios\SessionManager.cs" />
+    <Compile Include="MisConsultas.aspx.cs">
+      <DependentUpon>MisConsultas.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MisConsultas.aspx.designer.cs">
+      <DependentUpon>MisConsultas.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Consulta.aspx.cs">
       <DependentUpon>Consulta.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
