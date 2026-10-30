@@ -55,7 +55,7 @@ namespace FGF_Finanzas
             }
         }
 
-        protected void EstadoChanged(object sender, EventArgs e) { Seleccionada = null; lblMensaje.Text = ""; }
+        protected void EstadoChanged(object sender, EventArgs e) { Seleccionada = null; LimpiarMensajeVisible(lblMensaje); }
         protected void CerrarDetalle(object sender, EventArgs e) { Seleccionada = null; }
 
         protected void ConsultaBound(object sender, GridViewRowEventArgs e)
@@ -90,7 +90,7 @@ namespace FGF_Finanzas
                 {
                     consultas.CancelarPropia(id);
                     Seleccionada = null;
-                    lblMensaje.Text = TextoTraducido("cancelacionExitosa", "La consulta fue cancelada.");
+                    MostrarMensajeVisible(lblMensaje, "cancelacionExitosa");
                 }
             }
             catch (Exception ex) { MostrarFallo(ex); }
@@ -98,6 +98,7 @@ namespace FGF_Finanzas
 
         private void MostrarFallo(Exception ex)
         {
+            LimpiarMensajeVisible(lblMensaje);
             string codigo = (ex as BECustomException)?.CodigoError ?? "errorCarga";
             lblMensaje.Text = HttpUtility.HtmlEncode(
                 TextoTraducido(codigo, "No se pudo completar la operación."));
