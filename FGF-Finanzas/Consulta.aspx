@@ -2,6 +2,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link href="Content/Consultas/Consultas.css" rel="stylesheet" />
+    <script src='<%= ResolveUrl("~/Scripts/consulta-disponibilidad.js?v=" + DateTime.Now.Ticks) %>' type="text/javascript"></script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -15,8 +16,7 @@
 
             <div class="form-group">
                 <label for="dropMascota"><asp:Label ID="lblMascota" runat="server" Text="Mascota:" /></label>
-                <asp:DropDownList runat="server" CssClass="form-input" ID="dropMascota"
-                    AutoPostBack="true" OnSelectedIndexChanged="Horario_Changed">
+                <asp:DropDownList runat="server" CssClass="form-input" ID="dropMascota" ClientIDMode="Static">
                 </asp:DropDownList>
             </div>
 
@@ -26,27 +26,30 @@
             </div>
 
             <div class="form-group">
-                <label for="txtMotivo"><asp:Label ID="lblFechaHora" runat="server" Text="Fecha y Hora:" /></label>
-                <div class="fecha-hora-row">
-                    <asp:TextBox ID="txtFecha" runat="server" TextMode="Date" CssClass="form-input"
-                        AutoPostBack="true" OnTextChanged="Horario_Changed"></asp:TextBox>
-
-                    <div class="hora-wrap">
-                        <asp:DropDownList ID="ddlHora" runat="server" CssClass="form-input ddl-cuatro-filas"
-                            AutoPostBack="true" OnSelectedIndexChanged="Horario_Changed"
-                            onfocus="this.size=4;"
-                            onblur="this.size=1;"
-                            onchange="this.size=1; this.blur();">
-                        </asp:DropDownList>
-                    </div>
-                </div>
+                <label for="txtFecha"><asp:Label ID="lblFecha" runat="server" Text="Fecha:" /></label>
+                <asp:TextBox ID="txtFecha" runat="server" TextMode="Date" CssClass="form-input" ClientIDMode="Static"></asp:TextBox>
             </div>
-
 
             <div class="form-group">
                 <label for="ddlVeterinario"><asp:Label ID="lblVeterinario" runat="server" Text="Veterinario/a:" /></label>
-                <asp:DropDownList runat="server" CssClass="form-input" ID="ddlVeterinario"></asp:DropDownList>
+                <asp:DropDownList runat="server" CssClass="form-input" ID="ddlVeterinario" ClientIDMode="Static"></asp:DropDownList>
             </div>
+
+            <div class="form-group">
+                <label for="ddlHora"><asp:Label ID="lblHora" runat="server" Text="Hora:" /></label>
+                <asp:DropDownList ID="ddlHora" runat="server" CssClass="form-input ddl-cuatro-filas" ClientIDMode="Static"
+                    onfocus="this.size=4;"
+                    onblur="this.size=1;"
+                    onchange="this.size=1; this.blur();">
+                </asp:DropDownList>
+            </div>
+
+            <asp:Panel ID="pnlDisponibilidad" runat="server" CssClass="disponibilidad-panel" ClientIDMode="Static"
+                role="status" aria-live="polite">
+                <h3 class="disponibilidad-titulo"><asp:Label ID="lblDisponibilidadTitulo" runat="server" Text="Disponibilidad de turnos" /></h3>
+                <p class="disponibilidad-ayuda"><asp:Label ID="lblDisponibilidadAyuda" runat="server" Text="Elija mascota, fecha y veterinario para consultar los horarios libres." /></p>
+                <p class="disponibilidad-mensaje"></p>
+            </asp:Panel>
 
             <asp:Label runat="server" ID="lblError" ForeColor="Red" CssClass="lblError" />
             <asp:Label runat="server" ID="lblOk" CssClass="lblOk" />

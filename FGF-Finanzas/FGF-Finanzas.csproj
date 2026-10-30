@@ -105,6 +105,8 @@
     <Content Include="RegistrarMascotas.aspx" />
     <Content Include="Registrarse.aspx" />
     <Content Include="Scripts\scripts.js" />
+    <Content Include="Scripts\consulta-disponibilidad.js" />
+    <Content Include="WebServices\DisponibilidadService.asmx" />
     <None Include="Scripts\Actualizar-Traducciones-Consulta.ps1" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -142,6 +144,7 @@
       <DependentUpon>Cambiar-Contraseña.aspx</DependentUpon>
     </Compile>
     <Compile Include="Capas\BE\BEConsulta.cs" />
+    <Compile Include="Capas\BE\BEDisponibilidad.cs" />
     <Compile Include="Capas\BE\BEEvento.cs" />
     <Compile Include="Capas\BE\BEEtiqueta.cs" />
     <Compile Include="Capas\BE\BEIdioma.cs" />
@@ -151,6 +154,10 @@
     <Compile Include="Capas\BE\BECustomException.cs" />
     <Compile Include="Capas\BLL\BLLBackupRestore.cs" />
     <Compile Include="Capas\BLL\BLLConsulta.cs" />
+    <Compile Include="WebServices\DisponibilidadService.asmx.cs">
+      <DependentUpon>DisponibilidadService.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Capas\BLL\BLLEvento.cs" />
     <Compile Include="Capas\BE\BEDigitoVerificador.cs" />
     <Compile Include="Capas\BLL\BLLDigitoVerificador.cs" />
