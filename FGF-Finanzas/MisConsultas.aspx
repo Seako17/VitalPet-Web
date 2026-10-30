@@ -1,4 +1,4 @@
-<%@ Page Title="Mis consultas" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="MisConsultas.aspx.cs" Inherits="FGF_Finanzas.MisConsultas" ViewStateEncryptionMode="Always" %>
+﻿<%@ Page Title="Mis consultas" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="MisConsultas.aspx.cs" Inherits="FGF_Finanzas.MisConsultas" ViewStateEncryptionMode="Always" %>
 <asp:Content ID="Head" ContentPlaceHolderID="head" runat="server">
     <link href="Content/EventosStyles.css" rel="stylesheet" />
     <link href="Content/Consultas/MisConsultas.css" rel="stylesheet" />

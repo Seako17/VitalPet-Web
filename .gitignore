@@ -429,3 +429,4 @@ FodyWeavers.xsd
 *.msp
 
 AGENTS.md
+.verification/

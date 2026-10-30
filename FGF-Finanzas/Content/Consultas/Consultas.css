@@ -161,6 +161,8 @@ body {
 }
 
 .datos-consulta { width: 100%; }
+.disponibilidad-dia { display: block; margin-top: 10px; font-size: .92rem; color: #ffffff; }
+.hora-wrap select option:disabled, .datos-consulta select option:disabled { color: #757575; background-color: #eeeeee; }
 .tabla-pendientes { overflow-x: auto; margin-bottom: 20px; }
 .turnos-pendientes { width: 100%; border-collapse: collapse; background: white; }
 .turnos-pendientes th { background: #8c7d6b; color: white; }

@@ -40,6 +40,7 @@
                         </asp:DropDownList>
                     </div>
                 </div>
+                <asp:Label ID="lblDisponibilidadDia" runat="server" CssClass="disponibilidad-dia" role="status" aria-live="polite" Text="Elegí una fecha para ver los turnos disponibles." />
             </div>
 
 

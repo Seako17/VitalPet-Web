@@ -2,8 +2,10 @@ using System;
 using System.Web;
 using System.Web.UI.WebControls;
 using FGF_Finanzas.Capas.BE;
-using FGF_Finanzas.Capas.BLL;
 using FGF_Finanzas.Capas.Servicios;
+using FGF_Finanzas.Capas.Servicios.Cambio_Idioma;
+using FGF_Finanzas.Capas.BLL;
+using System.Data;
 
 namespace FGF_Finanzas
 {
@@ -45,11 +47,11 @@ namespace FGF_Finanzas
                 try
                 {
                     var consulta = consultas.ObtenerDetallePropio(Seleccionada.Value);
-                    if (consulta.estado != BEConsulta.Atendida) { Seleccionada = null; return; }
+                    if (consulta["estado"].ToString() != BEConsulta.Atendida) { Seleccionada = null; return; }
                     pnlDetalle.Visible = true;
-                    litResumen.Text = consulta.nombreMascota + " — " + consulta.fechaHora.ToString("dd/MM/yyyy HH:mm") + " — " + consulta.nombreVeterinario;
-                    litDiagnostico.Text = string.IsNullOrWhiteSpace(consulta.diagnostico)
-                        ? TextoTraducido("sinDiagnostico", "Sin diagnóstico registrado") : consulta.diagnostico;
+                    litResumen.Text = consulta["nombreMascota"] + " — " + ((DateTime)consulta["fechaHora"]).ToString("dd/MM/yyyy HH:mm") + " — " + consulta["nombreVeterinario"];
+                    litDiagnostico.Text = string.IsNullOrWhiteSpace(consulta["diagnostico"].ToString())
+                        ? TextoTraducido("sinDiagnostico", "Sin diagnóstico registrado") : consulta["diagnostico"].ToString();
                 }
                 catch (Exception ex) { Seleccionada = null; MostrarFallo(ex); }
             }
@@ -61,15 +63,16 @@ namespace FGF_Finanzas
         protected void ConsultaBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType != DataControlRowType.DataRow) return;
-            var consulta = (BEConsulta)e.Row.DataItem;
-            ((Literal)e.Row.FindControl("litEstado")).Text = BLLConsulta.PendienteDeRegistro(consulta, DateTime.Now)
+            var consulta = (DataRowView)e.Row.DataItem;
+            string estado = consulta["estado"].ToString();
+            ((Literal)e.Row.FindControl("litEstado")).Text = (bool)consulta["pendienteDeRegistro"]
                 ? TextoTraducido("estadoPendienteRegistro", "Pendiente de registro")
-                : TextoTraducido("estado" + consulta.estado, consulta.estado);
+                : TextoTraducido("estado" + estado, estado);
             var detalle = (LinkButton)e.Row.FindControl("btnDetalle");
-            detalle.Visible = consulta.estado == BEConsulta.Atendida;
+            detalle.Visible = estado == BEConsulta.Atendida;
             detalle.Text = TextoTraducido("btnDetalle", "Ver detalle");
             var cancelar = (LinkButton)e.Row.FindControl("btnCancelarConsulta");
-            cancelar.Visible = BLLConsulta.PuedeCancelar(consulta, DateTime.Now);
+            cancelar.Visible = (bool)consulta["puedeCancelar"];
             cancelar.Text = TextoTraducido("btnCancelarConsulta", "Cancelar cita");
             cancelar.OnClientClick = "return confirm('" + HttpUtility.JavaScriptStringEncode(TextoTraducido("confirmarCancelacion", "¿Querés cancelar esta cita?")) + "');";
         }
@@ -84,7 +87,7 @@ namespace FGF_Finanzas
                 if (e.CommandName == "Detalle")
                 {
                     var consulta = consultas.ObtenerDetallePropio(id);
-                    Seleccionada = consulta.estado == BEConsulta.Atendida ? (int?)id : null;
+                    Seleccionada = consulta["estado"].ToString() == BEConsulta.Atendida ? (int?)id : null;
                 }
                 else
                 {
@@ -101,7 +104,11 @@ namespace FGF_Finanzas
             LimpiarMensajeVisible(lblMensaje);
             string codigo = (ex as BECustomException)?.CodigoError ?? "errorCarga";
             lblMensaje.Text = HttpUtility.HtmlEncode(
-                TextoTraducido(codigo, "No se pudo completar la operación."));
+                TextoTraducido(codigo, codigo == "ERR_CONSULTA_SERVICIO"
+                    ? (IdiomaManager.Instancia.IdiomaActual.StartsWith("en", StringComparison.OrdinalIgnoreCase)
+                        ? "The appointment service is unavailable. Please try again shortly."
+                        : "El servicio de consultas no está disponible. Intentá nuevamente en unos momentos.")
+                    : "No se pudo completar la operación."));
         }
     }
 }

@@ -1,0 +1,15 @@
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
+    <OutputType>Exe</OutputType><TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
+    <AssemblyName>VitalPet.ConsultasService.Tests</AssemblyName><OutputPath>bin\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" /><Reference Include="System.Core" /><Reference Include="System.Data" />
+    <Reference Include="System.Configuration" /><Reference Include="System.Web" /><Reference Include="System.Web.Services" /><Reference Include="System.Xml" />
+    <ProjectReference Include="..\..\VitalPet.ConsultasService\VitalPet.ConsultasService.csproj"><Project>{F405445C-174B-42DF-B45C-C072EB3C1DB7}</Project><Name>VitalPet.ConsultasService</Name></ProjectReference>
+    <ProjectReference Include="..\..\FGF-Finanzas\FGF-Finanzas.csproj"><Project>{E188B7FE-CB0B-4B57-AD9C-6C3A242E307B}</Project><Name>FGF-Finanzas</Name></ProjectReference>
+    <Compile Include="Program.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -150,7 +150,9 @@
     <Compile Include="Capas\BE\BEUsuario.cs" />
     <Compile Include="Capas\BE\BECustomException.cs" />
     <Compile Include="Capas\BLL\BLLBackupRestore.cs" />
+    <Compile Include="ServiceReferences\Consultas\Reference.cs" />
     <Compile Include="Capas\BLL\BLLConsulta.cs" />
+    <Compile Include="Capas\Servicios\ServicioConsultas.cs" />
     <Compile Include="Capas\BLL\BLLEvento.cs" />
     <Compile Include="Capas\BE\BEDigitoVerificador.cs" />
     <Compile Include="Capas\BLL\BLLDigitoVerificador.cs" />
@@ -162,7 +164,6 @@
     <Compile Include="Capas\BLL\BLLPermiso.cs" />
     <Compile Include="Capas\DAL\DALAbstracta.cs" />
     <Compile Include="Capas\DAL\DALBackupRestore.cs" />
-    <Compile Include="Capas\DAL\DALConsulta.cs" />
     <Compile Include="Capas\DAL\DALEvento.cs" />
     <Compile Include="Capas\DAL\DALDigitoVerificador.cs" />
     <Compile Include="Capas\DAL\DALFamilia.cs" />
@@ -287,6 +288,9 @@
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
     <Folder Include="TempBackups\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
