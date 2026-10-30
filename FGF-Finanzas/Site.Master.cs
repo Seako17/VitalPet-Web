@@ -36,6 +36,7 @@ namespace FGF_Finanzas
             IdiomaManager.Instancia.Suscribir(this);
             Admin.Visible = false;
             Cliente.Visible = false;
+            Atencion.Visible = false;
             dropdownList.Visible = false;
             HttpCookie cookie = Request.Cookies["UserSessionFGF"];
             if (cookie != null)
@@ -89,6 +90,9 @@ namespace FGF_Finanzas
                         Cliente.Visible = true;
                         dropdownList.Visible = true;
                     }
+
+                    Atencion.Visible = SessionManager.Instancia.Usuario.Rol.TienePermiso(
+                        CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "ConsultaAtender"));
                 }
             }
             else

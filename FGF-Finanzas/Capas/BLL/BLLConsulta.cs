@@ -33,6 +33,11 @@ namespace FGF_Finanzas.Capas.BLL
             bllPermiso = new BLLPermiso();
         }
 
+        public DataTable ObtenerConsultas()
+        {
+            return dalConsulta.ObtenerConsultas();
+        }
+
         public List<string> ObtenerHorarios()
         {
             var horarios = new List<string>();

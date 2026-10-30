@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<preserve resultType="3" virtualPath="/C:/Program Files/Git/Backup-Restore.aspx" hash="16578dfa2" filehash="981d7f93c8b2201" flags="110000" assembly="App_Web_ba00jewd" type="ASP.backup_restore_aspx">
+    <filedeps>
+        <filedep name="/C:/Program Files/Git/Backup-Restore.aspx" />
+        <filedep name="/C:/Program Files/Git/Site.Master" />
+    </filedeps>
+</preserve>
