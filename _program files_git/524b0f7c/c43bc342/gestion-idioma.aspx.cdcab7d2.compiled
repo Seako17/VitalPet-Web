@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<preserve resultType="3" virtualPath="/C:/Program Files/Git/Gestion-Idioma.aspx" hash="16578dfa2" filehash="3a11db7a418596ff" flags="110000" assembly="App_Web_vx0fbrar" type="ASP.gestion_idioma_aspx">
+    <filedeps>
+        <filedep name="/C:/Program Files/Git/Gestion-Idioma.aspx" />
+        <filedep name="/C:/Program Files/Git/Site.Master" />
+    </filedeps>
+</preserve>

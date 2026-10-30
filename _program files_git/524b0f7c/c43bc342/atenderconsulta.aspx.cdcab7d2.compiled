@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<preserve resultType="3" virtualPath="/C:/Program Files/Git/AtenderConsulta.aspx" hash="16578dfa2" filehash="e1540748bdfcdead" flags="110000" assembly="App_Web_vx0fbrar" type="ASP.atenderconsulta_aspx">
+    <filedeps>
+        <filedep name="/C:/Program Files/Git/AtenderConsulta.aspx" />
+        <filedep name="/C:/Program Files/Git/Site.Master" />
+    </filedeps>
+</preserve>
