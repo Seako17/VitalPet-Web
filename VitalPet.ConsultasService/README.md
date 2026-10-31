@@ -23,7 +23,9 @@ La clase usada por `ServicioConsultas` está en `FGF_Finanzas.ServiceReferences.
 
 Por ejemplo, `ObtenerMascotas(dni, claveUsuario)` abre una conexión, comprueba el usuario y devuelve una tabla con sus mascotas. `Agendar(...)` comprueba el horario y el veterinario antes de insertar la consulta. `CancelarPropia(...)` actualiza el estado solo si el turno pertenece al cliente y todavía puede cancelarse.
 
-`claveUsuario` es el hash que ya tiene el usuario autenticado en la sesión de VitalPet. El servicio lo compara con el registro de Usuario mediante una consulta con parámetros; no se pide volver a ingresar la contraseña ni se conserva una contraseña en texto plano. Se mantienen las validaciones de permisos y propiedad de las mascotas. El hash se usa como credencial: no se registra ni se muestra en pantalla.
+`claveUsuario` es el hash que ya tiene el usuario autenticado en la sesión de VitalPet. El servicio lo compara con el registro de Usuario mediante una consulta con parámetros y comprueba que no esté bloqueado; no se pide volver a ingresar la contraseña ni se conserva una contraseña en texto plano. El hash se usa como credencial: no se registra ni se muestra en pantalla.
+
+Los permisos de acceso a pantallas se controlan en la aplicación. El web service no consulta permisos ni familias. Identifica a los veterinarios por el rol cuyo nombre es `Veterinario`, sin depender de un ID fijo ni del permiso `ConsultaAtender`. Conserva la validación de propiedad de las mascotas, consultas propias y disponibilidad al reservar o cancelar.
 
 ## Ejecutarlo
 

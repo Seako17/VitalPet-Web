@@ -51,10 +51,9 @@ namespace VitalPet.ConsultasService
                 ValidarUsuario(con, null, dni, claveUsuario);
                 ValidarMascota(con, null, dni, idMascota);
                 HashSet<string> veterinarios = new HashSet<string>();
-                DataTable usuarios = LeerTabla(con, null, "Usuarios", "SELECT dni, rol FROM Usuario WHERE bloqueado = 0");
+                DataTable usuarios = ObtenerVeterinarios(con, null);
                 foreach (DataRow usuario in usuarios.Rows)
-                    if (!usuario.IsNull("rol") && TienePermiso(con, null, (int)usuario["rol"], "ConsultaAtender"))
-                        veterinarios.Add(usuario["dni"].ToString());
+                    veterinarios.Add(usuario["dni"].ToString());
 
                 Dictionary<DateTime, HashSet<string>> ocupados = new Dictionary<DateTime, HashSet<string>>();
                 HashSet<DateTime> mascotaOcupada = new HashSet<DateTime>();
@@ -227,18 +226,16 @@ namespace VitalPet.ConsultasService
             }
         }
 
-        // Funciones privadas: no se publican como operaciones del web service.
+
         private void ValidarUsuario(SqlConnection con, SqlTransaction transaccion, string dni, string claveUsuario)
         {
-            // La web ya tiene el hash del usuario en su sesión. No se guarda la contraseña en texto plano.
             if (string.IsNullOrWhiteSpace(dni) || string.IsNullOrEmpty(claveUsuario)) throw Error("ERR_CONSULTA_ACCESO");
             if (Context != null && !Context.Request.IsLocal && !Context.Request.IsSecureConnection) throw Error("ERR_CONSULTA_ACCESO");
-            using (SqlCommand cmd = new SqlCommand("SELECT rol FROM Usuario WHERE dni = @Dni AND contraseña = @Clave AND bloqueado = 0", con, transaccion))
+            using (SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Usuario WHERE dni = @Dni AND contraseña = @Clave AND bloqueado = 0", con, transaccion))
             {
                 cmd.Parameters.AddWithValue("@Dni", dni);
                 cmd.Parameters.AddWithValue("@Clave", claveUsuario);
-                object rol = cmd.ExecuteScalar();
-                if (rol == null || rol == DBNull.Value || !TienePermiso(con, transaccion, Convert.ToInt32(rol), "MascotaRegistrar"))
+                if ((int)cmd.ExecuteScalar() == 0)
                     throw Error("ERR_CONSULTA_ACCESO");
             }
         }
@@ -255,30 +252,11 @@ namespace VitalPet.ConsultasService
             }
         }
 
-        private static bool TienePermiso(SqlConnection con, SqlTransaction transaccion, int rol, string permiso)
+        private static DataTable ObtenerVeterinarios(SqlConnection con, SqlTransaction transaccion)
         {
-            DataTable directos = LeerTabla(con, transaccion, "Permisos", @"SELECT p.id_permiso FROM RolPermiso rp
-                INNER JOIN Permiso p ON p.id_permiso = rp.id_permiso WHERE rp.id_rol = @Rol AND p.nombre = @Permiso",
-                new SqlParameter("@Rol", rol), new SqlParameter("@Permiso", permiso));
-            if (directos.Rows.Count > 0) return true;
-            DataTable familias = LeerTabla(con, transaccion, "Familias", "SELECT id_familia FROM RolFamilia WHERE id_rol = @Rol", new SqlParameter("@Rol", rol));
-            HashSet<int> visitadas = new HashSet<int>();
-            foreach (DataRow familia in familias.Rows)
-                if (FamiliaTienePermiso(con, transaccion, (int)familia["id_familia"], permiso, visitadas)) return true;
-            return false;
-        }
-
-        private static bool FamiliaTienePermiso(SqlConnection con, SqlTransaction transaccion, int familia, string permiso, HashSet<int> visitadas)
-        {
-            if (!visitadas.Add(familia)) return false;
-            DataTable permisos = LeerTabla(con, transaccion, "Permisos", @"SELECT p.id_permiso FROM FamiliaPermiso fp
-                INNER JOIN Permiso p ON p.id_permiso = fp.id_permiso WHERE fp.id_familia = @Familia AND p.nombre = @Permiso",
-                new SqlParameter("@Familia", familia), new SqlParameter("@Permiso", permiso));
-            if (permisos.Rows.Count > 0) return true;
-            DataTable hijas = LeerTabla(con, transaccion, "Familias", "SELECT id_familia_hija FROM FamiliaFamilia WHERE id_familia_padre = @Familia", new SqlParameter("@Familia", familia));
-            foreach (DataRow hija in hijas.Rows)
-                if (FamiliaTienePermiso(con, transaccion, (int)hija["id_familia_hija"], permiso, visitadas)) return true;
-            return false;
+            return LeerTabla(con, transaccion, "Veterinarios", @"SELECT u.dni, u.nombre, u.apellido
+                FROM Usuario u INNER JOIN Rol r ON r.id_rol = u.rol
+                WHERE u.bloqueado = 0 AND r.nombre = @Rol", new SqlParameter("@Rol", "Veterinario"));
         }
 
         private static void ValidarMascota(SqlConnection con, SqlTransaction transaccion, string dni, int idMascota)
@@ -302,7 +280,7 @@ namespace VitalPet.ConsultasService
                 if ((int)fila["idMascota"] == idMascota) throw Error("ERR_CONSULTA_MASCOTA_OCUPADA");
                 ocupados.Add(fila["DNI_Veterinario"].ToString());
             }
-            DataTable usuarios = LeerTabla(con, transaccion, "Usuarios", "SELECT dni, nombre, apellido, rol FROM Usuario WHERE bloqueado = 0");
+            DataTable usuarios = ObtenerVeterinarios(con, transaccion);
             DataTable disponibles = new DataTable("Veterinarios");
             disponibles.Columns.Add("Dni", typeof(string));
             disponibles.Columns.Add("NombreCompleto", typeof(string));
@@ -310,9 +288,8 @@ namespace VitalPet.ConsultasService
             foreach (DataRow usuario in usuarios.Rows)
             {
                 bool libre = !ocupados.Contains(usuario["dni"].ToString());
-                if (usuario.IsNull("rol") || (!libre && !incluirOcupados)) continue;
-                if (TienePermiso(con, transaccion, (int)usuario["rol"], "ConsultaAtender"))
-                    disponibles.Rows.Add(usuario["dni"], Cifrado.Descifrar(usuario["nombre"].ToString()) + " " + Cifrado.Descifrar(usuario["apellido"].ToString()), libre);
+                if (!libre && !incluirOcupados) continue;
+                disponibles.Rows.Add(usuario["dni"], Cifrado.Descifrar(usuario["nombre"].ToString()) + " " + Cifrado.Descifrar(usuario["apellido"].ToString()), libre);
             }
             if (disponibles.Rows.Count == 0) throw Error("ERR_CONSULTA_SIN_VETERINARIOS");
             return disponibles;
@@ -358,7 +335,6 @@ namespace VitalPet.ConsultasService
 
         private static void BloquearConsultas(SqlConnection con, SqlTransaction transaccion)
         {
-            // Evita que dos pedidos reserven el mismo cupo antes de confirmar la transacción.
             using (SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Consulta WITH (TABLOCKX, HOLDLOCK)", con, transaccion)) cmd.ExecuteScalar();
         }
 

@@ -8,7 +8,6 @@ using System.Web.Services.Protocols;
 
 namespace FGF_Finanzas.Capas.Servicios
 {
-    // Solo comunicación con el proyecto del web service.
     public class ServicioConsultas
     {
         private ConsultasService CrearServicio()
