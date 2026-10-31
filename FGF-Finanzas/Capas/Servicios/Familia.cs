@@ -22,7 +22,7 @@ namespace FGF_Finanzas.Capas.Servicios
         }
         public override bool TienePermiso(Permiso permiso)
         {
-            return Componentes.Any(x => x.TienePermiso(permiso));
+            return permiso != null && Componentes != null && Componentes.Any(x => x != null && x.TienePermiso(permiso));
         }
     }
 }

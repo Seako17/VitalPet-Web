@@ -32,6 +32,20 @@ namespace FGF_Finanzas
             AplicarTextoDePagina();
         }
 
+        public override void ActualizarIdioma(string codigoIdioma, System.Collections.Generic.IDictionary<string, string> traducciones)
+        {
+            base.ActualizarIdioma(codigoIdioma, traducciones);
+            AplicarTextoDePagina();
+            foreach (GridViewRow row in gvCarrito.Rows)
+            {
+                TextBox cantidad = row.FindControl("txtCantidad") as TextBox;
+                if (cantidad != null) cantidad.Attributes["aria-label"] = TextoTraducido("litCantidadAria", "Cantidad");
+                Literal estadoStock = row.FindControl("litEstadoStockCantidad") as Literal;
+                if (estadoStock != null && !string.IsNullOrEmpty(estadoStock.Text))
+                    estadoStock.Text = "<strong class=\"cart-stock-unavailable\">" + Server.HtmlEncode(TextoTraducido("litSinStock", "Sin stock")) + "</strong>";
+            }
+        }
+
         private void AplicarTextoDePagina()
         {
             Title = TextoTraducido("PageTitle", "Mi carrito");
@@ -40,12 +54,10 @@ namespace FGF_Finanzas
             litTitulo.Text = TextoTraducido("litTitulo", "Mi carrito");
             LitTotal.Text = TextoTraducido("LitTotal", "Total");
             litPagoTitulo.Text = TextoTraducido("litPagoTitulo", "Pago de demostración");
-            litPagoNotaTitulo.Text = TextoTraducido("litPagoNotaTitulo", "No se realizará ningún cargo");
             litNombreTitular.Text = TextoTraducido("litNombreTitular", "Nombre del titular");
             litNumeroTarjeta.Text = TextoTraducido("litNumeroTarjeta", "Número de tarjeta (16 dígitos, sin espacios)");
             litVencimiento.Text = TextoTraducido("litVencimiento", "Vencimiento (MM/AA)");
             litCvv.Text = TextoTraducido("litCvv", "Código de seguridad");
-            litNotaPago.Text = TextoTraducido("litNotaPago", "Los datos de la tarjeta solo se usan para validar esta compra de prueba y no se guardan.");
             btnComprar.Text = TextoTraducido("btnComprar", "Confirmar compra");
             txtTarjeta.Attributes["oninput"] = "this.value=this.value.replace(/[^0-9]/g,'').slice(0,16);";
             txtTarjeta.Attributes["autocomplete"] = "off";
@@ -73,6 +85,8 @@ namespace FGF_Finanzas
             }
             gvCarrito.DataSource = rows;
             gvCarrito.DataBind();
+            if (gvCarrito.HeaderRow != null)
+                gvCarrito.HeaderRow.TableSection = TableRowSection.TableHeader;
             decimal total = 0;
             foreach (BECarritoItem row in rows) total += row.Subtotal;
             lblTotal.Text = total.ToString("N2", CultureInfo.GetCultureInfo("es-AR"));
@@ -131,7 +145,7 @@ namespace FGF_Finanzas
         {
             TextBox txtCantidad = sender as TextBox;
             GridViewRow row = txtCantidad == null ? null : txtCantidad.NamingContainer as GridViewRow;
-            int id, cantidad;
+            int id;
             if (row == null || !int.TryParse(Convert.ToString(gvCarrito.DataKeys[row.RowIndex].Value), out id)) return;
 
             try
@@ -139,19 +153,21 @@ namespace FGF_Finanzas
                 BEProducto producto = bllProducto.ObtenerPorId(id);
                 if (producto == null || producto.Stock <= 0)
                 {
-                    MostrarError("msgProductoSinStockCarrito", "El producto no tiene stock. Podés eliminarlo del carrito.");
+                    txtCantidad.Text = "";
+                    MostrarError("msgProductoSinStockCarrito", "Sin stock");
                 }
                 else
                 {
                     int maximo = Math.Min(producto.Stock, 99);
-                    cantidad = int.TryParse(txtCantidad.Text, out cantidad) ? cantidad : 1;
-                    cantidad = Math.Max(1, Math.Min(cantidad, maximo));
-                    bllProducto.ActualizarCantidadCarrito(SessionManager.Instancia.Usuario.DNI, id, cantidad);
+                    int cantidadIngresada;
+                    int cantidadNueva = int.TryParse(txtCantidad.Text, out cantidadIngresada) ? cantidadIngresada : 1;
+                    cantidadNueva = Math.Max(1, Math.Min(cantidadNueva, maximo));
+                    bllProducto.ActualizarCantidadCarrito(SessionManager.Instancia.Usuario.DNI, id, cantidadNueva);
                 }
             }
             catch (BECustomException ex) when (ex.CodigoError == "ERR_PRODUCTO_SIN_STOCK")
             {
-                MostrarError("msgProductoSinStockCarrito", "El producto no tiene stock suficiente.");
+                MostrarError("msgProductoSinStockCarrito", "Sin stock");
             }
             catch
             {

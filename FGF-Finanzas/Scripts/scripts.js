@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
         mobileMenu.addEventListener("click", function () {
             navMenu.classList.toggle("active");
             mobileMenu.classList.toggle("active");
+            mobileMenu.setAttribute("aria-expanded", navMenu.classList.contains("active") ? "true" : "false");
         });
     }
 });
