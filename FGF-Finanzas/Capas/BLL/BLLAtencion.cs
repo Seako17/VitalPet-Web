@@ -38,8 +38,7 @@ namespace FGF_Finanzas.Capas.BLL
             return new BEAtencion
             {
                 id_atencion = (int)fila["id_atencion"], id_consulta = (int)fila["id_consulta"],
-                diagnostico = fila["diagnostico"].ToString(), observaciones = fila["observaciones"].ToString(),
-                atendido = (bool)fila["atendido"]
+                diagnostico = fila["diagnostico"].ToString(), observaciones = fila["observaciones"].ToString()
             };
         }
 
@@ -95,7 +94,6 @@ namespace FGF_Finanzas.Capas.BLL
             if (!bLLDigitoVerificador.ValidarIntegridadDelSistema())
                 throw new BECustomException("ERR_CONSULTA_MANTENIMIENTO");
             atencion.id_atencion = servicio.GuardarAtencion(usuario, atencion);
-            atencion.atendido = true;
             bLLDigitoVerificador.InicializarTablaCompleta("Atencion");
             bLLDigitoVerificador.InicializarTablaCompleta("Consulta");
         }

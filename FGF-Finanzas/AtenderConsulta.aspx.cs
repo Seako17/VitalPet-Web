@@ -132,8 +132,7 @@ namespace FGF_Finanzas
                     id_atencion = idAtencion,
                     id_consulta = IdConsulta,
                     diagnostico = txtDiagnostico.Text,
-                    observaciones = txtObservaciones.Text,
-                    atendido = true
+                    observaciones = txtObservaciones.Text
                 };
 
                 if (idAtencion > 0)

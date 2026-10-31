@@ -32,7 +32,7 @@ Los permisos de acceso a pantallas se controlan en la aplicación. El web servic
 1. Abrir `FGF-Finanzas.sln` en Visual Studio.
 2. En **Propiedades de la solución → Proyectos de inicio → Varios proyectos de inicio**, elegir **Iniciar** para `FGF-Finanzas` y `VitalPet.ConsultasService`.
 3. Revisar que `DBConnection` de ambos proyectos apunte a la base local `FGF-BDD`.
-   La base debe incluir `Atencion`: `id_atencion` (int identity, clave primaria), `id_consulta` (int, referencia a Consulta), `diagnostico` y `observaciones` (nvarchar(max), cifrados), `atendido` (bit) y `DV_Horizontal` (varchar(max)). Registrar también la integridad de esa tabla; al crearse vacía su cantidad es 0 y su dígito vertical es `0`.
+   La base debe incluir `Atencion`: `id_atencion` (int identity, clave primaria), `id_consulta` (int, referencia a Consulta), `diagnostico` y `observaciones` (nvarchar(max), cifrados) y `DV_Horizontal` (varchar(max)). Registrar también la integridad de esa tabla; al crearse vacía su cantidad es 0 y su dígito vertical es `0`.
    Si existe `CK_Consulta_Estado`, debe admitir los valores cifrados de Agendada, Atendida, Cancelada y NoSePresento. Una regla anterior que permita solo tres estados impedirá guardar ausencias, aunque el servicio esté disponible.
 4. Iniciar y usar **Agendar cita** o **Mis consultas** con un usuario cliente.
 
@@ -58,7 +58,7 @@ El resumen inferior usa texto blanco. ObtenerVeterinariosDelHorario devuelve los
 
 ## Integración con atención veterinaria
 
-`BLLAtencion` obtiene las consultas mediante `BLLConsulta.ObtenerConsultas` → `ServicioConsultas.ObtenerConsultasVeterinario` → SOAP. El servicio devuelve únicamente las consultas asignadas al DNI autenticado, excluyendo canceladas. La aplicación conserva el control de acceso a las pantallas. El listado pendiente también excluye consultas con estado Atendida y registros ya atendidos en Atencion.
+`BLLAtencion` obtiene las consultas mediante `BLLConsulta.ObtenerConsultas` → `ServicioConsultas.ObtenerConsultasVeterinario` → SOAP. El servicio devuelve únicamente las consultas asignadas al DNI autenticado, excluyendo canceladas. La aplicación conserva el control de acceso a las pantallas. Los listados se filtran únicamente por Consulta.estado.
 
 `BLLAtencion` usa `ServicioConsultas` para leer y guardar la atención mediante SOAP. `GuardarAtencion` inserta o corrige diagnóstico y observaciones cifrados en Atencion y cambia Consulta.estado a Atendida dentro de una misma transacción. Comprueba usuario, pertenencia al veterinario, consulta no cancelada y correspondencia del identificador de atención. No usa permisos de pantallas, BLL ni DAL dentro del servicio. Se retiró DALAtencion.
 
@@ -66,7 +66,7 @@ Se permite atender antes del horario del turno. En Atenciones se puede elegir Pe
 
 Antes de guardar, BLLAtencion verifica integridad; después del éxito llama a InicializarTablaCompleta para Atencion y Consulta. El servicio no calcula dígitos.
 
-Mis consultas obtiene el diagnóstico de Atencion, por lo que refleja las correcciones. Para datos anteriores conserva la lectura de Consulta.diagnostico cuando no existe una atención registrada y reconoce como Atendida una consulta Agendada que ya tiene Atencion.atendido = true. No se migraron registros ni se eliminaron columnas existentes. Las consultas atendidas dejan de ofrecer cancelación.
+Mis consultas obtiene el diagnóstico de Atencion, por lo que refleja las correcciones. Para datos anteriores conserva la lectura de Consulta.diagnostico cuando no existe una atención registrada. Consulta.estado es la única fuente del estado; Atencion conserva el diagnóstico y las observaciones. Se retiró el campo redundante atendido, conservando los registros y actualizando la integridad. Las consultas atendidas dejan de ofrecer cancelación.
 
 En Atenciones, Ver atención abre la consulta atendida con diagnóstico y observaciones de solo lectura, sin botón de guardado. Corregir atención mantiene la edición separada.
 
