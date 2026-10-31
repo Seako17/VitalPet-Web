@@ -6,12 +6,12 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     
     <div class="barra-titulo">
-        <h2>Cambiar contraseña</h2>
+        <h2><asp:Label ID="lblTituloCambio" runat="server" Text="Cambiar contraseña" /></h2>
     </div>
     <div id="contenedor-alertas"></div>
     <div class="main-layout">
         <div class="cambiar-contraseña__container">
-            <h3>Complete los datos:</h3>
+            <h3><asp:Label ID="lblSubtituloDatos" runat="server" Text="Complete los datos:" /></h3>
             
             <div class="control-form">
                 <div class="password-wrapper">
