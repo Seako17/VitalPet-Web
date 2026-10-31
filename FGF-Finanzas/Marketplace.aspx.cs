@@ -55,17 +55,22 @@ namespace FGF_Finanzas
             var cantidad = (TextBox)e.Item.FindControl("txtCantidad");
             var disponible = (Literal)e.Item.FindControl("litDisponibilidad");
             int stock = Convert.ToInt32(DataBinder.Eval(e.Item.DataItem, "Stock"));
-            if (btn != null) btn.Text = TextoTraducido("litAgregar", "Agregar");
+            if (btn != null)
+            {
+                btn.Text = TextoTraducido("litAgregar", "Agregar");
+                btn.Visible = stock > 0;
+            }
             if (cantidad != null)
             {
                 cantidad.Attributes["aria-label"] = TextoTraducido("litCantidadAria", "Cantidad");
                 cantidad.Attributes["max"] = Math.Max(1, stock).ToString();
                 cantidad.Enabled = stock > 0;
+                cantidad.Visible = stock > 0;
             }
             if (disponible != null)
             {
                 string texto = stock == 0 ? TextoTraducido("litSinStock", "Sin stock") :
-                    stock <= 5 ? string.Format(TextoTraducido("litUltimasUnidades", "Últimas {0} unidades"), stock) : TextoTraducido("litDisponible", "Disponible");
+                    string.Format(TextoTraducido("litQuedanUnidades", "Unidades disponibles: {0}"), stock);
                 disponible.Text = Server.HtmlEncode(texto);
             }
         }

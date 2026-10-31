@@ -2135,6 +2135,7 @@ INSERT INTO @Etiquetas(Formulario,ControlId,TextoEs,TextoEn) VALUES
 (N'Marketplace.aspx',N'litDisponible',N'Disponible',N'In stock'),
 (N'Marketplace.aspx',N'litSinStock',N'Sin stock',N'Out of stock'),
 (N'Marketplace.aspx',N'litUltimasUnidades',N'Últimas {0} unidades',N'Only {0} left'),
+(N'Marketplace.aspx',N'litQuedanUnidades',N'Unidades disponibles: {0}',N'Units available: {0}'),
 (N'Marketplace.aspx',N'msgStockInsuficiente',N'No se puede agregar: no hay más unidades disponibles de este producto.',N'Cannot add this item: no more units are available.'),
 (N'Marketplace.aspx',N'litVacioTitulo',N'Pronto habrá productos',N'Products coming soon'),
 (N'Marketplace.aspx',N'litVacioDescripcion',N'Estamos preparando nuestra tienda.',N'We are getting our store ready.'),
@@ -2169,12 +2170,14 @@ INSERT INTO @Etiquetas(Formulario,ControlId,TextoEs,TextoEn) VALUES
 (N'Carrito.aspx',N'msgCantidadActualizada',N'Se actualizó la cantidad del producto.',N'Product quantity updated.'),
 (N'Carrito.aspx',N'msgCantidadInvalidaCarrito',N'Ingresá una cantidad entre 1 y 99.',N'Enter a quantity between 1 and 99.'),
 (N'Carrito.aspx',N'msgStockInsuficiente',N'La cantidad supera el stock disponible.',N'Quantity exceeds available stock.'),
+(N'Carrito.aspx',N'msgProductoSinStockCarrito',N'Sin stock. Eliminá este producto para continuar.',N'Out of stock. Remove this item to continue.'),
+(N'Carrito.aspx',N'msgCheckoutSinStock',N'No hay productos disponibles para comprar. Eliminá los productos sin stock del carrito.',N'No products are available to purchase. Remove the out-of-stock items from your cart.'),
 (N'Carrito.aspx',N'msgErrorTitular',N'Revisá el nombre del titular.',N'Check the cardholder name.'),
 (N'Carrito.aspx',N'msgErrorTarjeta',N'Ingresá los 16 dígitos de la tarjeta, sin espacios.',N'Enter the 16 card digits without spaces.'),
 (N'Carrito.aspx',N'msgErrorCvv',N'El código de seguridad debe tener 3 o 4 dígitos.',N'The security code must have 3 or 4 digits.'),
 (N'Carrito.aspx',N'msgErrorFormatoFecha',N'Usá el formato MM/AA para el vencimiento.',N'Use MM/YY for the expiration date.'),
 (N'Carrito.aspx',N'msgTarjetaVencida',N'La tarjeta está vencida.',N'The card has expired.'),
-(N'Carrito.aspx',N'msgCompraExitosa',N'Pedido confirmado',N'Order confirmed'),
+(N'Carrito.aspx',N'msgCompraExitosa',N'Pedido realizado correctamente',N'Order placed successfully'),
 (N'Carrito.aspx',N'msgErrorCompra',N'No se pudo completar la compra. Revisá el stock disponible e intentá nuevamente.',N'The purchase could not be completed. Check stock and try again.'),
 (N'Gestion-Productos.aspx',N'litPanelTitulo',N'Panel de Administrador',N'Administrator panel'),
 (N'Gestion-Productos.aspx',N'litAdministracion',N'Administración',N'Administration'),
@@ -2238,7 +2241,7 @@ FROM dbo.Traduccion tr
 JOIN dbo.Etiqueta e ON e.IdEtiqueta=tr.IdEtiqueta
 JOIN @Etiquetas x ON x.Formulario=e.Formulario AND x.ControlId=e.ControlId
 JOIN dbo.Idioma i ON i.IdIdioma=tr.IdIdioma
-WHERE (x.Formulario=N'Gestion-Productos.aspx' AND x.ControlId IN(N'litImagen',N'msgValidarTamanoImagen',N'litMenuUsuarios',N'litMenuBitacora',N'litMenuPerfiles',N'litMenuFamilias',N'litMenuBackup',N'litMenuIdiomas',N'litModoEdicion')) OR (x.Formulario=N'Carrito.aspx' AND x.ControlId IN(N'litNumeroTarjeta',N'valTarjeta',N'msgErrorTarjeta',N'btnActualizarCantidad',N'litPrecioUnitario',N'msgCantidadActualizada',N'msgCantidadInvalidaCarrito',N'msgStockInsuficiente'));
+WHERE (x.Formulario=N'Gestion-Productos.aspx' AND x.ControlId IN(N'litImagen',N'msgValidarTamanoImagen',N'litMenuUsuarios',N'litMenuBitacora',N'litMenuPerfiles',N'litMenuFamilias',N'litMenuBackup',N'litMenuIdiomas',N'litModoEdicion')) OR (x.Formulario=N'Carrito.aspx' AND x.ControlId IN(N'litNumeroTarjeta',N'valTarjeta',N'msgErrorTarjeta',N'btnActualizarCantidad',N'litPrecioUnitario',N'msgCantidadActualizada',N'msgCantidadInvalidaCarrito',N'msgStockInsuficiente',N'msgProductoSinStockCarrito',N'msgCheckoutSinStock',N'msgCompraExitosa'));
 
 COMMIT TRANSACTION;
 GO
