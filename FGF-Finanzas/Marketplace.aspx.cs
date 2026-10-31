@@ -54,12 +54,19 @@ namespace FGF_Finanzas
             var btn = (LinkButton)e.Item.FindControl("btnAgregar");
             var cantidad = (TextBox)e.Item.FindControl("txtCantidad");
             var disponible = (Literal)e.Item.FindControl("litDisponibilidad");
+            int stock = Convert.ToInt32(DataBinder.Eval(e.Item.DataItem, "Stock"));
             if (btn != null) btn.Text = TextoTraducido("litAgregar", "Agregar");
-            if (cantidad != null) cantidad.Attributes["aria-label"] = TextoTraducido("litCantidadAria", "Cantidad");
+            if (cantidad != null)
+            {
+                cantidad.Attributes["aria-label"] = TextoTraducido("litCantidadAria", "Cantidad");
+                cantidad.Attributes["max"] = Math.Max(1, stock).ToString();
+                cantidad.Enabled = stock > 0;
+            }
             if (disponible != null)
             {
-                bool tieneStock = Convert.ToInt32(DataBinder.Eval(e.Item.DataItem, "Stock")) > 0;
-                disponible.Text = Server.HtmlEncode(TextoTraducido(tieneStock ? "litDisponible" : "litSinStock", tieneStock ? "Disponible" : "Sin stock"));
+                string texto = stock == 0 ? TextoTraducido("litSinStock", "Sin stock") :
+                    stock <= 5 ? string.Format(TextoTraducido("litUltimasUnidades", "Últimas {0} unidades"), stock) : TextoTraducido("litDisponible", "Disponible");
+                disponible.Text = Server.HtmlEncode(texto);
             }
         }
 
@@ -87,6 +94,12 @@ namespace FGF_Finanzas
                 TextBox cantidadBox = (TextBox)e.Item.FindControl("txtCantidad");
                 if (!int.TryParse(cantidadBox.Text, out cantidad) || cantidad < 1 || cantidad > 99)
                     throw new InvalidOperationException(TextoTraducido("msgCantidadInvalida", "Elegí una cantidad entre 1 y 99."));
+                int stockDisponible = bllProducto.ObtenerPorId(id)?.Stock ?? 0;
+                int enCarrito = 0;
+                foreach (BECarritoItem item in bllProducto.ObtenerCarrito(SessionManager.Instancia.Usuario.DNI))
+                    if (item.IdProducto == id) { enCarrito = item.Cantidad; break; }
+                if (cantidad > stockDisponible - enCarrito)
+                    throw new BECustomException("ERR_PRODUCTO_SIN_STOCK");
                 bllProducto.AgregarAlCarrito(SessionManager.Instancia.Usuario.DNI, id, cantidad);
                 lblEstadoOperacion.Text = TextoTraducido("lblMensaje", "Producto agregado al carrito.");
                 lblEstadoOperacion.CssClass = "market-message success";
@@ -98,7 +111,7 @@ namespace FGF_Finanzas
             }
             catch (BECustomException ex)
             {
-                lblEstadoOperacion.Text = Server.HtmlEncode(TextoTraducido(ex.CodigoError, "No se pudo agregar el producto al carrito."));
+                lblEstadoOperacion.Text = Server.HtmlEncode(TextoTraducido(ex.CodigoError == "ERR_PRODUCTO_SIN_STOCK" ? "msgStockInsuficiente" : ex.CodigoError, "No hay más unidades disponibles de este producto."));
                 lblEstadoOperacion.CssClass = "market-message error";
             }
             catch
