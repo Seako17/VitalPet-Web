@@ -36,6 +36,8 @@
 
                     <li id="Atencion" runat="server">
                         <asp:HyperLink runat="server" ID="lnkAtenderConsultas" NavigateUrl="Atenciones.aspx" Text="Atender consultas" /></li>
+                    <li id="Informes" runat="server">
+                        <asp:HyperLink runat="server" ID="lnkInformes" NavigateUrl="~/Informe-Consultas.aspx" Text="Informes" /></li>
 
                     <li id="dropdownList" runat="server" class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-btn" onclick="toggleDropdown(event)"><asp:Label ID="lblMenuConsultas" runat="server" Text="Consultas" /></a>

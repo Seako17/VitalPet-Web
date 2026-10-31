@@ -37,6 +37,7 @@ namespace FGF_Finanzas
             Admin.Visible = false;
             Cliente.Visible = false;
             Atencion.Visible = false;
+            Informes.Visible = false;
             dropdownList.Visible = false;
             HttpCookie cookie = Request.Cookies["UserSessionFGF"];
             if (cookie != null)
@@ -93,6 +94,8 @@ namespace FGF_Finanzas
 
                     Atencion.Visible = SessionManager.Instancia.Usuario.Rol.TienePermiso(
                         CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "ConsultaAtender"));
+                    var permisoInforme = CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "InformeVer");
+                    Informes.Visible = permisoInforme != null && SessionManager.Instancia.Usuario.Rol.TienePermiso(permisoInforme);
                 }
             }
             else

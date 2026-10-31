@@ -43,6 +43,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="itextsharp">
+      <HintPath>..\packages\itextsharp.5.5.13.6\lib\net461\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="BouncyCastle.Cryptography">
+      <HintPath>..\packages\BouncyCastle.Cryptography.2.6.2\lib\net461\BouncyCastle.Cryptography.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
@@ -68,6 +74,8 @@
   <ItemGroup>
     <Content Include="Backup-Restore.aspx" />
     <Content Include="Administracion.aspx" />
+    <Content Include="Informe-Consultas.aspx" />
+    <Content Include="Content\InformeConsultas.css" />
     <Content Include="Atenciones.aspx" />
     <Content Include="AtenderConsulta.aspx" />
     <Content Include="Content\Administracion.css" />
@@ -158,6 +166,17 @@
       <DependentUpon>Cambiar-Contraseña.aspx</DependentUpon>
     </Compile>
     <Compile Include="Capas\BE\Atencion.cs" />
+    <Compile Include="Capas\BE\BEInformeConsultas.cs" />
+    <Compile Include="Capas\BLL\BLLInformeConsultas.cs" />
+    <Compile Include="Capas\DAL\DALInformeConsultas.cs" />
+    <Compile Include="Capas\Servicios\ServicioInformePdf.cs" />
+    <Compile Include="Informe-Consultas.aspx.cs">
+      <DependentUpon>Informe-Consultas.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Informe-Consultas.aspx.designer.cs">
+      <DependentUpon>Informe-Consultas.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Capas\BE\BEConsulta.cs" />
     <Compile Include="Capas\BE\BEEvento.cs" />
     <Compile Include="Capas\BE\BEEtiqueta.cs" />

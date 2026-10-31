@@ -86,7 +86,7 @@ namespace FGF_Finanzas
         {
             try
             {
-                List<string> tablasAControlar = new List<string> { "Usuario", "Mascota", "Idioma", "Etiqueta", "Traduccion", "Consulta", "Atencion" };
+                List<string> tablasAControlar = new List<string> { "Usuario", "Mascota", "Idioma", "Etiqueta", "Traduccion", "Consulta", "Atencion", "InformeConsultas", "InformeConsultasDetalle", "InformeConsultasMes" };
 
                 foreach (string tabla in tablasAControlar)
                 {

@@ -1,0 +1,9 @@
+.informe-consultas { max-width: 1160px; margin: 25px auto; }
+.informe-consultas .eventos__container { margin-bottom: 22px; padding: 22px; color: #fff; }
+.filtros-informe { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin: 15px 0; }
+.filtros-informe select, .filtros-informe input { padding: 7px; border: 1px solid #aaa; border-radius: 4px; max-width: 100%; }
+.filtros-informe select, .filtros-informe input[type=number] { color: #263442; background-color: #fff; }
+.filtros-informe input[type=number] { width: 90px; }
+.btn-informe { background: #80c3da; color: #102c4d; border: 0; border-radius: 4px; padding: 8px 14px; cursor: pointer; display: inline-block; text-decoration: none; }
+.btn-informe:disabled { background: #ddd; color: #777; cursor: default; }
+@media(max-width: 700px) { .informe-consultas { margin: 15px 8px; } .informe-consultas .eventos__container { padding: 14px; } }

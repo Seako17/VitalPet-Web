@@ -94,6 +94,8 @@ namespace FGF_Finanzas
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl Atencion;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Informes;
+        protected global::System.Web.UI.WebControls.HyperLink lnkInformes;
 
         /// <summary>
         /// Control lnkAtenderConsultas.
