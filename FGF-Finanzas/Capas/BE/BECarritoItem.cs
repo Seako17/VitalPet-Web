@@ -7,7 +7,9 @@ namespace FGF_Finanzas.Capas.BE
         public string Descripcion { get; set; }
         public decimal Precio { get; set; }
         public int Cantidad { get; set; }
+        public int Stock { get; set; }
         public string Imagen { get; set; }
-        public decimal Subtotal { get { return Precio * Cantidad; } }
+        public bool SinStockSuficiente { get { return Stock < Cantidad; } }
+        public decimal Subtotal { get { return SinStockSuficiente ? 0 : Precio * Cantidad; } }
     }
 }
