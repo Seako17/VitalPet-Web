@@ -392,14 +392,14 @@ namespace FGF_Finanzas
             }
 
             var idsDuplicados = dt.AsEnumerable()
-                .GroupBy(row => row["DNI"].ToString())
-                .Where(g => g.Count() > 1)
+                .GroupBy(row => row["DNI"].ToString().Trim(), StringComparer.OrdinalIgnoreCase)
+                .Where(g => !string.IsNullOrWhiteSpace(g.Key) && g.Count() > 1)
                 .Select(g => g.Key)
                 .ToList();
 
             if (idsDuplicados.Any())
             {
-                throw new Exception("El XML contiene IDs duplicados.");
+                throw new Exception("El XML contiene DNI duplicados: " + string.Join(", ", idsDuplicados) + ".");
             }
 
         }
@@ -450,6 +450,7 @@ namespace FGF_Finanzas
                 bllUsuario.ImportarUsuarios(dt);
 
                 MostrarAlerta("El archivo se importó correctamente. Registros: " + dt.Rows.Count);
+                CargarGrillaUsuarios();
             }
             catch (Exception ex)
             {

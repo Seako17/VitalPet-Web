@@ -84,10 +84,11 @@ function abrirSelectorXML() {
 
 document.addEventListener('DOMContentLoaded', function () {
     const archivo = document.getElementById('fuUsuarios');
+    const confirmar = document.getElementById('btnProcesarImportacion');
+
+    if (!archivo || !confirmar) return;
 
     archivo.addEventListener('change', function () {
-        if (archivo.files.length > 0) {
-            document.getElementById('<%= btnProcesarImportacion.ClientID %>').click();
-        }
+        confirmar.style.display = archivo.files.length > 0 ? 'inline-block' : 'none';
     });
 });

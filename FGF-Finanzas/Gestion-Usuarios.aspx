@@ -116,7 +116,7 @@
                             OnClientClick="abrirSelectorXML(); return false;" />
 
                         <asp:Button ID="btnProcesarImportacion" runat="server" Text="Confirmar importación" CssClass="btn"
-                            OnClick="btnProcesarImportacion_Click" Style="display: none;" />
+                            OnClick="btnProcesarImportacion_Click" Style="display: none;" ClientIDMode="Static" />
 
                         <asp:FileUpload ID="fuUsuarios" runat="server" accept=".xml" Style="display: none;" ClientIDMode="Static" />
                     </aside>
