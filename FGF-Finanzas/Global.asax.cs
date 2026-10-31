@@ -18,14 +18,18 @@ namespace FGF_Finanzas
         {
             HttpCookie authCookie = Context.Request.Cookies[FormsAuthentication.FormsCookieName];
 
-            if (authCookie != null)
-            {
-                FormsAuthenticationTicket authTicket = FormsAuthentication.Decrypt(authCookie.Value);
-                string[] roles = new string[] { authTicket.UserData };
-                System.Security.Principal.GenericIdentity id = new System.Security.Principal.GenericIdentity(authTicket.Name, "Forms");
-                System.Security.Principal.GenericPrincipal principal = new System.Security.Principal.GenericPrincipal(id, roles);
-                Context.User = principal;
-            }
+            if (authCookie == null)
+                return;
+
+            FormsAuthenticationTicket authTicket = FormsAuthentication.Decrypt(authCookie.Value);
+
+            if (authTicket == null)
+                return;
+
+            var identity = new System.Security.Principal.GenericIdentity(authTicket.Name,"Forms");
+
+            var principal = new System.Security.Principal.GenericPrincipal(identity,new string[0]);
+            Context.User = principal;
         }
     }
 }

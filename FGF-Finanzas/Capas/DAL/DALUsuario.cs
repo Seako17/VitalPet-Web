@@ -30,22 +30,31 @@ namespace FGF_Finanzas.Capas.DAL
 
         public void AgregarUsuario(BEUsuario usuario)
         {
-            DataTable dt = ObtenerUsuarios();
-            dt.Rows.Add(new object[] {
-                usuario.DNI,
-                Encriptacion.EncriptarAES(usuario.Nombre),
-                Encriptacion.EncriptarAES(usuario.Apellido),
-                Encriptacion.EncriptarAES(usuario.Usuario),
-                usuario.Contraseña,
-                usuario.Intento,
-                usuario.Bloqueado,
-                Encriptacion.EncriptarAES(usuario.Mail),
-                usuario.Rol
-            });
+            using (SqlConnection con = new SqlConnection(_conexion))
+            {
+                string query = @"INSERT INTO Usuario
+                         (dni, nombre, apellido, usuario, contraseña, intento, bloqueado, mail, rol, idioma)
+                         VALUES
+                         (@Dni, @Nombre, @Apellido, @Usuario, @Contrasena, @Intento, @Bloqueado, @Mail, @Rol, @Idioma)";
 
-            SqlDataAdapter adapter = new SqlDataAdapter("Select * from Usuario", _conexion);
-            SqlCommandBuilder cb = new SqlCommandBuilder(adapter);
-            adapter.Update(dt);
+                SqlCommand cmd = new SqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@Dni", usuario.DNI);
+                cmd.Parameters.AddWithValue("@Nombre", Encriptacion.EncriptarAES(usuario.Nombre));
+                cmd.Parameters.AddWithValue("@Apellido", Encriptacion.EncriptarAES(usuario.Apellido));
+                cmd.Parameters.AddWithValue("@Usuario", Encriptacion.EncriptarAES(usuario.Usuario));
+                cmd.Parameters.AddWithValue("@Contrasena", usuario.Contraseña);
+                cmd.Parameters.AddWithValue("@Intento", usuario.Intento);
+                cmd.Parameters.AddWithValue("@Bloqueado", usuario.Bloqueado);
+                cmd.Parameters.AddWithValue("@Mail", Encriptacion.EncriptarAES(usuario.Mail));
+                cmd.Parameters.AddWithValue("@Rol", usuario.Rol.Id);
+                cmd.Parameters.AddWithValue(
+                    "@Idioma",
+                    string.IsNullOrWhiteSpace(usuario.Idioma) ? (object)DBNull.Value : usuario.Idioma
+                );
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
         }
 
         public void Actualizar(BEUsuario usuario)
@@ -65,7 +74,7 @@ namespace FGF_Finanzas.Capas.DAL
                 cmd.Parameters.AddWithValue("@Contraseña", usuario.Contraseña);
                 cmd.Parameters.AddWithValue("@Intento", usuario.Intento);
                 cmd.Parameters.AddWithValue("@Bloqueado", usuario.Bloqueado);
-                cmd.Parameters.AddWithValue("@Rol", usuario.Rol);
+                cmd.Parameters.AddWithValue("@Rol", usuario.Rol.Id);
                 cmd.Parameters.AddWithValue("@Nombre", Encriptacion.EncriptarAES(usuario.Nombre));
                 cmd.Parameters.AddWithValue("@Apellido", Encriptacion.EncriptarAES(usuario.Apellido));
                 cmd.Parameters.AddWithValue("@Usuario", Encriptacion.EncriptarAES(usuario.Usuario));
@@ -75,7 +84,7 @@ namespace FGF_Finanzas.Capas.DAL
             }
             catch (Exception e)
             {
-                throw new Exception("Error al actualizar usuario", e);
+                throw new BECustomException("ERR_ACTUALIZAR_USUARIO", e);
             }
             finally
             {
@@ -106,7 +115,7 @@ namespace FGF_Finanzas.Capas.DAL
                     usuarioEncontrado.Contraseña = reader["contraseña"].ToString();
                     usuarioEncontrado.Intento = Convert.ToInt32(reader["intento"]);
                     usuarioEncontrado.Bloqueado = Convert.ToBoolean(reader["bloqueado"]);
-                    usuarioEncontrado.Rol = reader["rol"].ToString();
+                    usuarioEncontrado.Rol = new Rol(int.Parse(reader["rol"].ToString()));
                     usuarioEncontrado.Nombre = Encriptacion.DesencriptarAES(reader["nombre"].ToString());
                     usuarioEncontrado.Apellido = Encriptacion.DesencriptarAES(reader["apellido"].ToString());
                     usuarioEncontrado.Usuario = Encriptacion.DesencriptarAES(reader["usuario"].ToString());
@@ -115,7 +124,7 @@ namespace FGF_Finanzas.Capas.DAL
             }
             catch (Exception e)
             {
-                throw new Exception("Error al consultar el usuario de forma individual", e);
+                throw new BECustomException("ERR_CONSULTAR_USUARIO", e);
             }
             finally
             {
@@ -139,7 +148,7 @@ namespace FGF_Finanzas.Capas.DAL
                 cmd.Parameters.AddWithValue("@Contraseña", nuevaContraseñaEncriptada);
                 cmd.ExecuteNonQuery();
             }
-            catch (Exception e) { throw new Exception("Error al actualizar la contraseña", e); }
+            catch (Exception e) { throw new BECustomException("ERR_ACTUALIZAR_PASSWORD", e); }
             finally { con.Close(); }
         }
 
@@ -165,6 +174,31 @@ namespace FGF_Finanzas.Capas.DAL
 
             SqlDataAdapter adapter = new SqlDataAdapter(query, _conexion);
             adapter.Fill(dt);   
+            return dt;
+        }
+
+        public void ActualizarIdioma(string dni, string codigoIdioma)
+        {
+            using (SqlConnection con = new SqlConnection(_conexion))
+            {
+                string query = "UPDATE Usuario SET idioma = @idioma WHERE dni = @dni";
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@idioma", codigoIdioma);
+                    cmd.Parameters.AddWithValue("@dni", dni);
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public DataTable ObtenerRolesExistentes()
+        {
+            string query = "SELECT id_rol, nombre FROM Rol WHERE nombre IS NOT NULL AND LTRIM(RTRIM(nombre)) <> ''";
+            DataTable dt = new DataTable();
+
+            SqlDataAdapter adapter = new SqlDataAdapter(query, _conexion);
+            adapter.Fill(dt);
             return dt;
         }
     }

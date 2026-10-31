@@ -10,7 +10,12 @@ namespace FGF_Finanzas.Capas.Servicios
     public class SessionManager
     {
         private static object _lock = new Object();
-        private static SessionManager _session;
+        // La instancia pertenece a la sesión HTTP, nunca a toda la aplicación.
+        private static SessionManager _session
+        {
+            get { return HttpContext.Current?.Session?["UsuarioSessionManager"] as SessionManager; }
+            set { HttpContext.Current.Session["UsuarioSessionManager"] = value; }
+        }
         public BEUsuario Usuario { get; set; }
         public static SessionManager Instancia
         {

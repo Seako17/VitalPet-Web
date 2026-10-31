@@ -123,7 +123,98 @@ footer{
 
 }
 
+.icono-mundo {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    opacity: 0.85;
+}
+
+.idioma-dropdown {
+    position: relative;
+    user-select: none;
+}
+
+.idioma-boton-actual {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    color: #0F1647;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+    .idioma-boton-actual:hover {
+        opacity: 0.85;
+    }
+
+.flechita {
+    font-size: 15px;
+    margin-left: 2px;
+}
+
+.idioma-sublista {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    list-style: none;
+    background-color: #ffffff;
+    min-width: 130px;
+    padding: 4px 0;
+    margin: 0;
+    border-radius: 6px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+}
+
+    .idioma-sublista li a {
+        display: block;
+        padding: 8px 16px;
+        color: #0F1647;
+        font-size: 14px;
+        text-decoration: none;
+        transition: background-color 0.2s ease;
+    }
+
+        .idioma-sublista li a:hover {
+            background-color: #eaf4f8;
+        }
+
 .dropdown {
     position: relative;
 }
 
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #81C4DE;
+    list-style: none;
+    min-width: 180px;
+    padding: 10px 0;
+    margin: 0;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.dropdown:hover .dropdown-menu,
+.dropdown.open .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu, .dropdown-menu li {
+    width: 100%;
+    border-radius: 10px;
+}
+
+    .dropdown-menu li a {
+        display: block;
+        padding: 10px 15px;
+        white-space: nowrap;
+    }
+
+        .dropdown-menu li a:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }

@@ -7,11 +7,11 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
     <div class="barra-titulo">
-        <h1>Registrarse</h1>
+        <h1><asp:Label ID="lblTituloRegistro" runat="server" Text="Registrarse" /></h1>
     </div>
 
     <div class="contenedor-registro">
-        <h2>INGRESE SUS DATOS</h2>
+        <h2><asp:Label ID="lblSubtituloDatos" runat="server" Text="INGRESE SUS DATOS" /></h2>
         <hr class="linea-subrayado" />
 
         <div class="formulario-datos">

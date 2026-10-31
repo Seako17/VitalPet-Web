@@ -43,6 +43,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Web.DynamicData" />
@@ -63,19 +66,25 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
-      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Backup-Restore.aspx" />
+    <Content Include="Administracion.aspx" />
+    <Content Include="Atenciones.aspx" />
+    <Content Include="AtenderConsulta.aspx" />
+    <Content Include="Content\Administracion.css" />
+    <Content Include="Content\Atenciones\Atenciones.css" />
+    <Content Include="Content\MenuAdministracion.css" />
     <Content Include="BitacoraEventos.aspx" />
     <Content Include="Cambiar-Contraseña.aspx" />
+    <Content Include="Consulta.aspx" />
     <Content Include="Content\BackupRestore\clip.png" />
     <Content Include="Content\BackupRestore\BackupStyles.css" />
+    <Content Include="Content\Consultas\Consultas.css" />
     <Content Include="Content\DV_Styles.css" />
+    <Content Include="Content\Estilos-Gestion-Idioma.css" />
     <Content Include="Content\Estilos.css" />
     <Content Include="Content\EventosStyles.css" />
+    <Content Include="Content\GestionFamiliasStyles.css" />
+    <Content Include="Content\GestionPerfiles.css" />
     <Content Include="Content\GestionUsuarios\CambiarContraseñaStyles.css" />
     <Content Include="Content\GestionUsuarios\GestionUsuariosStyles.css" />
     <Content Include="Content\Login\ojoAbierto.png" />
@@ -85,6 +94,9 @@
     <Content Include="Content\registrarMascotasStyles.css" />
     <Content Include="Content\RegistrarStyles.css" />
     <Content Include="Default.aspx" />
+    <Content Include="Gestion-Familias.aspx" />
+    <Content Include="Gestion-Perfiles.aspx" />
+    <Content Include="Gestion-Idioma.aspx" />
     <Content Include="Gestion-Usuarios.aspx" />
     <Content Include="DV_Form.aspx" />
     <Content Include="Global.asax" />
@@ -92,6 +104,8 @@
     <Content Include="RegistrarMascotas.aspx" />
     <Content Include="Registrarse.aspx" />
     <Content Include="Scripts\scripts.js" />
+    <None Include="packages.config" />
+    <None Include="Scripts\Actualizar-Traducciones-Consulta.ps1" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -102,6 +116,31 @@
     <Compile Include="Backup-Restore.aspx.designer.cs">
       <DependentUpon>Backup-Restore.aspx</DependentUpon>
     </Compile>
+    <Compile Include="BasePage.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Administracion.aspx.cs">
+      <DependentUpon>Administracion.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Administracion.aspx.designer.cs">
+      <DependentUpon>Administracion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Atenciones.aspx.cs">
+      <DependentUpon>Atenciones.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Atenciones.aspx.designer.cs">
+      <DependentUpon>Atenciones.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AtenderConsulta.aspx.cs">
+      <DependentUpon>AtenderConsulta.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AtenderConsulta.aspx.designer.cs">
+      <DependentUpon>AtenderConsulta.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Capas\Servicios\MenuAdministracion.cs" />
     <Compile Include="BitacoraEventos.aspx.cs">
       <DependentUpon>BitacoraEventos.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -116,30 +155,84 @@
     <Compile Include="Cambiar-Contraseña.aspx.designer.cs">
       <DependentUpon>Cambiar-Contraseña.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Capas\BE\Atencion.cs" />
+    <Compile Include="Capas\BE\BEConsulta.cs" />
     <Compile Include="Capas\BE\BEEvento.cs" />
+    <Compile Include="Capas\BE\BEEtiqueta.cs" />
+    <Compile Include="Capas\BE\BEIdioma.cs" />
     <Compile Include="Capas\BE\BEMascota.cs" />
+    <Compile Include="Capas\BE\BETraduccion.cs" />
     <Compile Include="Capas\BE\BEUsuario.cs" />
+    <Compile Include="Capas\BE\BECustomException.cs" />
+    <Compile Include="Capas\BLL\BLLAtencion.cs" />
     <Compile Include="Capas\BLL\BLLBackupRestore.cs" />
+    <Compile Include="Capas\BLL\BLLConsulta.cs" />
     <Compile Include="Capas\BLL\BLLEvento.cs" />
     <Compile Include="Capas\BE\BEDigitoVerificador.cs" />
     <Compile Include="Capas\BLL\BLLDigitoVerificador.cs" />
+    <Compile Include="Capas\BLL\BLLFamilia.cs" />
     <Compile Include="Capas\BLL\BLLMascota.cs" />
+    <Compile Include="Capas\BLL\BLLRol.cs" />
+    <Compile Include="Capas\BLL\BLLTraduccion.cs" />
     <Compile Include="Capas\BLL\BLLUsuario.cs" />
+    <Compile Include="Capas\BLL\BLLPermiso.cs" />
     <Compile Include="Capas\DAL\DALAbstracta.cs" />
+    <Compile Include="Capas\DAL\DALAtencion.cs" />
     <Compile Include="Capas\DAL\DALBackupRestore.cs" />
+    <Compile Include="Capas\DAL\DALConsulta.cs" />
     <Compile Include="Capas\DAL\DALEvento.cs" />
     <Compile Include="Capas\DAL\DALDigitoVerificador.cs" />
+    <Compile Include="Capas\DAL\DALFamilia.cs" />
     <Compile Include="Capas\DAL\DALMascota.cs" />
+    <Compile Include="Capas\DAL\DALPermiso.cs" />
+    <Compile Include="Capas\DAL\DALRol.cs" />
+    <Compile Include="Capas\DAL\DALTraduccion.cs" />
     <Compile Include="Capas\DAL\DALUsuario.cs" />
+    <Compile Include="Capas\Servicios\CodigosPermiso.cs" />
+    <Compile Include="Capas\Servicios\Componente.cs" />
     <Compile Include="Capas\Servicios\Encriptacion.cs" />
+    <Compile Include="Capas\Servicios\Cambio-Idioma\IdiomaManager.cs" />
+    <Compile Include="Capas\Servicios\Cambio-Idioma\IIdiomaSubject.cs" />
+    <Compile Include="Capas\Servicios\Cambio-Idioma\IIdiomaObserver.cs" />
+    <Compile Include="Capas\Servicios\Familia.cs" />
+    <Compile Include="Capas\Servicios\Permiso.cs" />
+    <Compile Include="Capas\Servicios\Rol.cs" />
     <Compile Include="Capas\Servicios\SessionManager.cs" />
     <Compile Include="Capas\Servicios\XMLExportador.cs" />
+    <Compile Include="Consulta.aspx.cs">
+      <DependentUpon>Consulta.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Consulta.aspx.designer.cs">
+      <DependentUpon>Consulta.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Gestion-Idioma.aspx.cs">
+      <DependentUpon>Gestion-Idioma.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Gestion-Idioma.aspx.designer.cs">
+      <DependentUpon>Gestion-Idioma.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Gestion-Familias.aspx.cs">
+      <DependentUpon>Gestion-Familias.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Gestion-Familias.aspx.designer.cs">
+      <DependentUpon>Gestion-Familias.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Gestion-Perfiles.aspx.cs">
+      <DependentUpon>Gestion-Perfiles.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Gestion-Perfiles.aspx.designer.cs">
+      <DependentUpon>Gestion-Perfiles.aspx</DependentUpon>
     </Compile>
     <Compile Include="Gestion-Usuarios.aspx.cs">
       <DependentUpon>Gestion-Usuarios.aspx</DependentUpon>
@@ -165,6 +258,9 @@
     <Compile Include="Login.aspx.designer.cs">
       <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
+    <Compile Include="PaginaSegura.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegistrarMascotas.aspx.cs">
       <DependentUpon>RegistrarMascotas.aspx</DependentUpon>
@@ -189,7 +285,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <Content Include="Site.Master" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -228,12 +323,6 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>Este proyecto hace referencia a los paquetes NuGet que faltan en este equipo. Use la restauración de paquetes NuGet para descargarlos. Para obtener más información, consulte http://go.microsoft.com/fwlink/?LinkID=322105. El archivo que falta es {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
-  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
@@ -241,4 +330,10 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>Este proyecto hace referencia a los paquetes NuGet que faltan en este equipo. Use la restauración de paquetes NuGet para descargarlos. Para obtener más información, consulte http://go.microsoft.com/fwlink/?LinkID=322105. El archivo que falta es {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
 </Project>

@@ -21,7 +21,7 @@ namespace FGF_Finanzas.Capas.BLL
         public string HacerBackup(string rutaBase)
         {
             string nombreArchivo = $"Backup_Vital-Pet{DateTime.Now:yyyyMMdd_HHmmss}.bak";
-            if (!Directory.Exists(rutaBase)) throw new Exception("No existe la carpeta temporal en el servidor");
+            if (!Directory.Exists(rutaBase)) throw new BECustomException("ERR_CARPETA_TEMPORAL_NO_EXISTE");
             string rutaServidor = System.IO.Path.Combine(rutaBase, nombreArchivo);
             _dalBackupRestore.RealizarBackup(rutaServidor);
             bllEvento.AgregarEvento(new BEEvento(SessionManager.Instancia.Usuario, DateTime.Now, "Administrador", "Hacer Backup", 4));
@@ -31,7 +31,7 @@ namespace FGF_Finanzas.Capas.BLL
         public void HacerRestore(string rutaArchivo)
         {
             if (!System.IO.File.Exists(rutaArchivo))
-                throw new Exception("El archivo no se subió correctamente al servidor.");
+                throw new BECustomException("ERR_ARCHIVO_NO_SUBIDO");
             try
             {
                 _dalBackupRestore.RestaurarBDD(rutaArchivo);
@@ -39,7 +39,7 @@ namespace FGF_Finanzas.Capas.BLL
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error en el proceso de restauración: {ex.Message}", ex);
+                throw new BECustomException("ERR_PROCESO_RESTAURACION", ex, ex.Message);
             }
             finally
             {

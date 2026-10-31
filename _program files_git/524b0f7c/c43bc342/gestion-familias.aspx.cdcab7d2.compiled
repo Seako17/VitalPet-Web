@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<preserve resultType="3" virtualPath="/C:/Program Files/Git/Gestion-Familias.aspx" hash="16578dfa2" filehash="5e132c53c686ade3" flags="110000" assembly="App_Web_ba00jewd" type="ASP.gestion_familias_aspx">
+    <filedeps>
+        <filedep name="/C:/Program Files/Git/Gestion-Familias.aspx" />
+        <filedep name="/C:/Program Files/Git/Site.Master" />
+    </filedeps>
+</preserve>

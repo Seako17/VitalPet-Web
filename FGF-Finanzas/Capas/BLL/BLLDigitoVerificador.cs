@@ -97,8 +97,8 @@ namespace FGF_Finanzas.Capas.BLL
                         NombreTabla = nombreTabla,
                         IdRegistro = "N/A",
                         TipoFalla = filasActuales.Count > cantidadRegistrosGuardada
-                            ? "Hubo un alta no registrada."
-                            : "Hubo una eliminación no registrada."
+                            ? "DV_FALLA_ALTA_NO_REGISTRADA"
+                            : "DV_FALLA_ELIMINACION_NO_REGISTRADA"
                     });
                     continue;
                 }
@@ -116,7 +116,7 @@ namespace FGF_Finanzas.Capas.BLL
                         {
                             NombreTabla = nombreTabla,
                             IdRegistro = fila.Id,
-                            TipoFalla = "Hubo una modificación en el registro."
+                            TipoFalla = "DV_FALLA_MODIFICACION_REGISTRO"
                         });
                         huboModificacionEnTabla = true;
                     }
@@ -136,7 +136,7 @@ namespace FGF_Finanzas.Capas.BLL
                         {
                             NombreTabla = nombreTabla,
                             IdRegistro = "N/A",
-                            TipoFalla = "Falla de integridad estructural."
+                            TipoFalla = "DV_FALLA_INTEGRIDAD_ESTRUCTURAL"
                         });
                     }
                 }

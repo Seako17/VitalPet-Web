@@ -13,8 +13,12 @@ using System.Web.UI.WebControls;
 
 namespace FGF_Finanzas
 {
-    public partial class RegistrarMascotas : System.Web.UI.Page
+    public partial class RegistrarMascotas : PaginaSegura
     {
+        protected override Permiso PermisoRequerido
+        {
+            get { return CodigosPermiso.ObtenerPermisos().Find(x=>x.Nombre == "MascotaRegistrar"); }
+        }
         BLLMascota bllMascota = new BLLMascota();
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -23,13 +27,14 @@ namespace FGF_Finanzas
 
         protected void btnRegistrar_Click(object sender, EventArgs e)
         {
+            LimpiarMensajeVisible(lblError);
             if (!Page.IsValid) return;
             try
             {
                 var nombre = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(txtNombre.Text.ToLower()).Trim();
                 if (Convert.ToDateTime(txtFechaNacimiento.Value) > DateTime.Now)
                 {
-                    throw new Exception("Fecha de nacimiento inválida");
+                    throw new BECustomException("ERR_FECHA_NACIMIENTO");
                 }
 
                 BEMascota mascota = new BEMascota(
@@ -41,12 +46,13 @@ namespace FGF_Finanzas
                 );
 
                 bllMascota.AgregarMascota(mascota);
-                string script = "alert('Mascota registrada correctamente.'); window.location.href = 'Default.aspx';";
+                string mensaje = ObtenerMensaje("MSG_MASCOTA_REGISTRADA").Replace("'", "\\'");
+                string script = "alert('" + mensaje + "'); window.location.href = 'Default.aspx';";
                 ScriptManager.RegisterStartupScript(this, GetType(), "MascotaRegistrada", script, true);
             }
             catch (Exception ex)
             {
-                lblError.Text = ex.Message;
+                MostrarErrorVisible(lblError, ex);
             }
         }
     }
