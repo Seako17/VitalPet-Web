@@ -59,6 +59,9 @@ namespace FGF_Finanzas
                         case Label lbl:
                             lbl.Text = texto;
                             break;
+                        case Literal literal:
+                            literal.Text = texto;
+                            break;
                         case LinkButton lbtn:
                             lbtn.Text = texto;
                             break;

@@ -101,6 +101,11 @@
     <Content Include="DV_Form.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Login.aspx" />
+    <Content Include="Marketplace.aspx" />
+    <Content Include="Carrito.aspx" />
+    <Content Include="Gestion-Productos.aspx" />
+    <Content Include="Content\Marketplace.css" />
+    <Content Include="Scripts\script.sql" />
     <Content Include="RegistrarMascotas.aspx" />
     <Content Include="Registrarse.aspx" />
     <Content Include="Scripts\scripts.js" />
@@ -254,6 +259,16 @@
       <DependentUpon>Login.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="Marketplace.aspx.cs"><DependentUpon>Marketplace.aspx</DependentUpon><SubType>ASPXCodeBehind</SubType></Compile>
+    <Compile Include="Marketplace.aspx.designer.cs"><DependentUpon>Marketplace.aspx</DependentUpon></Compile>
+    <Compile Include="Carrito.aspx.cs"><DependentUpon>Carrito.aspx</DependentUpon><SubType>ASPXCodeBehind</SubType></Compile>
+    <Compile Include="Carrito.aspx.designer.cs"><DependentUpon>Carrito.aspx</DependentUpon></Compile>
+    <Compile Include="Gestion-Productos.aspx.cs"><DependentUpon>Gestion-Productos.aspx</DependentUpon><SubType>ASPXCodeBehind</SubType></Compile>
+    <Compile Include="Gestion-Productos.aspx.designer.cs"><DependentUpon>Gestion-Productos.aspx</DependentUpon></Compile>
+    <Compile Include="Capas\BE\BEProducto.cs" />
+    <Compile Include="Capas\BE\BECarritoItem.cs" />
+    <Compile Include="Capas\DAL\DALProducto.cs" />
+    <Compile Include="Capas\BLL\BLLProducto.cs" />
     <Compile Include="Login.aspx.designer.cs">
       <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
@@ -334,5 +349,16 @@
       <ErrorText>Este proyecto hace referencia a los paquetes NuGet que faltan en este equipo. Use la restauración de paquetes NuGet para descargarlos. Para obtener más información, consulte http://go.microsoft.com/fwlink/?LinkID=322105. El archivo que falta es {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <Target Name="EnsureRoslynCompilerInBin" AfterTargets="Build" Condition="Exists('$(MSBuildProjectDirectory)\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\tools\RoslynLatest\csc.exe')">
+    <PropertyGroup>
+      <MarketplaceRoslynSource>$(MSBuildProjectDirectory)\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\tools\RoslynLatest</MarketplaceRoslynSource>
+      <MarketplaceRoslynDestination>$(MSBuildProjectDirectory)\bin\roslyn</MarketplaceRoslynDestination>
+    </PropertyGroup>
+    <MakeDir Directories="$(MarketplaceRoslynDestination)" />
+    <ItemGroup>
+      <MarketplaceRoslynFiles Include="$(MarketplaceRoslynSource)\**\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(MarketplaceRoslynFiles)" DestinationFiles="@(MarketplaceRoslynFiles->'$(MarketplaceRoslynDestination)\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
   </Target>
 </Project>

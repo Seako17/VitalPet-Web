@@ -13,6 +13,7 @@ namespace FGF_Finanzas
 
     public partial class Backup_Restore
     {
+        protected global::System.Web.UI.WebControls.Literal lnkMenuProductos;
 
         /// <summary>
         /// Control lblMensaje.
