@@ -6,7 +6,7 @@
     <span class="market-kicker"><asp:Literal ID="litKicker" runat="server" /></span>
     <h1><asp:Literal ID="litTitulo" runat="server" /></h1>
     <asp:Label ID="lblMensaje" runat="server" CssClass="market-message" EnableViewState="false" />
-    <asp:GridView ID="gvCarrito" runat="server" AutoGenerateColumns="False" CssClass="cart-table cart-items" GridLines="None" OnRowCommand="gvCarrito_RowCommand" OnRowDataBound="gvCarrito_RowDataBound">
+    <asp:GridView ID="gvCarrito" runat="server" AutoGenerateColumns="False" DataKeyNames="IdProducto" CssClass="cart-table cart-items" GridLines="None" OnRowCommand="gvCarrito_RowCommand" OnRowDataBound="gvCarrito_RowDataBound">
         <Columns>
             <asp:TemplateField HeaderText="Producto">
                 <ItemTemplate>
@@ -20,8 +20,8 @@
             <asp:TemplateField HeaderText="Cantidad">
                 <ItemTemplate>
                     <div class="cart-quantity-control">
-                        <asp:TextBox ID="txtCantidad" runat="server" Text='<%# Eval("Cantidad") %>' TextMode="Number" min="1" max="99" CssClass="cart-quantity-input" aria-label="Cantidad" />
-                        <asp:LinkButton ID="btnActualizarCantidad" runat="server" CssClass="cart-update-button" CommandName="ActualizarCantidad" CommandArgument='<%# Eval("IdProducto") %>' CausesValidation="false" />
+                        <asp:TextBox ID="txtCantidad" runat="server" Text='<%# Eval("Cantidad") %>' TextMode="Number" min="1" max="99" CssClass="cart-quantity-input" aria-label="Cantidad" AutoPostBack="true" CausesValidation="false" OnTextChanged="txtCantidad_TextChanged" />
+                        <asp:Literal ID="litEstadoStockCantidad" runat="server" />
                     </div>
                 </ItemTemplate>
             </asp:TemplateField>
