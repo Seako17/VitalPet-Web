@@ -151,13 +151,18 @@ namespace FGF_Finanzas.Capas.BLL
 
         public void AgregarUsuario(BEUsuario usuario)
         {
+            AgregarUsuario(usuario, false);
+        }
+
+        private void AgregarUsuario(BEUsuario usuario, bool contraseñaYaEncriptada)
+        {
             if (!bllDigitoVerificador.ValidarIntegridadDelSistema())
             {
                 throw new BECustomException("ERR_SISTEMA_MANTENIMIENTO_REGISTRO");
             }
 
-            string encriptado = Encriptacion.Encriptar(usuario.Contraseña);
-            usuario.Contraseña = encriptado;
+            if (!contraseñaYaEncriptada)
+                usuario.Contraseña = Encriptacion.Encriptar(usuario.Contraseña);
             dalUsuario.AgregarUsuario(usuario);
             if(SessionManager.IsLogged())
             {
@@ -235,121 +240,112 @@ namespace FGF_Finanzas.Capas.BLL
 
         public void ImportarUsuarios(DataTable dt)
         {
-            string[] columnas = {
-                "DNI", "Nombre", "Apellido", "Usuario",
-                "Contraseña", "Intento", "Bloqueado", "Mail", "Rol"};
+            string[] columnasRequeridas = { "DNI", "Nombre", "Apellido", "Usuario", "Contraseña", "Intento", "Bloqueado", "Mail", "Rol" };
+            var columnasFaltantes = columnasRequeridas.Except(
+                dt.Columns.Cast<DataColumn>().Select(c => c.ColumnName),
+                StringComparer.OrdinalIgnoreCase);
 
-            foreach (string columna in columnas)
-            {
-                if (!dt.Columns.Contains(columna))
-                    throw new Exception("Falta la columna " + columna + " en el archivo XML.");
-            }
+            if (columnasFaltantes.Any())
+                throw new Exception($"Faltan las siguientes columnas en el XML: {string.Join(", ", columnasFaltantes)}");
+
+            Dictionary<int, string> rolesExistentes = dalUsuario.ObtenerRolesExistentes().AsEnumerable()
+                .ToDictionary(fila => Convert.ToInt32(fila["id_rol"]), fila => fila["nombre"].ToString().Trim());
 
             DataTable guardados = ObtenerUsuarios();
-            Dictionary<string, int> rolesExistentes = dalUsuario.ObtenerRolesExistentes().AsEnumerable()
-                .ToDictionary(
-                    fila => fila["nombre"].ToString().Trim(),
-                    fila => Convert.ToInt32(fila["id_rol"]),
-                    StringComparer.OrdinalIgnoreCase);
+            HashSet<string> dnisExistentesBD = new HashSet<string>(guardados.AsEnumerable().Select(r => r["DNI"].ToString().Trim()));
+            HashSet<string> usuariosExistentesBD = new HashSet<string>(guardados.AsEnumerable().Select(r => r["Usuario"].ToString().Trim()), StringComparer.OrdinalIgnoreCase);
+            HashSet<string> mailsExistentesBD = new HashSet<string>(guardados.AsEnumerable().Select(r => r["Mail"].ToString().Trim()), StringComparer.OrdinalIgnoreCase);
+
+            HashSet<string> dnisXml = new HashSet<string>();
+            HashSet<string> usuariosXml = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            HashSet<string> mailsXml = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
             List<BEUsuario> usuariosImportados = new List<BEUsuario>();
 
-            HashSet<string> dnis = new HashSet<string>();
-            HashSet<string> usuarios = new HashSet<string>();
-            HashSet<string> mails = new HashSet<string>();
-
             foreach (DataRow fila in dt.Rows)
             {
-                BEUsuario usuario = new BEUsuario
+                foreach (string col in columnasRequeridas)
                 {
-                    DNI = fila["DNI"].ToString(),
-                    Nombre = fila["Nombre"].ToString(),
-                    Apellido = fila["Apellido"].ToString(),
-                    Usuario = fila["Usuario"].ToString(),
-                    Contraseña = fila["Contraseña"].ToString(),
-                    Intento = Convert.ToInt32(fila["Intento"]),
-                    Bloqueado = Convert.ToBoolean(fila["Bloqueado"]),
-                    Mail = fila["Mail"].ToString()
-                };
-                string nombreRolImportado = fila["Rol"].ToString().Trim();
-
-                // 1. Validar campos obligatorios
-                if (string.IsNullOrWhiteSpace(usuario.DNI) ||
-                    string.IsNullOrWhiteSpace(usuario.Nombre) ||
-                    string.IsNullOrWhiteSpace(usuario.Apellido) ||
-                    string.IsNullOrWhiteSpace(usuario.Usuario) ||
-                    string.IsNullOrWhiteSpace(usuario.Contraseña) ||
-                    string.IsNullOrWhiteSpace(usuario.Mail) ||
-                    string.IsNullOrWhiteSpace(nombreRolImportado))
-                {
-                    throw new Exception("Existen usuarios con campos obligatorios vacíos.");
+                    if (fila[col] == DBNull.Value || fila[col] == null || string.IsNullOrWhiteSpace(fila[col].ToString()))
+                        throw new Exception($"El campo '{col}' no puede ser nulo ni estar vacío.");
                 }
 
-                // 2. Validar DNI
-                if (!usuario.DNI.All(char.IsDigit) ||
-                    (usuario.DNI.Length != 7 && usuario.DNI.Length != 8))
-                {
-                    throw new Exception("El DNI " + usuario.DNI + " no tiene un formato válido.");
-                }
+                string dni = fila["DNI"].ToString().Trim();
+                string nombre = fila["Nombre"].ToString().Trim();
+                string apellido = fila["Apellido"].ToString().Trim();
+                string usuarioNombre = fila["Usuario"].ToString().Trim();
+                string contrasena = fila["Contraseña"].ToString().Trim();
+                string mailTexto = fila["Mail"].ToString().Trim();
+                string rolTexto = fila["Rol"].ToString().Trim();
 
-                // 3. Validar correo electrónico
+                if (!dni.All(char.IsDigit) || (dni.Length != 7 && dni.Length != 8)) throw new Exception($"El DNI '{dni}' no tiene un formato válido.");
+
                 try
                 {
-                    MailAddress mail = new MailAddress(usuario.Mail);
-
-                    if (mail.Address != usuario.Mail.Trim())
-                        throw new Exception();
+                    MailAddress mailAddress = new MailAddress(mailTexto);
+                    if (mailAddress.Address != mailTexto) throw new Exception();
                 }
                 catch
                 {
-                    throw new Exception("El correo " + usuario.Mail + " no es válido.");
+                    throw new Exception($"El correo '{mailTexto}' no es válido.");
                 }
 
-                // 4. Validar intento
-                if (usuario.Intento < 0)
-                    throw new Exception("El usuario " + usuario.Usuario + " tiene un número de intentos inválido.");
+                if (!int.TryParse(fila["Intento"].ToString(), out int intento) || intento < 0) throw new Exception($"El usuario '{usuarioNombre}' tiene un número de intentos inválido.");
 
-                // 5. Validar contraseña
-                if (string.IsNullOrWhiteSpace(usuario.Contraseña))
-                    throw new Exception("El usuario " + usuario.Usuario + " no tiene contraseña.");
+                bool bloqueado;
+                string valorBloqueado = fila["Bloqueado"].ToString().Trim();
+                if (valorBloqueado == "1") bloqueado = true;
+                else if (valorBloqueado == "0") bloqueado = false;
+                else if (!bool.TryParse(valorBloqueado, out bloqueado)) throw new Exception($"El campo Bloqueado del usuario '{usuarioNombre}' debe ser true, false, 1 o 0.");
 
-                // 6. Validar rol
                 int idRol;
-                if (!rolesExistentes.TryGetValue(nombreRolImportado, out idRol))
-                    throw new Exception("El rol " + nombreRolImportado + " del usuario " + usuario.Usuario + " no existe.");
-                usuario.Rol = new Rol(idRol);
-
-                // 7. Validar duplicados dentro del XML
-                if (!dnis.Add(usuario.DNI))
-                    throw new Exception("El DNI " + usuario.DNI + " está duplicado en el XML.");
-
-                if (!usuarios.Add(usuario.Usuario.ToLowerInvariant()))
-                    throw new Exception("El usuario " + usuario.Usuario + " está duplicado en el XML.");
-
-                if (!mails.Add(usuario.Mail.ToLowerInvariant()))
-                    throw new Exception("El correo " + usuario.Mail + " está duplicado en el XML.");
-
-                // 8. Validar existencia en la base de datos
-                foreach (DataRow existente in guardados.Rows)
+                if (int.TryParse(rolTexto, out idRol))
                 {
-                    if (existente["DNI"].ToString() == usuario.DNI)
-                        throw new Exception("El DNI " + usuario.DNI + " ya está registrado.");
-
-                    if (existente["Usuario"].ToString().Equals(
-                        usuario.Usuario, StringComparison.OrdinalIgnoreCase))
-                        throw new Exception("El nombre de usuario " + usuario.Usuario + " ya está registrado.");
-
-                    if (existente["Mail"].ToString().Equals(
-                        usuario.Mail, StringComparison.OrdinalIgnoreCase))
-                        throw new Exception("El correo " + usuario.Mail + " ya está registrado.");
+                    if (!rolesExistentes.ContainsKey(idRol))
+                        throw new Exception($"El ID de rol {idRol} del usuario '{usuarioNombre}' no existe.");
                 }
+                else
+                {
+                    KeyValuePair<int, string> rolPorNombre = rolesExistentes.FirstOrDefault(
+                        rol => rol.Value.Equals(rolTexto, StringComparison.OrdinalIgnoreCase));
+                    if (rolPorNombre.Key == 0)
+                        throw new Exception($"El rol '{rolTexto}' del usuario '{usuarioNombre}' no existe.");
+
+                    idRol = rolPorNombre.Key;
+                }
+
+                if (!dnisXml.Add(dni)) throw new Exception($"El DNI {dni} está duplicado en el XML.");
+
+                if (!usuariosXml.Add(usuarioNombre)) throw new Exception($"El usuario {usuarioNombre} está duplicado en el XML.");
+
+                if (!mailsXml.Add(mailTexto)) throw new Exception($"El correo {mailTexto} está duplicado en el XML.");
+
+                if (dnisExistentesBD.Contains(dni)) throw new Exception($"El DNI {dni} ya está registrado.");
+
+                if (usuariosExistentesBD.Contains(usuarioNombre)) throw new Exception($"El nombre de usuario {usuarioNombre} ya está registrado.");
+
+                if (mailsExistentesBD.Contains(mailTexto)) throw new Exception($"El correo {mailTexto} ya está registrado.");
+
+                BEUsuario usuario = new BEUsuario
+                {
+                    DNI = dni,
+                    Nombre = nombre,
+                    Apellido = apellido,
+                    Usuario = usuarioNombre,
+                    Contraseña = contrasena,
+                    Intento = intento,
+                    Bloqueado = bloqueado,
+                    Mail = mailTexto,
+                    Rol = new Rol(idRol)
+                };
 
                 usuariosImportados.Add(usuario);
             }
 
             foreach (BEUsuario usuario in usuariosImportados)
             {
-                AgregarUsuario(usuario);
+                bool contraseñaYaEncriptada = Regex.IsMatch(usuario.Contraseña, @"\A[0-9a-fA-F]{64}\z");
+                AgregarUsuario(usuario, contraseñaYaEncriptada);
             }
         }
     }
