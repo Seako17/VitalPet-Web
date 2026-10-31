@@ -19,6 +19,7 @@ namespace FGF_Finanzas.Capas.BLL
         }
 
         public DataTable ObtenerMascotas() { return servicio.ObtenerMascotas(UsuarioActual()); }
+        public DataTable ObtenerConsultas() { return servicio.ObtenerConsultasVeterinario(UsuarioActual()); }
         public string[] ObtenerHorarios() { return servicio.ObtenerHorarios(UsuarioActual()); }
         public DataTable ObtenerDisponibilidadDia(int idMascota, DateTime fecha)
         { return servicio.ObtenerDisponibilidadDia(UsuarioActual(), idMascota, fecha); }

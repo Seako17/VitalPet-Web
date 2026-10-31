@@ -53,3 +53,9 @@ La integridad se coordina en `BLLConsulta`, dentro de la aplicación web: antes 
 Para actualizar la referencia después de cambiar los métodos del servicio, iniciar el servicio y usar **Agregar referencia web** en Visual Studio, o ejecutar `wsdl.exe /language:CS /namespace:FGF_Finanzas.ServiceReferences.Consultas /out:FGF-Finanzas/ServiceReferences/Consultas/Reference.cs http://localhost:50950/ConsultasService.asmx?WSDL` desde la raíz.
 
 El resumen inferior usa texto blanco. ObtenerVeterinariosDelHorario devuelve los veterinarios habilitados con una columna Disponible; el selector conserva visibles en gris y deshabilitados los ocupados. ObtenerVeterinariosDisponibles sigue devolviendo solo los libres para validar reservas.
+
+## Integración con atención veterinaria
+
+`BLLAtencion` obtiene las consultas mediante `BLLConsulta.ObtenerConsultas` → `ServicioConsultas.ObtenerConsultasVeterinario` → SOAP. El servicio devuelve únicamente las consultas asignadas al DNI autenticado, excluyendo canceladas. La aplicación conserva el control de acceso a las pantallas. El listado pendiente también excluye consultas con estado Atendida y registros ya atendidos en Atencion.
+
+El guardado de atención proveniente de develop sigue en `BLLAtencion`/`DALAtencion`, con diagnóstico y observaciones cifrados y recálculo de integridad de Atencion. Todavía no actualiza estado/diagnóstico en Consulta: esa unificación queda pendiente. Por eso guardar una atención aún no la refleja como Atendida en Mis consultas. No usar esta integración como cierre del circuito completo hasta resolver esa sincronización.

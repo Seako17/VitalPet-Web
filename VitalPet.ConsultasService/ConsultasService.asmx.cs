@@ -17,6 +17,28 @@ namespace VitalPet.ConsultasService
         private const string FormatoFecha = "yyyy-MM-dd HH:mm";
 
         [WebMethod]
+        public DataTable ObtenerConsultasVeterinario(string dni, string claveUsuario)
+        {
+            using (SqlConnection con = new SqlConnection(cadenaConexion))
+            {
+                con.Open();
+                ValidarUsuario(con, null, dni, claveUsuario);
+                DataTable datos = LeerTabla(con, null, "Consultas", @"SELECT idConsulta, idMascota, DNI_Veterinario,
+                    motivo, fechaHora, estado FROM Consulta WHERE DNI_Veterinario = @Dni", new SqlParameter("@Dni", dni));
+                DataTable resultado = datos.Clone();
+                resultado.Columns["fechaHora"].DataType = typeof(DateTime);
+                foreach (DataRow fila in datos.Rows)
+                {
+                    string estado = Cifrado.Descifrar(fila["estado"].ToString());
+                    if (estado == "Cancelada") continue;
+                    resultado.Rows.Add(fila["idConsulta"], fila["idMascota"], fila["DNI_Veterinario"],
+                        Cifrado.Descifrar(fila["motivo"].ToString()), LeerFecha(fila["fechaHora"]), estado);
+                }
+                return resultado;
+            }
+        }
+
+        [WebMethod]
         public DataTable ObtenerMascotas(string dni, string claveUsuario)
         {
             using (SqlConnection con = new SqlConnection(cadenaConexion))

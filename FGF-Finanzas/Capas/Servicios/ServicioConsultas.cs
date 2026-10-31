@@ -29,6 +29,15 @@ namespace FGF_Finanzas.Capas.Servicios
             }
         }
 
+        public DataTable ObtenerConsultasVeterinario(BEUsuario usuario)
+        {
+            using (ConsultasService ws = CrearServicio())
+            {
+                try { return ws.ObtenerConsultasVeterinario(usuario.DNI, usuario.Contraseña); }
+                catch (Exception ex) { throw TraducirError(ex); }
+            }
+        }
+
         public string[] ObtenerHorarios(BEUsuario usuario)
         {
             using (ConsultasService ws = CrearServicio())
