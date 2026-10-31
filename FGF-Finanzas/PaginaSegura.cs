@@ -14,7 +14,7 @@ namespace FGF_Finanzas
         protected virtual bool TieneAcceso(FGF_Finanzas.Capas.BE.BEUsuario usuario)
         {
             var permiso = PermisoRequerido;
-            return usuario?.Rol?.Componentes != null && permiso != null && usuario.Rol.TienePermiso(permiso);
+            return usuario?.Rol != null && permiso != null && usuario.Rol.TienePermiso(permiso);
         }
 
         protected override void OnInit(EventArgs e)

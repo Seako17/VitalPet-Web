@@ -22,7 +22,7 @@
                 <div><asp:Label ID="litPrecio" runat="server" AssociatedControlID="txtPrecio" /><asp:TextBox ID="txtPrecio" runat="server" TextMode="Number" step="0.01" min="0.01" /></div>
                 <div class="field-wide"><asp:Label ID="litDescripcion" runat="server" AssociatedControlID="txtDescripcion" /><asp:TextBox ID="txtDescripcion" runat="server" TextMode="MultiLine" Rows="3" MaxLength="1000" /></div>
                 <div><asp:Label ID="litStock" runat="server" AssociatedControlID="txtStock" /><asp:TextBox ID="txtStock" runat="server" TextMode="Number" min="0" /></div>
-                <div><asp:Label ID="litImagen" runat="server" AssociatedControlID="fuImagen" /><asp:FileUpload ID="fuImagen" runat="server" /></div>
+                <div class="file-upload-field"><asp:Label ID="litImagen" runat="server" AssociatedControlID="fuImagen" /><div class="file-upload-control"><label class="file-upload-button" for="<%= fuImagen.ClientID %>"><asp:Literal ID="litSeleccionarArchivo" runat="server" /></label><asp:FileUpload ID="fuImagen" runat="server" CssClass="file-upload-input" /><asp:Label ID="lblArchivoSeleccionado" runat="server" CssClass="file-upload-name" /></div></div>
             </div>
             <div class="editor-actions"><asp:Button ID="btnGuardar" runat="server" CssClass="market-button" OnClick="btnGuardar_Click" /><asp:Button ID="btnLimpiar" runat="server" CssClass="market-button" CausesValidation="false" OnClick="btnLimpiar_Click" /></div>
         </div>

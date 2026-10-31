@@ -30,6 +30,12 @@ namespace FGF_Finanzas
             AplicarTextoDePagina();
         }
 
+        public override void ActualizarIdioma(string codigoIdioma, System.Collections.Generic.IDictionary<string, string> traducciones)
+        {
+            base.ActualizarIdioma(codigoIdioma, traducciones);
+            AplicarTextoDePagina();
+        }
+
         private void AplicarTextoDePagina()
         {
             Title = TextoTraducido("PageTitle", "Gestión de productos");
@@ -49,6 +55,10 @@ namespace FGF_Finanzas
             litDescripcion.Text = TextoTraducido("litDescripcion", "Descripción");
             litStock.Text = TextoTraducido("litStock", "Stock");
             litImagen.Text = TextoTraducido("litImagen", "Imagen (PNG, JPG o GIF; máximo 2 MB)");
+            litSeleccionarArchivo.Text = TextoTraducido("litSeleccionarArchivo", "Seleccionar archivo");
+            string sinArchivo = TextoTraducido("lblArchivoNinguno", "Ningún archivo seleccionado");
+            lblArchivoSeleccionado.Text = fuImagen.HasFile ? Path.GetFileName(fuImagen.FileName) : sinArchivo;
+            fuImagen.Attributes["onchange"] = "this.parentElement.querySelector('.file-upload-name').textContent=this.files.length?this.files[0].name:'" + HttpUtility.JavaScriptStringEncode(sinArchivo) + "';";
             btnGuardar.Text = TextoTraducido("btnGuardar", "Guardar producto");
             btnLimpiar.Text = TextoTraducido("btnLimpiar", "Limpiar");
             TraducirGrilla();
@@ -72,6 +82,11 @@ namespace FGF_Finanzas
             TraducirSinDatos(gvProductos, "gvProductos_Vacio", "Aún no hay productos cargados.");
             TraducirBotonFila(gvProductos, "btnEditar", "btnEditar", "Editar");
             TraducirBotonFila(gvProductos, "btnEliminar", "btnEliminar", "Eliminar");
+            foreach (GridViewRow fila in gvProductos.Rows)
+            {
+                LinkButton eliminar = fila.FindControl("btnEliminar") as LinkButton;
+                if (eliminar != null) eliminar.OnClientClick = "return confirm('" + HttpUtility.JavaScriptStringEncode(TextoTraducido("msgConfirmarEliminar", "¿Eliminar este producto de la tienda?")) + "');";
+            }
         }
 
         private void Cargar() { gvProductos.DataSource = bllProducto.ObtenerTodos(); gvProductos.DataBind(); TraducirGrilla(); }

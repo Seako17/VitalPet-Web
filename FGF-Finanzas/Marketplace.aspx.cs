@@ -23,6 +23,13 @@ namespace FGF_Finanzas
             AplicarTextoDePagina();
         }
 
+        public override void ActualizarIdioma(string codigoIdioma, System.Collections.Generic.IDictionary<string, string> traducciones)
+        {
+            base.ActualizarIdioma(codigoIdioma, traducciones);
+            AplicarTextoDePagina();
+            ActualizarTextosProductos();
+        }
+
         private void AplicarTextoDePagina()
         {
             Title = TextoTraducido("PageTitle", "Tienda");
@@ -51,10 +58,31 @@ namespace FGF_Finanzas
         protected void rptProductos_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
             if (e.Item.ItemType != ListItemType.Item && e.Item.ItemType != ListItemType.AlternatingItem) return;
-            var btn = (LinkButton)e.Item.FindControl("btnAgregar");
             var cantidad = (TextBox)e.Item.FindControl("txtCantidad");
-            var disponible = (Literal)e.Item.FindControl("litDisponibilidad");
             int stock = Convert.ToInt32(DataBinder.Eval(e.Item.DataItem, "Stock"));
+            if (cantidad != null)
+            {
+                cantidad.Attributes["data-stock"] = stock.ToString();
+                cantidad.Attributes["max"] = Math.Max(1, stock).ToString();
+            }
+            AplicarTextoProducto(e.Item);
+        }
+
+        private void ActualizarTextosProductos()
+        {
+            foreach (RepeaterItem item in rptProductos.Items)
+            {
+                AplicarTextoProducto(item);
+            }
+        }
+
+        private void AplicarTextoProducto(RepeaterItem item)
+        {
+            LinkButton btn = item.FindControl("btnAgregar") as LinkButton;
+            TextBox cantidad = item.FindControl("txtCantidad") as TextBox;
+            Literal disponible = item.FindControl("litDisponibilidad") as Literal;
+            int stock = 0;
+            if (cantidad != null) int.TryParse(cantidad.Attributes["data-stock"], out stock);
             if (btn != null)
             {
                 btn.Text = TextoTraducido("litAgregar", "Agregar");
@@ -63,7 +91,6 @@ namespace FGF_Finanzas
             if (cantidad != null)
             {
                 cantidad.Attributes["aria-label"] = TextoTraducido("litCantidadAria", "Cantidad");
-                cantidad.Attributes["max"] = Math.Max(1, stock).ToString();
                 cantidad.Enabled = stock > 0;
                 cantidad.Visible = stock > 0;
             }
