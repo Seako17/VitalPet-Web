@@ -1,7 +1,6 @@
 using FGF_Finanzas.Capas.BE;
-using FGF_Finanzas.Capas.DAL;
+using FGF_Finanzas.Capas.Servicios;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 
@@ -9,7 +8,7 @@ namespace FGF_Finanzas.Capas.BLL
 {
     public class BLLAtencion
     {
-        DALAtencion dalAtencion;
+        private readonly ServicioConsultas servicio = new ServicioConsultas();
         BLLConsulta bllConsulta;
         BLLMascota bllMascota;
         BLLUsuario bllUsuario;
@@ -17,34 +16,38 @@ namespace FGF_Finanzas.Capas.BLL
 
         public BLLAtencion()
         {
-            dalAtencion = new DALAtencion();
             bllConsulta = new BLLConsulta();
             bllMascota = new BLLMascota();
             bllUsuario = new BLLUsuario();
             bLLDigitoVerificador = new BLLDigitoVerificador();
         }
 
-        public List<BEAtencion> ObtenerTodos()
+        private BEUsuario UsuarioActual()
         {
-            return dalAtencion.ObtenerTodos();
+            BEUsuario usuario = SessionManager.Instancia?.Usuario;
+            if (usuario == null || string.IsNullOrEmpty(usuario.DNI) || string.IsNullOrEmpty(usuario.Contraseña))
+                throw new BECustomException("ERR_CONSULTA_ACCESO");
+            return usuario;
         }
 
         public BEAtencion ObtenerPorConsulta(int idConsulta)
         {
-            return dalAtencion.ObtenerPorConsulta(idConsulta);
+            DataTable tabla = servicio.ObtenerAtencion(UsuarioActual(), idConsulta);
+            if (tabla.Rows.Count == 0) return null;
+            DataRow fila = tabla.Rows[0];
+            return new BEAtencion
+            {
+                id_atencion = (int)fila["id_atencion"], id_consulta = (int)fila["id_consulta"],
+                diagnostico = fila["diagnostico"].ToString(), observaciones = fila["observaciones"].ToString(),
+                atendido = (bool)fila["atendido"]
+            };
         }
 
-        public DataTable ObtenerConsultasSinAtender()
+        public DataTable ObtenerConsultasPorEstado(string estado)
         {
             DataTable consultas = ObtenerConsultasConDetalle();
-            List<BEAtencion> atenciones = dalAtencion.ObtenerTodos();
-
-            HashSet<int> consultasAtendidas = new HashSet<int>(
-                atenciones.Where(a => a.atendido).Select(a => a.id_consulta));
-
             var pendientes = consultas.AsEnumerable()
-                .Where(c => c["estado"].ToString() != "Atendida" &&
-                    !consultasAtendidas.Contains(Convert.ToInt32(c["idConsulta"])));
+                .Where(c => c["estado"].ToString() == estado);
 
             DataTable resultado = pendientes.Any() ? pendientes.CopyToDataTable() : consultas.Clone();
 
@@ -59,11 +62,20 @@ namespace FGF_Finanzas.Capas.BLL
                 .FirstOrDefault(c => Convert.ToInt32(c["idConsulta"]) == idConsulta);
         }
 
+        public void MarcarNoSePresento(int idConsulta)
+        {
+            BEUsuario usuario = UsuarioActual();
+            if (!bLLDigitoVerificador.ValidarIntegridadDelSistema())
+                throw new BECustomException("ERR_CONSULTA_MANTENIMIENTO");
+            servicio.MarcarNoSePresento(usuario, idConsulta);
+            bLLDigitoVerificador.InicializarTablaCompleta("Consulta");
+        }
+
         public void Guardar(BEAtencion atencion)
         {
             ValidarAtencion(atencion);
-            dalAtencion.Guardar(atencion);
-            bLLDigitoVerificador.InicializarTablaCompleta("Atencion");
+            if (atencion.id_atencion != 0) throw new BECustomException("ERR_ATENCION_ID_INVALIDO");
+            GuardarEnServicio(atencion);
         }
 
         public void Actualizar(BEAtencion atencion)
@@ -74,8 +86,18 @@ namespace FGF_Finanzas.Capas.BLL
             }
 
             ValidarAtencion(atencion);
-            dalAtencion.Actualizar(atencion);
+            GuardarEnServicio(atencion);
+        }
+
+        private void GuardarEnServicio(BEAtencion atencion)
+        {
+            BEUsuario usuario = UsuarioActual();
+            if (!bLLDigitoVerificador.ValidarIntegridadDelSistema())
+                throw new BECustomException("ERR_CONSULTA_MANTENIMIENTO");
+            atencion.id_atencion = servicio.GuardarAtencion(usuario, atencion);
+            atencion.atendido = true;
             bLLDigitoVerificador.InicializarTablaCompleta("Atencion");
+            bLLDigitoVerificador.InicializarTablaCompleta("Consulta");
         }
 
         private DataTable ObtenerConsultasConDetalle()
@@ -125,6 +147,8 @@ namespace FGF_Finanzas.Capas.BLL
             }
 
             atencion.diagnostico = atencion.diagnostico.Trim();
+            if (string.IsNullOrWhiteSpace(atencion.observaciones))
+                throw new BECustomException("ERR_ATENCION_OBSERVACIONES_OBLIGATORIAS");
             if (!string.IsNullOrWhiteSpace(atencion.observaciones))
             {
                 atencion.observaciones = atencion.observaciones.Trim();

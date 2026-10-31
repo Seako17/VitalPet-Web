@@ -10,6 +10,7 @@ namespace FGF_Finanzas.Capas.BE
         public const string Agendada = "Agendada";
         public const string Atendida = "Atendida";
         public const string Cancelada = "Cancelada";
+        public const string NoSePresento = "NoSePresento";
         public int idConsulta { get; set; }
         public string estado { get; set; } = Agendada;
         public string diagnostico { get; set; }

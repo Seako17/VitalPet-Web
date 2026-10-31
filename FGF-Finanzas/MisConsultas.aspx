@@ -14,6 +14,7 @@
                     <asp:ListItem Value="Agendada">Agendadas</asp:ListItem>
                     <asp:ListItem Value="Atendida">Atendidas</asp:ListItem>
                     <asp:ListItem Value="Cancelada">Canceladas</asp:ListItem>
+                    <asp:ListItem Value="NoSePresento">No se presentó</asp:ListItem>
                 </asp:DropDownList>
                 <asp:HyperLink ID="lnkNueva" runat="server" NavigateUrl="~/Consulta.aspx" Text="Nueva consulta" CssClass="btn-filtro" />
             </div>

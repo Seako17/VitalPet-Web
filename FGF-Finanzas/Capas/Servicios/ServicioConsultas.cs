@@ -38,6 +38,34 @@ namespace FGF_Finanzas.Capas.Servicios
             }
         }
 
+        public DataTable ObtenerAtencion(BEUsuario usuario, int idConsulta)
+        {
+            using (ConsultasService ws = CrearServicio())
+            {
+                try { return ws.ObtenerAtencion(usuario.DNI, usuario.Contraseña, idConsulta); }
+                catch (Exception ex) { throw TraducirError(ex); }
+            }
+        }
+
+        public void MarcarNoSePresento(BEUsuario usuario, int idConsulta)
+        {
+            using (ConsultasService ws = CrearServicio())
+            {
+                try { ws.MarcarNoSePresento(usuario.DNI, usuario.Contraseña, idConsulta); }
+                catch (Exception ex) { throw TraducirError(ex); }
+            }
+        }
+
+        public int GuardarAtencion(BEUsuario usuario, BEAtencion atencion)
+        {
+            using (ConsultasService ws = CrearServicio())
+            {
+                try { return ws.GuardarAtencion(usuario.DNI, usuario.Contraseña, atencion.id_consulta,
+                    atencion.id_atencion, atencion.diagnostico, atencion.observaciones); }
+                catch (Exception ex) { throw TraducirError(ex); }
+            }
+        }
+
         public string[] ObtenerHorarios(BEUsuario usuario)
         {
             using (ConsultasService ws = CrearServicio())
@@ -121,7 +149,22 @@ namespace FGF_Finanzas.Capas.Servicios
 
         private static BECustomException TraducirError(Exception ex, params object[] argumentos)
         {
-            string codigo = ex is SoapException ? Regex.Match(ex.Message, @"\bERR_CONSULTA_[A-Z_]+\b").Value : "";
+            string codigo = ex is SoapException ? Regex.Match(ex.Message, @"\bERR_(?:CONSULTA|ATENCION)_[A-Z_]+\b").Value : "";
+            if (string.IsNullOrEmpty(codigo))
+            {
+                try
+                {
+                    var contexto = System.Web.HttpContext.Current;
+                    if (contexto != null && contexto.Request.IsLocal)
+                    {
+                        string carpeta = contexto.Server.MapPath("~/App_Data");
+                        System.IO.Directory.CreateDirectory(carpeta);
+                        System.IO.File.AppendAllText(System.IO.Path.Combine(carpeta, "ConsultasService.errores.log"),
+                            DateTime.UtcNow.ToString("o") + Environment.NewLine + ex + Environment.NewLine);
+                    }
+                }
+                catch (Exception errorRegistro) { System.Diagnostics.Trace.TraceError(errorRegistro.Message); }
+            }
             return new BECustomException(string.IsNullOrEmpty(codigo) ? "ERR_CONSULTA_SERVICIO" : codigo, ex, argumentos);
         }
     }

@@ -38,6 +38,7 @@ namespace FGF_Finanzas
             CargarGrilla();
             foreach (string estado in new[] { "", BEConsulta.Agendada, BEConsulta.Atendida, BEConsulta.Cancelada })
                 TraducirItem(ddlEstado, estado, "filtro" + estado, estado == "" ? "Todas" : estado == BEConsulta.Agendada ? "Agendadas" : estado == BEConsulta.Atendida ? "Atendidas" : "Canceladas");
+            TraducirItem(ddlEstado, BEConsulta.NoSePresento, "filtroNoSePresento", "No se presentó");
             var nombres = new[] { "Mascota", "Fecha y hora", "Veterinario/a", "Motivo", "Estado", "Acciones" };
             for (int i = 0; i < nombres.Length; i++) TraducirColumna(grilla, i, "columna" + i, nombres[i]);
             TraducirSinDatos(grilla, "sinConsultas", "No hay consultas para el estado seleccionado.");
@@ -67,7 +68,7 @@ namespace FGF_Finanzas
             string estado = consulta["estado"].ToString();
             ((Literal)e.Row.FindControl("litEstado")).Text = (bool)consulta["pendienteDeRegistro"]
                 ? TextoTraducido("estadoPendienteRegistro", "Pendiente de registro")
-                : TextoTraducido("estado" + estado, estado);
+                : TextoTraducido("estado" + estado, estado == BEConsulta.NoSePresento ? "No se presentó" : estado);
             var detalle = (LinkButton)e.Row.FindControl("btnDetalle");
             detalle.Visible = estado == BEConsulta.Atendida;
             detalle.Text = TextoTraducido("btnDetalle", "Ver detalle");

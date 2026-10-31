@@ -28,6 +28,12 @@ namespace FGF_Finanzas.ServiceReferences.Consultas {
     [System.Web.Services.WebServiceBindingAttribute(Name="ConsultasServiceSoap", Namespace="http://vitalpet/consultas/")]
     public partial class ConsultasService : System.Web.Services.Protocols.SoapHttpClientProtocol {
         
+        private System.Threading.SendOrPostCallback MarcarNoSePresentoOperationCompleted;
+
+        private System.Threading.SendOrPostCallback ObtenerAtencionOperationCompleted;
+
+        private System.Threading.SendOrPostCallback GuardarAtencionOperationCompleted;
+
         private System.Threading.SendOrPostCallback ObtenerConsultasVeterinarioOperationCompleted;
 
         private System.Threading.SendOrPostCallback ObtenerMascotasOperationCompleted;
@@ -55,6 +61,15 @@ namespace FGF_Finanzas.ServiceReferences.Consultas {
             this.Url = "http://localhost:50950/ConsultasService.asmx";
         }
         
+        /// <remarks/>
+        public event MarcarNoSePresentoCompletedEventHandler MarcarNoSePresentoCompleted;
+
+        /// <remarks/>
+        public event ObtenerAtencionCompletedEventHandler ObtenerAtencionCompleted;
+
+        /// <remarks/>
+        public event GuardarAtencionCompletedEventHandler GuardarAtencionCompleted;
+
         /// <remarks/>
         public event ObtenerConsultasVeterinarioCompletedEventHandler ObtenerConsultasVeterinarioCompleted;
 
@@ -88,6 +103,154 @@ namespace FGF_Finanzas.ServiceReferences.Consultas {
         /// <remarks/>
         public event CancelarPropiaCompletedEventHandler CancelarPropiaCompleted;
         
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://vitalpet/consultas/MarcarNoSePresento", RequestNamespace="http://vitalpet/consultas/", ResponseNamespace="http://vitalpet/consultas/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void MarcarNoSePresento(string dni, string claveUsuario, int idConsulta) {
+            this.Invoke("MarcarNoSePresento", new object[] {
+                        dni,
+                        claveUsuario,
+                        idConsulta});
+        }
+
+        /// <remarks/>
+        public System.IAsyncResult BeginMarcarNoSePresento(string dni, string claveUsuario, int idConsulta, System.AsyncCallback callback, object asyncState) {
+            return this.BeginInvoke("MarcarNoSePresento", new object[] {
+                        dni,
+                        claveUsuario,
+                        idConsulta}, callback, asyncState);
+        }
+
+        /// <remarks/>
+        public void EndMarcarNoSePresento(System.IAsyncResult asyncResult) {
+            this.EndInvoke(asyncResult);
+        }
+
+        /// <remarks/>
+        public void MarcarNoSePresentoAsync(string dni, string claveUsuario, int idConsulta) {
+            this.MarcarNoSePresentoAsync(dni, claveUsuario, idConsulta, null);
+        }
+
+        /// <remarks/>
+        public void MarcarNoSePresentoAsync(string dni, string claveUsuario, int idConsulta, object userState) {
+            if ((this.MarcarNoSePresentoOperationCompleted == null)) {
+                this.MarcarNoSePresentoOperationCompleted = new System.Threading.SendOrPostCallback(this.OnMarcarNoSePresentoOperationCompleted);
+            }
+            this.InvokeAsync("MarcarNoSePresento", new object[] {
+                        dni,
+                        claveUsuario,
+                        idConsulta}, this.MarcarNoSePresentoOperationCompleted, userState);
+        }
+
+        private void OnMarcarNoSePresentoOperationCompleted(object arg) {
+            if ((this.MarcarNoSePresentoCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.MarcarNoSePresentoCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://vitalpet/consultas/ObtenerAtencion", RequestNamespace="http://vitalpet/consultas/", ResponseNamespace="http://vitalpet/consultas/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public System.Data.DataTable ObtenerAtencion(string dni, string claveUsuario, int idConsulta) {
+            object[] results = this.Invoke("ObtenerAtencion", new object[] {
+                        dni,
+                        claveUsuario,
+                        idConsulta});
+            return ((System.Data.DataTable)(results[0]));
+        }
+
+        /// <remarks/>
+        public System.IAsyncResult BeginObtenerAtencion(string dni, string claveUsuario, int idConsulta, System.AsyncCallback callback, object asyncState) {
+            return this.BeginInvoke("ObtenerAtencion", new object[] {
+                        dni,
+                        claveUsuario,
+                        idConsulta}, callback, asyncState);
+        }
+
+        /// <remarks/>
+        public System.Data.DataTable EndObtenerAtencion(System.IAsyncResult asyncResult) {
+            object[] results = this.EndInvoke(asyncResult);
+            return ((System.Data.DataTable)(results[0]));
+        }
+
+        /// <remarks/>
+        public void ObtenerAtencionAsync(string dni, string claveUsuario, int idConsulta) {
+            this.ObtenerAtencionAsync(dni, claveUsuario, idConsulta, null);
+        }
+
+        /// <remarks/>
+        public void ObtenerAtencionAsync(string dni, string claveUsuario, int idConsulta, object userState) {
+            if ((this.ObtenerAtencionOperationCompleted == null)) {
+                this.ObtenerAtencionOperationCompleted = new System.Threading.SendOrPostCallback(this.OnObtenerAtencionOperationCompleted);
+            }
+            this.InvokeAsync("ObtenerAtencion", new object[] {
+                        dni,
+                        claveUsuario,
+                        idConsulta}, this.ObtenerAtencionOperationCompleted, userState);
+        }
+
+        private void OnObtenerAtencionOperationCompleted(object arg) {
+            if ((this.ObtenerAtencionCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.ObtenerAtencionCompleted(this, new ObtenerAtencionCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://vitalpet/consultas/GuardarAtencion", RequestNamespace="http://vitalpet/consultas/", ResponseNamespace="http://vitalpet/consultas/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public int GuardarAtencion(string dni, string claveUsuario, int idConsulta, int idAtencion, string diagnostico, string observaciones) {
+            object[] results = this.Invoke("GuardarAtencion", new object[] {
+                        dni,
+                        claveUsuario,
+                        idConsulta,
+                        idAtencion,
+                        diagnostico,
+                        observaciones});
+            return ((int)(results[0]));
+        }
+
+        /// <remarks/>
+        public System.IAsyncResult BeginGuardarAtencion(string dni, string claveUsuario, int idConsulta, int idAtencion, string diagnostico, string observaciones, System.AsyncCallback callback, object asyncState) {
+            return this.BeginInvoke("GuardarAtencion", new object[] {
+                        dni,
+                        claveUsuario,
+                        idConsulta,
+                        idAtencion,
+                        diagnostico,
+                        observaciones}, callback, asyncState);
+        }
+
+        /// <remarks/>
+        public int EndGuardarAtencion(System.IAsyncResult asyncResult) {
+            object[] results = this.EndInvoke(asyncResult);
+            return ((int)(results[0]));
+        }
+
+        /// <remarks/>
+        public void GuardarAtencionAsync(string dni, string claveUsuario, int idConsulta, int idAtencion, string diagnostico, string observaciones) {
+            this.GuardarAtencionAsync(dni, claveUsuario, idConsulta, idAtencion, diagnostico, observaciones, null);
+        }
+
+        /// <remarks/>
+        public void GuardarAtencionAsync(string dni, string claveUsuario, int idConsulta, int idAtencion, string diagnostico, string observaciones, object userState) {
+            if ((this.GuardarAtencionOperationCompleted == null)) {
+                this.GuardarAtencionOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGuardarAtencionOperationCompleted);
+            }
+            this.InvokeAsync("GuardarAtencion", new object[] {
+                        dni,
+                        claveUsuario,
+                        idConsulta,
+                        idAtencion,
+                        diagnostico,
+                        observaciones}, this.GuardarAtencionOperationCompleted, userState);
+        }
+
+        private void OnGuardarAtencionOperationCompleted(object arg) {
+            if ((this.GuardarAtencionCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.GuardarAtencionCompleted(this, new GuardarAtencionCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://vitalpet/consultas/ObtenerConsultasVeterinario", RequestNamespace="http://vitalpet/consultas/", ResponseNamespace="http://vitalpet/consultas/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         public System.Data.DataTable ObtenerConsultasVeterinario(string dni, string claveUsuario) {
@@ -620,6 +783,62 @@ namespace FGF_Finanzas.ServiceReferences.Consultas {
         }
     }
     
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "4.8.9037.0")]
+    public delegate void MarcarNoSePresentoCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "4.8.9037.0")]
+    public delegate void ObtenerAtencionCompletedEventHandler(object sender, ObtenerAtencionCompletedEventArgs e);
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "4.8.9037.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class ObtenerAtencionCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+
+        private object[] results;
+
+        internal ObtenerAtencionCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+
+        /// <remarks/>
+        public System.Data.DataTable Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((System.Data.DataTable)(this.results[0]));
+            }
+        }
+    }
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "4.8.9037.0")]
+    public delegate void GuardarAtencionCompletedEventHandler(object sender, GuardarAtencionCompletedEventArgs e);
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "4.8.9037.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class GuardarAtencionCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+
+        private object[] results;
+
+        internal GuardarAtencionCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+
+        /// <remarks/>
+        public int Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((int)(this.results[0]));
+            }
+        }
+    }
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "4.8.9037.0")]
     public delegate void ObtenerConsultasVeterinarioCompletedEventHandler(object sender, ObtenerConsultasVeterinarioCompletedEventArgs e);

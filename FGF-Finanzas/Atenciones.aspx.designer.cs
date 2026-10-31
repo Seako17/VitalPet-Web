@@ -13,6 +13,11 @@ namespace FGF_Finanzas
 
     public partial class Atenciones
     {
+        protected global::System.Web.UI.WebControls.Label lblTitulo;
+        protected global::System.Web.UI.WebControls.Label lblEstado;
+        protected global::System.Web.UI.WebControls.DropDownList ddlEstado;
+        protected global::System.Web.UI.WebControls.Button btnVerAtencion;
+        protected global::System.Web.UI.WebControls.Button btnNoSePresento;
 
         /// <summary>
         /// Control lblSubtitulo.

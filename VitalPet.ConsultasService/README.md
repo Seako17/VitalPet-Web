@@ -32,6 +32,8 @@ Los permisos de acceso a pantallas se controlan en la aplicación. El web servic
 1. Abrir `FGF-Finanzas.sln` en Visual Studio.
 2. En **Propiedades de la solución → Proyectos de inicio → Varios proyectos de inicio**, elegir **Iniciar** para `FGF-Finanzas` y `VitalPet.ConsultasService`.
 3. Revisar que `DBConnection` de ambos proyectos apunte a la base local `FGF-BDD`.
+   La base debe incluir `Atencion`: `id_atencion` (int identity, clave primaria), `id_consulta` (int, referencia a Consulta), `diagnostico` y `observaciones` (nvarchar(max), cifrados), `atendido` (bit) y `DV_Horizontal` (varchar(max)). Registrar también la integridad de esa tabla; al crearse vacía su cantidad es 0 y su dígito vertical es `0`.
+   Si existe `CK_Consulta_Estado`, debe admitir los valores cifrados de Agendada, Atendida, Cancelada y NoSePresento. Una regla anterior que permita solo tres estados impedirá guardar ausencias, aunque el servicio esté disponible.
 4. Iniciar y usar **Agendar cita** o **Mis consultas** con un usuario cliente.
 
 El servicio usa `http://localhost:50950/ConsultasService.asmx`. La web tiene esa dirección en `ConsultasService.Url` de su `Web.config`. No hay archivos de claves ni certificados adicionales que configurar para ejecutarlo localmente. Si se aloja en otra computadora, se debe usar HTTPS para proteger las credenciales.
@@ -48,7 +50,7 @@ La integridad se coordina en `BLLConsulta`, dentro de la aplicación web: antes 
 
 ## Verificación
 
-`./tests/ConsultasService/Run.ps1` ejecuta las pruebas con una base temporal de datos ficticios, la elimina al terminar y detiene su servidor de pruebas. No modifica `FGF-BDD`.
+La verificación habitual se realiza mediante revisión del código, compilación de la solución y precompilación ASP.NET. No ejecutar pruebas con datos salvo pedido del usuario o necesidad justificada.
 
 Para actualizar la referencia después de cambiar los métodos del servicio, iniciar el servicio y usar **Agregar referencia web** en Visual Studio, o ejecutar `wsdl.exe /language:CS /namespace:FGF_Finanzas.ServiceReferences.Consultas /out:FGF-Finanzas/ServiceReferences/Consultas/Reference.cs http://localhost:50950/ConsultasService.asmx?WSDL` desde la raíz.
 
@@ -58,4 +60,22 @@ El resumen inferior usa texto blanco. ObtenerVeterinariosDelHorario devuelve los
 
 `BLLAtencion` obtiene las consultas mediante `BLLConsulta.ObtenerConsultas` → `ServicioConsultas.ObtenerConsultasVeterinario` → SOAP. El servicio devuelve únicamente las consultas asignadas al DNI autenticado, excluyendo canceladas. La aplicación conserva el control de acceso a las pantallas. El listado pendiente también excluye consultas con estado Atendida y registros ya atendidos en Atencion.
 
-El guardado de atención proveniente de develop sigue en `BLLAtencion`/`DALAtencion`, con diagnóstico y observaciones cifrados y recálculo de integridad de Atencion. Todavía no actualiza estado/diagnóstico en Consulta: esa unificación queda pendiente. Por eso guardar una atención aún no la refleja como Atendida en Mis consultas. No usar esta integración como cierre del circuito completo hasta resolver esa sincronización.
+`BLLAtencion` usa `ServicioConsultas` para leer y guardar la atención mediante SOAP. `GuardarAtencion` inserta o corrige diagnóstico y observaciones cifrados en Atencion y cambia Consulta.estado a Atendida dentro de una misma transacción. Comprueba usuario, pertenencia al veterinario, consulta no cancelada y correspondencia del identificador de atención. No usa permisos de pantallas, BLL ni DAL dentro del servicio. Se retiró DALAtencion.
+
+Se permite atender antes del horario del turno. En Atenciones se puede elegir Pendientes o Atendidas; desde Atendidas se selecciona una consulta y se usa Corregir atención para modificar el registro existente. No se agregó un control específico de simultaneidad entre atención y cancelación.
+
+Antes de guardar, BLLAtencion verifica integridad; después del éxito llama a InicializarTablaCompleta para Atencion y Consulta. El servicio no calcula dígitos.
+
+Mis consultas obtiene el diagnóstico de Atencion, por lo que refleja las correcciones. Para datos anteriores conserva la lectura de Consulta.diagnostico cuando no existe una atención registrada y reconoce como Atendida una consulta Agendada que ya tiene Atencion.atendido = true. No se migraron registros ni se eliminaron columnas existentes. Las consultas atendidas dejan de ofrecer cancelación.
+
+En Atenciones, Ver atención abre la consulta atendida con diagnóstico y observaciones de solo lectura, sin botón de guardado. Corregir atención mantiene la edición separada.
+
+No se presentó es un estado manual: el veterinario selecciona un turno pendiente y confirma el botón. El servicio valida que corresponda al veterinario, que el horario haya llegado y que no esté atendido ni cancelado; guarda el estado cifrado y la auditoría, y la BLL recalcula la integridad de Consulta. No se crea una atención clínica para una ausencia. Mis consultas y Atenciones permiten filtrar este estado.
+
+El paso del tiempo nunca marca ausencias automáticamente: un turno pasado sigue Agendado y puede mostrarse como Pendiente de registro hasta que el veterinario cargue la atención o marque la ausencia manualmente.
+
+Si el paciente llega tarde, en el filtro No se presentó el veterinario puede seleccionar el turno y usar Atender. Se abre el formulario habitual; solo al guardar la atención el estado cambia a Atendida. Volver sin guardar conserva NoSePresento. La auditoría previa de ausencia se conserva y se agrega el evento del guardado de atención.
+
+En ejecución local, los fallos técnicos de la llamada SOAP se registran en `FGF-Finanzas/App_Data/ConsultasService.errores.log` para diagnóstico. No se registran los parámetros enviados al servicio; el archivo está excluido de Git por la regla de archivos `.log`.
+
+Las pantallas Atenciones y AtenderConsulta usan el catálogo Etiqueta/Traduccion en es-AR y en-US, incluidos títulos, filtros, columnas, selección, acciones, confirmación de ausencia, mensajes de validación y alerta de guardado. Los mensajes visibles y los textos dinámicos se actualizan al cambiar el idioma. Se incluyen el enlace del menú y el estado No se presentó del cliente. La actualización del catálogo requiere recalcular la integridad de Etiqueta y Traduccion.

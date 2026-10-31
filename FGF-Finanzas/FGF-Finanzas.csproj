@@ -181,7 +181,6 @@
     <Compile Include="Capas\BLL\BLLUsuario.cs" />
     <Compile Include="Capas\BLL\BLLPermiso.cs" />
     <Compile Include="Capas\DAL\DALAbstracta.cs" />
-    <Compile Include="Capas\DAL\DALAtencion.cs" />
     <Compile Include="Capas\DAL\DALBackupRestore.cs" />
     <Compile Include="Capas\DAL\DALEvento.cs" />
     <Compile Include="Capas\DAL\DALDigitoVerificador.cs" />

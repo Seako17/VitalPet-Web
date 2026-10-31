@@ -17,6 +17,108 @@ namespace VitalPet.ConsultasService
         private const string FormatoFecha = "yyyy-MM-dd HH:mm";
 
         [WebMethod]
+        public void MarcarNoSePresento(string dni, string claveUsuario, int idConsulta)
+        {
+            using (SqlConnection con = new SqlConnection(cadenaConexion))
+            {
+                con.Open();
+                using (SqlTransaction transaccion = con.BeginTransaction())
+                {
+                    ValidarUsuario(con, transaccion, dni, claveUsuario);
+                    DataTable consulta = LeerTabla(con, transaccion, "Consulta", @"SELECT estado, fechaHora FROM Consulta
+                        WHERE idConsulta = @Consulta AND DNI_Veterinario = @Dni",
+                        new SqlParameter("@Consulta", idConsulta), new SqlParameter("@Dni", dni));
+                    if (consulta.Rows.Count == 0) throw Error("ERR_ATENCION_CONSULTA_INVALIDA");
+                    if (Cifrado.Descifrar(consulta.Rows[0]["estado"].ToString()) != "Agendada")
+                        throw Error("ERR_ATENCION_ESTADO");
+                    if (LeerFecha(consulta.Rows[0]["fechaHora"]) > DateTime.Now) throw Error("ERR_ATENCION_AUSENCIA_ANTICIPADA");
+                    DataTable atencion = LeerTabla(con, transaccion, "Atencion", "SELECT id_atencion FROM Atencion WHERE id_consulta = @Consulta AND atendido = 1",
+                        new SqlParameter("@Consulta", idConsulta));
+                    if (atencion.Rows.Count > 0) throw Error("ERR_ATENCION_ESTADO");
+                    using (SqlCommand cmd = new SqlCommand("UPDATE Consulta SET estado = @Estado WHERE idConsulta = @Consulta", con, transaccion))
+                    {
+                        cmd.Parameters.AddWithValue("@Estado", Cifrado.Cifrar("NoSePresento"));
+                        cmd.Parameters.AddWithValue("@Consulta", idConsulta);
+                        cmd.ExecuteNonQuery();
+                    }
+                    RegistrarEvento(con, transaccion, dni, "Registrar ausencia");
+                    transaccion.Commit();
+                }
+            }
+        }
+
+        [WebMethod]
+        public DataTable ObtenerAtencion(string dni, string claveUsuario, int idConsulta)
+        {
+            using (SqlConnection con = new SqlConnection(cadenaConexion))
+            {
+                con.Open();
+                ValidarUsuario(con, null, dni, claveUsuario);
+                DataTable atenciones = LeerTabla(con, null, "Atencion", @"SELECT a.id_atencion, a.id_consulta,
+                    a.diagnostico, a.observaciones, a.atendido FROM Atencion a
+                    INNER JOIN Consulta c ON c.idConsulta = a.id_consulta
+                    WHERE c.idConsulta = @Consulta AND c.DNI_Veterinario = @Dni",
+                    new SqlParameter("@Consulta", idConsulta), new SqlParameter("@Dni", dni));
+                foreach (DataRow fila in atenciones.Rows)
+                {
+                    fila["diagnostico"] = Cifrado.Descifrar(fila["diagnostico"].ToString());
+                    fila["observaciones"] = Cifrado.Descifrar(fila["observaciones"].ToString());
+                }
+                return atenciones;
+            }
+        }
+
+        [WebMethod]
+        public int GuardarAtencion(string dni, string claveUsuario, int idConsulta, int idAtencion, string diagnostico, string observaciones)
+        {
+            using (SqlConnection con = new SqlConnection(cadenaConexion))
+            {
+                con.Open();
+                using (SqlTransaction transaccion = con.BeginTransaction())
+                {
+                    ValidarUsuario(con, transaccion, dni, claveUsuario);
+                    if (string.IsNullOrWhiteSpace(diagnostico)) throw Error("ERR_ATENCION_DIAGNOSTICO_OBLIGATORIO");
+                    if (string.IsNullOrWhiteSpace(observaciones)) throw Error("ERR_ATENCION_OBSERVACIONES_OBLIGATORIAS");
+                    DataTable consulta = LeerTabla(con, transaccion, "Consulta", @"SELECT estado FROM Consulta
+                        WHERE idConsulta = @Consulta AND DNI_Veterinario = @Dni",
+                        new SqlParameter("@Consulta", idConsulta), new SqlParameter("@Dni", dni));
+                    if (consulta.Rows.Count == 0) throw Error("ERR_ATENCION_CONSULTA_INVALIDA");
+                    string estado = Cifrado.Descifrar(consulta.Rows[0]["estado"].ToString());
+                    if (estado == "Cancelada") throw Error("ERR_ATENCION_CANCELADA");
+                    if (estado != "Agendada" && estado != "Atendida" && estado != "NoSePresento") throw Error("ERR_ATENCION_ESTADO");
+                    if (idAtencion < 0) throw Error("ERR_ATENCION_ID_INVALIDO");
+                    DataTable existentes = LeerTabla(con, transaccion, "Atencion", "SELECT id_atencion FROM Atencion WHERE id_consulta = @Consulta",
+                        new SqlParameter("@Consulta", idConsulta));
+                    if (idAtencion == 0 && existentes.Rows.Count > 0) throw Error("ERR_ATENCION_EXISTENTE");
+                    if (idAtencion > 0 && (existentes.Rows.Count != 1 || (int)existentes.Rows[0]["id_atencion"] != idAtencion))
+                        throw Error("ERR_ATENCION_ID_INVALIDO");
+                    string sql = idAtencion == 0
+                        ? @"INSERT Atencion (id_consulta, diagnostico, observaciones, atendido)
+                            VALUES (@Consulta, @Diagnostico, @Observaciones, 1); SELECT CAST(SCOPE_IDENTITY() AS int)"
+                        : @"UPDATE Atencion SET diagnostico = @Diagnostico, observaciones = @Observaciones, atendido = 1
+                            WHERE id_atencion = @Atencion AND id_consulta = @Consulta; SELECT @Atencion";
+                    using (SqlCommand cmd = new SqlCommand(sql, con, transaccion))
+                    {
+                        cmd.Parameters.AddWithValue("@Consulta", idConsulta);
+                        cmd.Parameters.AddWithValue("@Atencion", idAtencion);
+                        cmd.Parameters.AddWithValue("@Diagnostico", Cifrado.Cifrar(diagnostico.Trim()));
+                        cmd.Parameters.AddWithValue("@Observaciones", Cifrado.Cifrar(observaciones.Trim()));
+                        idAtencion = (int)cmd.ExecuteScalar();
+                    }
+                    using (SqlCommand cmd = new SqlCommand("UPDATE Consulta SET estado = @Estado WHERE idConsulta = @Consulta", con, transaccion))
+                    {
+                        cmd.Parameters.AddWithValue("@Estado", Cifrado.Cifrar("Atendida"));
+                        cmd.Parameters.AddWithValue("@Consulta", idConsulta);
+                        cmd.ExecuteNonQuery();
+                    }
+                    RegistrarEvento(con, transaccion, dni, "Guardar Atencion");
+                    transaccion.Commit();
+                    return idAtencion;
+                }
+            }
+        }
+
+        [WebMethod]
         public DataTable ObtenerConsultasVeterinario(string dni, string claveUsuario)
         {
             using (SqlConnection con = new SqlConnection(cadenaConexion))
@@ -24,13 +126,17 @@ namespace VitalPet.ConsultasService
                 con.Open();
                 ValidarUsuario(con, null, dni, claveUsuario);
                 DataTable datos = LeerTabla(con, null, "Consultas", @"SELECT idConsulta, idMascota, DNI_Veterinario,
-                    motivo, fechaHora, estado FROM Consulta WHERE DNI_Veterinario = @Dni", new SqlParameter("@Dni", dni));
+                    motivo, fechaHora, estado, CAST(CASE WHEN EXISTS (SELECT 1 FROM Atencion a
+                        WHERE a.id_consulta = Consulta.idConsulta AND a.atendido = 1) THEN 1 ELSE 0 END AS bit) AS atencionRegistrada
+                    FROM Consulta WHERE DNI_Veterinario = @Dni", new SqlParameter("@Dni", dni));
                 DataTable resultado = datos.Clone();
                 resultado.Columns["fechaHora"].DataType = typeof(DateTime);
+                resultado.Columns.Remove("atencionRegistrada");
                 foreach (DataRow fila in datos.Rows)
                 {
                     string estado = Cifrado.Descifrar(fila["estado"].ToString());
                     if (estado == "Cancelada") continue;
+                    if (estado == "Agendada" && (bool)fila["atencionRegistrada"]) estado = "Atendida";
                     resultado.Rows.Add(fila["idConsulta"], fila["idMascota"], fila["DNI_Veterinario"],
                         Cifrado.Descifrar(fila["motivo"].ToString()), LeerFecha(fila["fechaHora"]), estado);
                 }
@@ -170,7 +276,7 @@ namespace VitalPet.ConsultasService
         [WebMethod]
         public DataTable ObtenerMisConsultas(string dni, string claveUsuario, string estado)
         {
-            if (!string.IsNullOrEmpty(estado) && estado != "Agendada" && estado != "Atendida" && estado != "Cancelada")
+            if (!string.IsNullOrEmpty(estado) && estado != "Agendada" && estado != "Atendida" && estado != "Cancelada" && estado != "NoSePresento")
                 throw Error("ERR_CONSULTA_ESTADO");
             using (SqlConnection con = new SqlConnection(cadenaConexion))
             {
@@ -320,13 +426,17 @@ namespace VitalPet.ConsultasService
         private static DataTable BuscarConsultas(SqlConnection con, SqlTransaction transaccion, string dni)
         {
             DataTable datos = LeerTabla(con, transaccion, "Consultas", @"SELECT c.idConsulta, c.idMascota, c.DNI_Veterinario,
-                c.fechaHora, c.motivo, c.estado, c.diagnostico, m.nombre AS nombreMascota, u.nombre, u.apellido
+                c.fechaHora, c.motivo, c.estado, COALESCE(a.diagnostico, c.diagnostico) AS diagnostico,
+                m.nombre AS nombreMascota, u.nombre, u.apellido, a.atendido AS atencionRegistrada
                 FROM Consulta c INNER JOIN Mascota m ON m.id_mascota = c.idMascota
+                OUTER APPLY (SELECT TOP 1 diagnostico, atendido FROM Atencion
+                    WHERE id_consulta = c.idConsulta AND atendido = 1 ORDER BY id_atencion DESC) a
                 INNER JOIN Usuario u ON u.dni = c.DNI_Veterinario WHERE m.dni = @Dni", new SqlParameter("@Dni", dni));
             DataTable resultado = datos.Clone();
             resultado.Columns["fechaHora"].DataType = typeof(DateTime);
             resultado.Columns.Remove("nombre");
             resultado.Columns.Remove("apellido");
+            resultado.Columns.Remove("atencionRegistrada");
             resultado.Columns.Add("nombreVeterinario", typeof(string));
             resultado.Columns.Add("puedeCancelar", typeof(bool));
             resultado.Columns.Add("pendienteDeRegistro", typeof(bool));
@@ -340,6 +450,8 @@ namespace VitalPet.ConsultasService
                 nueva["fechaHora"] = LeerFecha(fila["fechaHora"]);
                 nueva["motivo"] = Cifrado.Descifrar(fila["motivo"].ToString());
                 nueva["estado"] = Cifrado.Descifrar(fila["estado"].ToString());
+                if (fila["atencionRegistrada"] != DBNull.Value && (bool)fila["atencionRegistrada"] && nueva["estado"].ToString() == "Agendada")
+                    nueva["estado"] = "Atendida";
                 nueva["diagnostico"] = Cifrado.Descifrar(fila["diagnostico"].ToString());
                 nueva["nombreMascota"] = fila["nombreMascota"];
                 nueva["nombreVeterinario"] = Cifrado.Descifrar(fila["nombre"].ToString()) + " " + Cifrado.Descifrar(fila["apellido"].ToString());
