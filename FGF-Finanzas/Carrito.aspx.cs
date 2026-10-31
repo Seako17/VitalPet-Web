@@ -131,7 +131,7 @@ namespace FGF_Finanzas
             {
                 int order = bllProducto.ConfirmarCompra(SessionManager.Instancia.Usuario.DNI, titular, tarjeta, exp, cvv);
                 txtTarjeta.Text = ""; txtCvv.Text = ""; txtVencimiento.Text = ""; txtTitular.Text = "";
-                lblMensaje.Text = string.Format(TextoTraducido("msgCompraExitosa", "Compra de demostración completada. Pedido #{0}. No se realizó ningún cargo."), order);
+                lblMensaje.Text = TextoTraducido("msgCompraExitosa", "Pedido confirmado");
                 lblMensaje.CssClass = "market-message success";
             }
             catch (BECustomException ex)
