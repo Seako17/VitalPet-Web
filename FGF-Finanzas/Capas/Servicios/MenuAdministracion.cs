@@ -33,7 +33,8 @@ namespace FGF_Finanzas.Capas.Servicios
             new SeccionAdministracion("Gestion-Perfiles.aspx", "PerfilGestionar", "lblMenuPerfiles", "Gestión Perfiles"),
             new SeccionAdministracion("Gestion-Familias.aspx", "FamiliaGestionar", "lblMenuFamilias", "Gestión Familias"),
             new SeccionAdministracion("Backup-Restore.aspx", "BackUpRestore", "lnkMenuBackup", "Backup/Restore"),
-            new SeccionAdministracion("Gestion-Idioma.aspx", "IdiomaGestionar", "lnkMenuIdiomas", "Gestión Idiomas")
+            new SeccionAdministracion("Gestion-Idioma.aspx", "IdiomaGestionar", "lnkMenuIdiomas", "Gestión Idiomas"),
+            new SeccionAdministracion("Gestion-Productos.aspx", "ProductoGestionar", "lnkMenuProductos", "Gestión de productos")
         });
 
         public static IList<SeccionAdministracion> ObtenerSeccionesPermitidas(Rol rol)

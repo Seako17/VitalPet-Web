@@ -13,6 +13,7 @@ namespace FGF_Finanzas
 
     public partial class Gestion_Usuarios
     {
+        protected global::System.Web.UI.WebControls.HyperLink lnkMenuProductos;
 
         /// <summary>
         /// Control lblTituloPanel.

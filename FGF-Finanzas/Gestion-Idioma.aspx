@@ -21,6 +21,7 @@
                 <li runat="server" data-permiso="FamiliaGestionar"><a runat="server" href="Gestion-Familias.aspx"><asp:Label ID="lblMenuFamilias" runat="server" Text="Gestión Familias" /></a></li>
                 <li runat="server" data-permiso="BackUpRestore"><asp:HyperLink ID="lnkMenuBackup" runat="server" NavigateUrl="Backup-Restore.aspx">Backup/Restore</asp:HyperLink></li>
                 <li class="active" runat="server" data-permiso="IdiomaGestionar"><asp:Label ID="lblMenuIdiomas" runat="server" Text="Gestión Idiomas" /></li>
+                <li runat="server" data-permiso="ProductoGestionar"><asp:HyperLink ID="lnkMenuProductos" runat="server" NavigateUrl="Gestion-Productos.aspx">Gestión de productos</asp:HyperLink></li>
             </ul>
         </aside>
 

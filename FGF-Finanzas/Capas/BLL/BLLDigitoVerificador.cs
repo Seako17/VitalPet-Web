@@ -44,37 +44,7 @@ namespace FGF_Finanzas.Capas.BLL
 
         public void InicializarTablaCompleta(string nombreTabla)
         {
-            List<FilaGenerica> filas = _dalDigito.ObtenerFilasDeTablaNegocio(nombreTabla);
-            string nombrePK = _dalDigito.ObtenerPKPublico(nombreTabla);
-
-            BigInteger sumaVertical = 0;
-
-            using (SqlConnection con = new SqlConnection(_dalDigito.ObtenerConexionString()))
-            {
-                con.Open();
-                foreach (var fila in filas)
-                {
-                    string dvHorizontalCalculado = _dalDigito.CalcularDVHorizontalFila(fila);
-
-                    string queryUpdateFila = $"UPDATE {nombreTabla} SET DV_Horizontal = @dvh WHERE {nombrePK} = @id";
-                    using (SqlCommand cmdFila = new SqlCommand(queryUpdateFila, con))
-                    {
-                        cmdFila.Parameters.AddWithValue("@dvh", dvHorizontalCalculado);
-                        cmdFila.Parameters.AddWithValue("@id", fila.Id);
-                        cmdFila.ExecuteNonQuery();
-                    }
-
-                    string hexCol = Encriptacion.Encriptar(dvHorizontalCalculado);
-                    sumaVertical += BigInteger.Parse("00" + hexCol, NumberStyles.HexNumber);
-                }
-            }
-
-            BEDigitoVerificador dvGlobal = new BEDigitoVerificador();
-            dvGlobal.NombreTabla = nombreTabla;
-            dvGlobal.DV_Vertical = sumaVertical.ToString("X");
-            dvGlobal.CantidadRegistros = filas.Count;
-
-            _dalDigito.GuardarDigitoVerificador(dvGlobal);
+            _dalDigito.ActualizarIntegridadTabla(nombreTabla);
         }
 
         public List<InconsistenciaReporte> CompararDigito()

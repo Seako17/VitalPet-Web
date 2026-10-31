@@ -86,14 +86,32 @@ namespace FGF_Finanzas
         {
             try
             {
-                List<string> tablasAControlar = new List<string> { "Usuario", "Mascota", "Idioma", "Etiqueta", "Traduccion", "Consulta", "Atencion" };
+                List<string> tablasAControlar = new List<string>
+                {
+                    "Usuario", "Mascota", "Idioma", "Etiqueta", "Traduccion", "Consulta", "Atencion",
+                    "Producto", "CarritoItem", "Compra", "CompraItem"
+                };
 
                 foreach (string tabla in tablasAControlar)
                 {
                     _bllDV.InicializarTablaCompleta(tabla);
                 }
+
+                List<InconsistenciaReporte> pendientes = _bllDV.CompararDigito();
+                if (pendientes != null && pendientes.Count > 0)
+                {
+                    foreach (InconsistenciaReporte pendiente in pendientes)
+                        pendiente.TipoFalla = TraducirDiagnostico(pendiente.TipoFalla);
+                    lblMensaje.Text = TextoTraducido("ERR_REESTABLECER_DV", "El recálculo terminó, pero todavía se detectan inconsistencias. Revisá las tablas informadas e intentá nuevamente.");
+                    lblMensaje.ForeColor = System.Drawing.Color.Red;
+                    GridInconsistencias.DataSource = pendientes;
+                    GridInconsistencias.DataBind();
+                    GridInconsistencias.Visible = true;
+                    return;
+                }
+
                 string mensaje = ObtenerMensaje("MSG_DV_RESTABLECIDOS").Replace("'", "\\'");
-                string mensajeScript = "alert('" + mensaje + "'); window.location.href = 'Default.aspx';";
+                string mensajeScript = "alert('" + mensaje + "'); window.location.replace('" + ResolveUrl("~/Default.aspx") + "');";
                 Page.ClientScript.RegisterStartupScript(this.GetType(), "AlertaInconsistencia", mensajeScript, true);
             }
             catch (Exception ex)
