@@ -15,6 +15,15 @@ namespace FGF_Finanzas
     {
 
         /// <summary>
+        /// Control lblTituloLogin.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblTituloLogin;
+
+        /// <summary>
         /// Control ErrorMessage.
         /// </summary>
         /// <remarks>
@@ -42,6 +51,15 @@ namespace FGF_Finanzas
         protected global::System.Web.UI.WebControls.TextBox UserName;
 
         /// <summary>
+        /// Control rfvUserName.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvUserName;
+
+        /// <summary>
         /// Control Password.
         /// </summary>
         /// <remarks>
@@ -49,6 +67,15 @@ namespace FGF_Finanzas
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox Password;
+
+        /// <summary>
+        /// Control rfvPassword.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvPassword;
 
         /// <summary>
         /// Control lblError.
@@ -60,12 +87,21 @@ namespace FGF_Finanzas
         protected global::System.Web.UI.WebControls.Label lblError;
 
         /// <summary>
-        /// Control RememberMe.
+        /// Control chkRememberMe.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox RememberMe;
+        protected global::System.Web.UI.WebControls.CheckBox chkRememberMe;
+
+        /// <summary>
+        /// Control btnLogin.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnLogin;
     }
 }

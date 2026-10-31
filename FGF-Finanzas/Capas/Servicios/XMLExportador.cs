@@ -20,7 +20,17 @@ namespace FGF_Finanzas.Capas.Servicios
         public DataTable Importar(Stream xml)
         {
             DataSet ds = new DataSet();
-            ds.ReadXml(xml);
+
+            XmlReaderSettings settings = new XmlReaderSettings
+            {
+                DtdProcessing = DtdProcessing.Prohibit,
+                XmlResolver = null
+            };
+
+            using (XmlReader reader = XmlReader.Create(xml, settings))
+            {
+                ds.ReadXml(reader);
+            }
 
             if (ds.Tables.Count > 0)
             {
