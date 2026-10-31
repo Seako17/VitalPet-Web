@@ -37,7 +37,7 @@ namespace FGF_Finanzas
             IdiomaManager.Instancia.Desuscribir(this);
         }
 
-        public void ActualizarIdioma(string codigoIdioma, IDictionary<string, string> traducciones)
+        public virtual void ActualizarIdioma(string codigoIdioma, IDictionary<string, string> traducciones)
         {
             AplicarTraducciones(this.Controls, traducciones);
         }

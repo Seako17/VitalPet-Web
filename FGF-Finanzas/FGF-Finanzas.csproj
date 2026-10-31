@@ -106,11 +106,13 @@
     <Content Include="Gestion-Productos.aspx" />
     <Content Include="Content\Marketplace.css" />
     <Content Include="Scripts\script.sql" />
+    <Content Include="Scripts\Actualizar-Traducciones-Tienda.sql" />
     <Content Include="RegistrarMascotas.aspx" />
     <Content Include="Registrarse.aspx" />
     <Content Include="Scripts\scripts.js" />
     <None Include="packages.config" />
     <None Include="Scripts\Actualizar-Traducciones-Consulta.ps1" />
+    <None Include="Scripts\Actualizar-Traducciones-Tienda.ps1" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -259,12 +261,27 @@
       <DependentUpon>Login.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Marketplace.aspx.cs"><DependentUpon>Marketplace.aspx</DependentUpon><SubType>ASPXCodeBehind</SubType></Compile>
-    <Compile Include="Marketplace.aspx.designer.cs"><DependentUpon>Marketplace.aspx</DependentUpon></Compile>
-    <Compile Include="Carrito.aspx.cs"><DependentUpon>Carrito.aspx</DependentUpon><SubType>ASPXCodeBehind</SubType></Compile>
-    <Compile Include="Carrito.aspx.designer.cs"><DependentUpon>Carrito.aspx</DependentUpon></Compile>
-    <Compile Include="Gestion-Productos.aspx.cs"><DependentUpon>Gestion-Productos.aspx</DependentUpon><SubType>ASPXCodeBehind</SubType></Compile>
-    <Compile Include="Gestion-Productos.aspx.designer.cs"><DependentUpon>Gestion-Productos.aspx</DependentUpon></Compile>
+    <Compile Include="Marketplace.aspx.cs">
+      <DependentUpon>Marketplace.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Marketplace.aspx.designer.cs">
+      <DependentUpon>Marketplace.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Carrito.aspx.cs">
+      <DependentUpon>Carrito.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Carrito.aspx.designer.cs">
+      <DependentUpon>Carrito.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Gestion-Productos.aspx.cs">
+      <DependentUpon>Gestion-Productos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Gestion-Productos.aspx.designer.cs">
+      <DependentUpon>Gestion-Productos.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Capas\BE\BEProducto.cs" />
     <Compile Include="Capas\BE\BECarritoItem.cs" />
     <Compile Include="Capas\DAL\DALProducto.cs" />

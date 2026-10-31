@@ -31,6 +31,7 @@ namespace FGF_Finanzas
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
+        protected global::System.Web.UI.ScriptManager smPrincipal;
 
         /// <summary>
         /// Control lnkLogin.
@@ -149,6 +150,7 @@ namespace FGF_Finanzas
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink lnkCambiarPass;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl itemCambiarPass;
 
         /// <summary>
         /// Control LogoutBtn.
@@ -158,6 +160,7 @@ namespace FGF_Finanzas
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button LogoutBtn;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl itemCerrarSesion;
 
         /// <summary>
         /// Control lblIdiomaSeleccionado.
