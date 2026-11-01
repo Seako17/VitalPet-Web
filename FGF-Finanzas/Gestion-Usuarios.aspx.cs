@@ -5,8 +5,10 @@ using FGF_Finanzas.Capas.Servicios;
 using FGF_Finanzas.Capas.Servicios.Cambio_Idioma;
 using System;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -184,8 +186,6 @@ namespace FGF_Finanzas
             }
         }
 
-
-
         protected void btnCrear_Click(object sender, EventArgs e)
         {
             EstablecerEstado("Crear");
@@ -353,6 +353,108 @@ namespace FGF_Finanzas
             catch (Exception ex)
             {
                 MostrarAlerta(ObtenerError("ERR_CAMBIAR_VISUALIZACION", ex.Message), "error");
+            }
+        }
+
+        protected void btnExportar_Click(object sender, EventArgs e)
+        {
+            DataTable dt = bllUsuario.ObtenerUsuarios();
+
+            string carpeta = Server.MapPath("~/Temp");
+
+            if (!Directory.Exists(carpeta))
+            {
+                Directory.CreateDirectory(carpeta);
+            }
+
+            string ruta = Path.Combine(carpeta, "Usuarios.xml");
+
+            XMLExportador exp = new XMLExportador();
+            exp.Exportar(dt, ruta);
+
+            Response.Clear();
+            Response.ContentType = "application/xml";
+            Response.AddHeader("Content-Disposition", "attachment; filename=usuarios.xml");
+            Response.TransmitFile(ruta);
+            Response.End();
+        }
+
+        protected void btnImportar_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void ValidarUsuariosImportados(DataTable dt)
+        {
+            if (!dt.Columns.Contains("DNI"))
+            {
+                throw new Exception("El XML no contiene la columna idUsuario.");
+            }
+
+            var idsDuplicados = dt.AsEnumerable()
+                .GroupBy(row => row["DNI"].ToString().Trim(), StringComparer.OrdinalIgnoreCase)
+                .Where(g => !string.IsNullOrWhiteSpace(g.Key) && g.Count() > 1)
+                .Select(g => g.Key)
+                .ToList();
+
+            if (idsDuplicados.Any())
+            {
+                throw new Exception("El XML contiene DNI duplicados: " + string.Join(", ", idsDuplicados) + ".");
+            }
+
+        }
+
+        private void MostrarAlerta(string mensaje)
+        {
+            string script = "alert('" + HttpUtility.JavaScriptStringEncode(mensaje) + "');";
+
+            ScriptManager.RegisterStartupScript(
+                this,
+                GetType(),
+                Guid.NewGuid().ToString(),
+                script,
+                true
+            );
+        }
+
+        protected void btnProcesarImportacion_Click(object sender, EventArgs e)
+        {
+            if (!fuUsuarios.HasFile)
+            {
+                MostrarAlerta("Seleccione un archivo XML.");
+                return;
+            }
+
+            string extension = Path.GetExtension(fuUsuarios.FileName);
+
+            if (!extension.Equals(".xml", StringComparison.OrdinalIgnoreCase))
+            {
+                MostrarAlerta("El archivo debe tener formato XML.");
+                return;
+            }
+
+            try
+            {
+                XMLExportador exp = new XMLExportador();
+
+                DataTable dt = exp.Importar(fuUsuarios.FileContent);
+
+                if (dt.Rows.Count == 0)
+                {
+                    MostrarAlerta("El archivo XML no contiene usuarios.");
+                    return;
+                }
+
+                ValidarUsuariosImportados(dt);
+
+                bllUsuario.ImportarUsuarios(dt);
+
+                MostrarAlerta("El archivo se importó correctamente. Registros: " + dt.Rows.Count);
+                CargarGrillaUsuarios();
+            }
+            catch (Exception ex)
+            {
+                MostrarAlerta("Error al importar el archivo: " + ex.Message);
             }
         }
     }
