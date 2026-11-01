@@ -1,10 +1,11 @@
-﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="FGF_Finanzas.Site" %>
+<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="FGF_Finanzas.Site" %>
 
 <!DOCTYPE html>
 
 <html>
 <head runat="server">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>VitalPet</title>
 
     <link href="Content/Estilos.css" rel="stylesheet" />
@@ -15,6 +16,7 @@
 </head>
 <body>
     <form id="form1" runat="server">
+        <asp:ScriptManager ID="smPrincipal" runat="server" EnablePartialRendering="true" />
 
         <header>
             <nav class="navbar">
@@ -24,7 +26,14 @@
                     <a href="/Default.aspx">VitalPet</a>
                 </div>
 
+                <button type="button" class="nav-toggle" id="mobile-menu" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
                 <ul class="navbar-menu" id="nav-menu">
+                    <li><asp:HyperLink runat="server" ID="lnkMarketplace" NavigateUrl="~/Marketplace.aspx" Text="Tienda" /></li>
+
                     <li>
                         <asp:HyperLink runat="server" ID="lnkLogin" NavigateUrl="/Login.aspx" Text="Iniciar sesión" /></li>
                     <li>
@@ -50,14 +59,11 @@
                         </ul>
                     </li>
 
-                    <% if (FGF_Finanzas.Capas.Servicios.SessionManager.Instancia != null && FGF_Finanzas.Capas.Servicios.SessionManager.Instancia.Usuario.Rol.TienePermiso(FGF_Finanzas.Capas.Servicios.CodigosPermiso.ObtenerPermisos().Find(x =>x.Nombre == "ContrasenaCambiar")))
-                        { %>
-                    <li>
-                        <asp:HyperLink runat="server" ID="lnkCambiarPass" NavigateUrl="Cambiar-Contraseña.aspx" Text="Cambiar Contraseña" /></li>
-                    <li>
+                    <li id="itemCambiarPass" runat="server">
+                        <asp:HyperLink runat="server" ID="lnkCambiarPass" NavigateUrl="~/Cambiar-Contrase%C3%B1a.aspx" Text="Cambiar Contraseña" /></li>
+                    <li id="itemCerrarSesion" runat="server">
                         <asp:Button runat="server" OnClick="LogoutBtn_Click" ID="LogoutBtn" Text="Cerrar Sesión" class="btn-logout" CausesValidation="false" />
                     </li>
-                    <% } %>
                     <li class="idioma-menu-css">
                         <details class="idioma-dropdown" id="detailsIdioma">
                             <summary class="idioma-boton-actual">
@@ -84,11 +90,6 @@
                     </li>
                 </ul>
 
-                <div class="nav-toggle" id="mobile-menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
             </nav>
         </header>
 
