@@ -1,6 +1,7 @@
 using FGF_Finanzas.Capas.BE;
 using FGF_Finanzas.Capas.BLL;
 using FGF_Finanzas.Capas.Servicios;
+using FGF_Finanzas.Capas.Servicios.Cambio_Idioma;
 using System;
 using System.Globalization;
 using System.IO;
@@ -27,17 +28,19 @@ namespace FGF_Finanzas
             Form.Enctype = "multipart/form-data";
             fuImagen.Attributes["accept"] = "image/png,image/jpeg,image/gif,.png,.jpg,.jpeg,.gif";
             if (!IsPostBack) Cargar();
-            AplicarTextoDePagina();
+            AplicarTextoDePagina(IdiomaManager.Instancia.IdiomaActual);
         }
 
         public override void ActualizarIdioma(string codigoIdioma, System.Collections.Generic.IDictionary<string, string> traducciones)
         {
             base.ActualizarIdioma(codigoIdioma, traducciones);
-            AplicarTextoDePagina();
+            AplicarTextoDePagina(codigoIdioma);
         }
 
-        private void AplicarTextoDePagina()
+        private void AplicarTextoDePagina(string codigoIdioma)
         {
+            bool ingles = !string.IsNullOrWhiteSpace(codigoIdioma)
+                && codigoIdioma.StartsWith("en", StringComparison.OrdinalIgnoreCase);
             Title = TextoTraducido("PageTitle", "Gestión de productos");
             litPanelTitulo.Text = TextoTraducido("litPanelTitulo", "Panel de Administrador");
             litAdministracion.Text = TextoTraducido("litAdministracion", "Administración");
@@ -55,8 +58,8 @@ namespace FGF_Finanzas
             litDescripcion.Text = TextoTraducido("litDescripcion", "Descripción");
             litStock.Text = TextoTraducido("litStock", "Stock");
             litImagen.Text = TextoTraducido("litImagen", "Imagen (PNG, JPG o GIF; máximo 2 MB)");
-            litSeleccionarArchivo.Text = TextoTraducido("litSeleccionarArchivo", "Seleccionar archivo");
-            string sinArchivo = TextoTraducido("lblArchivoNinguno", "Ningún archivo seleccionado");
+            litSeleccionarArchivo.Text = TextoTraducido("litSeleccionarArchivo", ingles ? "Choose file" : "Seleccionar archivo");
+            string sinArchivo = TextoTraducido("lblArchivoNinguno", ingles ? "No file selected" : "Ningún archivo seleccionado");
             lblArchivoSeleccionado.Text = fuImagen.HasFile ? Path.GetFileName(fuImagen.FileName) : sinArchivo;
             fuImagen.Attributes["onchange"] = "this.parentElement.querySelector('.file-upload-name').textContent=this.files.length?this.files[0].name:'" + HttpUtility.JavaScriptStringEncode(sinArchivo) + "';";
             btnGuardar.Text = TextoTraducido("btnGuardar", "Guardar producto");
