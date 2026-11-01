@@ -101,7 +101,6 @@
     max-height: 400px; 
     overflow-y: auto; 
     overflow-x: auto;
-    display: block;
     box-sizing: border-box;
     margin-bottom: 20px;
 }
@@ -109,10 +108,20 @@
 .table {
     width: 100%;
     background-color: white;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
 }
+    
+    .table thead,
+    .table tr {
+        position: static;
+    }
 
     .table th {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        z-index: 10;
         background-color: #8c7d6b;
         color: white;
         padding: 12px;

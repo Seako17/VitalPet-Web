@@ -191,5 +191,15 @@ namespace FGF_Finanzas.Capas.DAL
                 }
             }
         }
+
+        public DataTable ObtenerRolesExistentes()
+        {
+            string query = "SELECT id_rol, nombre FROM Rol WHERE nombre IS NOT NULL AND LTRIM(RTRIM(nombre)) <> ''";
+            DataTable dt = new DataTable();
+
+            SqlDataAdapter adapter = new SqlDataAdapter(query, _conexion);
+            adapter.Fill(dt);
+            return dt;
+        }
     }
 }
