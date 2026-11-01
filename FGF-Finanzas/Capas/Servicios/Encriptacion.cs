@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Globalization;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace FGF_Finanzas.Capas.Servicios
                 byte[] bytesTexto = Encoding.UTF8.GetBytes(s);
                 byte[] hash = sha256.ComputeHash(bytesTexto);
                 StringBuilder sb = new StringBuilder();
-                foreach (byte b in hash) sb.Append(b.ToString("x2"));
+                foreach (byte b in hash) sb.Append(b.ToString("x2", CultureInfo.InvariantCulture));
                 return sb.ToString();
             }
         }

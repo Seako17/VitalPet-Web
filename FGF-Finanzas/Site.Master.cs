@@ -39,6 +39,8 @@ namespace FGF_Finanzas
             Atencion.Visible = false;
             Informes.Visible = false;
             dropdownList.Visible = false;
+            itemCambiarPass.Visible = false;
+            itemCerrarSesion.Visible = false;
             HttpCookie cookie = Request.Cookies["UserSessionFGF"];
             if (cookie != null)
             {
@@ -85,6 +87,15 @@ namespace FGF_Finanzas
 
                 if(SessionManager.Instancia != null && SessionManager.Instancia.Usuario != null)
                 {
+                    var rolCliente = SessionManager.Instancia.Usuario.Rol;
+                    if (string.Equals(rolCliente?.Nombre, "Cliente", StringComparison.OrdinalIgnoreCase))
+                    {
+                        Cliente.Visible = true;
+                        dropdownList.Visible = true;
+                    }
+                    bool puedeCambiarContrasena = rolCliente?.TienePermiso(CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "ContrasenaCambiar")) == true;
+                    itemCambiarPass.Visible = puedeCambiarContrasena;
+                    itemCerrarSesion.Visible = true;
                     Admin.Visible = MenuAdministracion.TieneAcceso(SessionManager.Instancia.Usuario.Rol);
                     if (SessionManager.Instancia.Usuario.Rol.TienePermiso(CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "MascotaRegistrar")))
                     {
@@ -156,6 +167,11 @@ namespace FGF_Finanzas
         public void ActualizarIdioma(string codigoIdioma, IDictionary<string, string> traducciones)
         {
             BasePage.AplicarTraducciones(this.Controls, traducciones);
+            string tienda = traducciones != null && traducciones.TryGetValue("lnkMarketplace", out string textoTienda)
+                ? textoTienda
+                : IdiomaManager.Instancia.ObtenerTexto(NombreFormulario, "lnkMarketplace", codigoIdioma);
+            if (tienda == "[lnkMarketplace]") tienda = codigoIdioma.StartsWith("en", StringComparison.OrdinalIgnoreCase) ? "Store" : "Tienda";
+            lnkMarketplace.Text = tienda;
         }
 
         protected void rptIdiomas_ItemCommand(object source, RepeaterCommandEventArgs e)

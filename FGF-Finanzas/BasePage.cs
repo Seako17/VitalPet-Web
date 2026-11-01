@@ -37,7 +37,7 @@ namespace FGF_Finanzas
             IdiomaManager.Instancia.Desuscribir(this);
         }
 
-        public void ActualizarIdioma(string codigoIdioma, IDictionary<string, string> traducciones)
+        public virtual void ActualizarIdioma(string codigoIdioma, IDictionary<string, string> traducciones)
         {
             AplicarTraducciones(this.Controls, traducciones);
         }
@@ -58,6 +58,9 @@ namespace FGF_Finanzas
                             break;
                         case Label lbl:
                             lbl.Text = texto;
+                            break;
+                        case Literal literal:
+                            literal.Text = texto;
                             break;
                         case LinkButton lbtn:
                             lbtn.Text = texto;
