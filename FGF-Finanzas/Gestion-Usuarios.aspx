@@ -3,6 +3,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link href="Content/GestionUsuarios/GestionUsuariosStyles.css" rel="stylesheet" />
     <link href="Content/MenuAdministracion.css?v=1" rel="stylesheet" />
+    <script src="Scripts/scripts.js"></script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <div class="barra-titulo">
@@ -111,6 +112,14 @@
                         <asp:Button ID="btnModificar" runat="server" Text="Modificar" OnClick="btnModificar_Click" />
                         <asp:Button ID="btnAplicar" runat="server" Text="Aplicar" OnClick="btnAplicar_Click" />
                         <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" OnClick="btnCancelar_Click" />
+                        <asp:Button ID="btnExportar" runat="server" Text="Exportar Xml" OnClick="btnExportar_Click" />
+                        <asp:Button ID="btnImportar" runat="server" Text="Importar XML" CssClass="btn"
+                            OnClientClick="abrirSelectorXML(); return false;" />
+
+                        <asp:Button ID="btnProcesarImportacion" runat="server" Text="Confirmar importación" CssClass="btn"
+                            OnClick="btnProcesarImportacion_Click" Style="display: none;" ClientIDMode="Static" />
+
+                        <asp:FileUpload ID="fuUsuarios" runat="server" accept=".xml" Style="display: none;" ClientIDMode="Static" />
                     </aside>
                 </div>
             </div>

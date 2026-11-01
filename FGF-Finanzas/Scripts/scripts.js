@@ -78,3 +78,18 @@ document.addEventListener('click', function (e) {
         dropdownIdioma.removeAttribute('open');
     }
 });
+
+function abrirSelectorXML() {
+    document.getElementById('fuUsuarios').click();
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const archivo = document.getElementById('fuUsuarios');
+    const confirmar = document.getElementById('btnProcesarImportacion');
+
+    if (!archivo || !confirmar) return;
+
+    archivo.addEventListener('change', function () {
+        confirmar.style.display = archivo.files.length > 0 ? 'inline-block' : 'none';
+    });
+});
