@@ -203,6 +203,7 @@
     <Compile Include="Capas\Servicios\Permiso.cs" />
     <Compile Include="Capas\Servicios\Rol.cs" />
     <Compile Include="Capas\Servicios\SessionManager.cs" />
+    <Compile Include="Capas\Servicios\XMLExportador.cs" />
     <Compile Include="Consulta.aspx.cs">
       <DependentUpon>Consulta.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
