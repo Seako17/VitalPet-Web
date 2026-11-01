@@ -106,13 +106,11 @@
     <Content Include="Gestion-Productos.aspx" />
     <Content Include="Content\Marketplace.css" />
     <Content Include="Scripts\script.sql" />
-    <Content Include="Scripts\Actualizar-Traducciones-Tienda.sql" />
     <Content Include="RegistrarMascotas.aspx" />
     <Content Include="Registrarse.aspx" />
     <Content Include="Scripts\scripts.js" />
     <None Include="packages.config" />
     <None Include="Scripts\Actualizar-Traducciones-Consulta.ps1" />
-    <None Include="Scripts\Actualizar-Traducciones-Tienda.ps1" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
