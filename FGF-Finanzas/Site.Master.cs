@@ -37,6 +37,7 @@ namespace FGF_Finanzas
             Admin.Visible = false;
             Cliente.Visible = false;
             Atencion.Visible = false;
+            Informes.Visible = false;
             dropdownList.Visible = false;
             itemCambiarPass.Visible = false;
             itemCerrarSesion.Visible = false;
@@ -104,6 +105,8 @@ namespace FGF_Finanzas
 
                     Atencion.Visible = SessionManager.Instancia.Usuario.Rol.TienePermiso(
                         CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "ConsultaAtender"));
+                    var permisoInforme = CodigosPermiso.ObtenerPermisos().Find(x => x.Nombre == "InformeVer");
+                    Informes.Visible = permisoInforme != null && SessionManager.Instancia.Usuario.Rol.TienePermiso(permisoInforme);
                 }
             }
             else
@@ -167,7 +170,7 @@ namespace FGF_Finanzas
             string tienda = traducciones != null && traducciones.TryGetValue("lnkMarketplace", out string textoTienda)
                 ? textoTienda
                 : IdiomaManager.Instancia.ObtenerTexto(NombreFormulario, "lnkMarketplace", codigoIdioma);
-            if (tienda == "[lnkMarketplace]") tienda = string.Equals(codigoIdioma, "en", StringComparison.OrdinalIgnoreCase) ? "Store" : "Tienda";
+            if (tienda == "[lnkMarketplace]") tienda = codigoIdioma.StartsWith("en", StringComparison.OrdinalIgnoreCase) ? "Store" : "Tienda";
             lnkMarketplace.Text = tienda;
         }
 

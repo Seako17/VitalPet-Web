@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FGF_Finanzas.Capas.BE;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -86,9 +87,8 @@ namespace FGF_Finanzas.Capas.Servicios
                 {
                     XmlElement dni = campos.FirstOrDefault(campo =>
                         campo.LocalName.Equals("DNI", StringComparison.OrdinalIgnoreCase));
-                    string identificador = dni == null ? "sin DNI" : "con DNI " + dni.InnerText;
-                    throw new Exception("El registro " + identificador + " no contiene las columnas: " +
-                        string.Join(", ", faltantes) + ".");
+                    throw new BECustomException("ERR_XML_FILA_COLUMNAS",
+                        dni == null ? "-" : dni.InnerText, string.Join(", ", faltantes));
                 }
 
                 foreach (XmlElement campo in campos)

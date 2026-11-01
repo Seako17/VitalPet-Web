@@ -1,4 +1,4 @@
-﻿using FGF_Finanzas.Capas.BE;
+using FGF_Finanzas.Capas.BE;
 using FGF_Finanzas.Capas.BLL;
 using FGF_Finanzas.Capas.Servicios;
 using FGF_Finanzas.Capas.Servicios.Cambio_Idioma;
@@ -86,11 +86,7 @@ namespace FGF_Finanzas
         {
             try
             {
-                List<string> tablasAControlar = new List<string>
-                {
-                    "Usuario", "Mascota", "Idioma", "Etiqueta", "Traduccion", "Consulta", "Atencion",
-                    "Producto", "CarritoItem", "Compra", "CompraItem"
-                };
+                List<string> tablasAControlar = new List<string> { "Usuario", "Mascota", "Idioma", "Etiqueta", "Traduccion", "Consulta", "Atencion", "InformeConsultas", "InformeConsultasDetalle", "InformeConsultasMes", "Producto", "CarritoItem", "Compra", "CompraItem" };
 
                 foreach (string tabla in tablasAControlar)
                 {

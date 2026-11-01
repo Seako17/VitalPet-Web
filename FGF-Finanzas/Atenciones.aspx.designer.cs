@@ -3,7 +3,7 @@
 //     Este código fue generado por una herramienta.
 //
 //     Los cambios en este archivo podrían causar un comportamiento incorrecto y se perderán si
-//     se vuelve a generar el código. 
+//     se vuelve a generar el código.
 // </generado automáticamente>
 //------------------------------------------------------------------------------
 
@@ -13,6 +13,11 @@ namespace FGF_Finanzas
 
     public partial class Atenciones
     {
+        protected global::System.Web.UI.WebControls.Label lblTitulo;
+        protected global::System.Web.UI.WebControls.Label lblEstado;
+        protected global::System.Web.UI.WebControls.DropDownList ddlEstado;
+        protected global::System.Web.UI.WebControls.Button btnVerAtencion;
+        protected global::System.Web.UI.WebControls.Button btnNoSePresento;
 
         /// <summary>
         /// Control lblSubtitulo.

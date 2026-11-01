@@ -13,6 +13,13 @@ namespace FGF_Finanzas
 
     public partial class Consulta
     {
+        protected global::System.Web.UI.WebControls.Panel pnlFormulario;
+        protected global::System.Web.UI.WebControls.Panel pnlAviso;
+        protected global::System.Web.UI.WebControls.Label lblAviso;
+        protected global::System.Web.UI.WebControls.Label lblConfirmarAviso;
+        protected global::System.Web.UI.WebControls.GridView grillaPendientes;
+        protected global::System.Web.UI.WebControls.Button btnVolver;
+        protected global::System.Web.UI.WebControls.Button btnConfirmar;
         protected global::System.Web.UI.WebControls.Label lblTitulo;
         protected global::System.Web.UI.WebControls.Label lblSubtitulo;
         protected global::System.Web.UI.WebControls.Label lblMascota;
@@ -100,5 +107,6 @@ namespace FGF_Finanzas
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnAgendar;
+        protected global::System.Web.UI.WebControls.Label lblDisponibilidadDia;
     }
 }

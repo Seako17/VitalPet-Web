@@ -429,3 +429,5 @@ FodyWeavers.xsd
 *.msp
 
 AGENTS.md
+.verification/
+_program files_git/

@@ -1,4 +1,4 @@
-using FGF_Finanzas.Capas.BE;
+﻿using FGF_Finanzas.Capas.BE;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -45,24 +45,7 @@ namespace FGF_Finanzas.Capas.DAL
                             {
                                 object valor = rdr.GetValue(i);
 
-                                if (nombreTabla.Equals("Usuario", StringComparison.OrdinalIgnoreCase))
-                                {
-                                    if (nombreColumna.Equals("nombre", StringComparison.OrdinalIgnoreCase) ||
-                                        nombreColumna.Equals("apellido", StringComparison.OrdinalIgnoreCase) ||
-                                        nombreColumna.Equals("usuario", StringComparison.OrdinalIgnoreCase) ||
-                                        nombreColumna.Equals("mail", StringComparison.OrdinalIgnoreCase))
-                                    {
-                                        valor = Encriptacion.DesencriptarAES(valor?.ToString());
-                                    }
-                                }
-                                else if (nombreTabla.Equals("Producto", StringComparison.OrdinalIgnoreCase) &&
-                                    (nombreColumna.Equals("Nombre", StringComparison.OrdinalIgnoreCase) || nombreColumna.Equals("Descripcion", StringComparison.OrdinalIgnoreCase) || nombreColumna.Equals("Imagen", StringComparison.OrdinalIgnoreCase)))
-                                {
-                                    valor = Encriptacion.DesencriptarAES(valor?.ToString());
-                                }
-                                if (nombreTabla.Equals("Compra", StringComparison.OrdinalIgnoreCase) &&
-                                    (nombreColumna.Equals("TitularTarjeta", StringComparison.OrdinalIgnoreCase) || nombreColumna.Equals("Ultimos4", StringComparison.OrdinalIgnoreCase)))
-                                    valor = Encriptacion.DesencriptarAES(valor?.ToString());
+                                valor = Encriptacion.DescifrarCampo(nombreTabla, nombreColumna, valor);
                                 fila.ValoresCampos.Add(valor);
                             }
                         }
@@ -118,11 +101,7 @@ namespace FGF_Finanzas.Capas.DAL
                     string col = r.GetName(i);
                     if (col.Equals("DV_Horizontal", StringComparison.OrdinalIgnoreCase)) { fila.DV_HorizontalGuardado = Convert.ToString(r.GetValue(i)); continue; }
                     object value = r.IsDBNull(i) ? null : r.GetValue(i);
-                    if (nombreTabla.Equals("Usuario", StringComparison.OrdinalIgnoreCase) && new[] { "nombre", "apellido", "usuario", "mail" }.Contains(col, StringComparer.OrdinalIgnoreCase)) value = Encriptacion.DesencriptarAES(Convert.ToString(value));
-                    if (nombreTabla.Equals("Producto", StringComparison.OrdinalIgnoreCase) && new[] { "Nombre", "Descripcion", "Imagen" }.Contains(col, StringComparer.OrdinalIgnoreCase)) value = Encriptacion.DesencriptarAES(Convert.ToString(value));
-                    if (nombreTabla.Equals("Compra", StringComparison.OrdinalIgnoreCase) && new[] { "TitularTarjeta", "Ultimos4" }.Contains(col, StringComparer.OrdinalIgnoreCase)) value = Encriptacion.DesencriptarAES(Convert.ToString(value));
-                    if (nombreTabla.Equals("Atencion", StringComparison.OrdinalIgnoreCase) && new[] { "diagnostico", "observaciones" }.Contains(col, StringComparer.OrdinalIgnoreCase)) value = Encriptacion.DesencriptarAES(Convert.ToString(value));
-                    fila.ValoresCampos.Add(value);
+                    fila.ValoresCampos.Add(Encriptacion.DescifrarCampo(nombreTabla, col, value));
                 }
                 filas.Add(fila);
             }
@@ -180,29 +159,7 @@ namespace FGF_Finanzas.Capas.DAL
                             {
                                 object valor = rdr.GetValue(i);
 
-                                if (nombreTabla.Equals("Usuario", StringComparison.OrdinalIgnoreCase))
-                                {
-                                    if (nombreColumna.Equals("nombre", StringComparison.OrdinalIgnoreCase) ||
-                                        nombreColumna.Equals("apellido", StringComparison.OrdinalIgnoreCase) ||
-                                        nombreColumna.Equals("usuario", StringComparison.OrdinalIgnoreCase) ||
-                                        nombreColumna.Equals("mail", StringComparison.OrdinalIgnoreCase))
-                                    {
-                                        valor = Encriptacion.DesencriptarAES(valor?.ToString());
-                                    }
-                                }
-                                else if (nombreTabla.Equals("Atencion", StringComparison.OrdinalIgnoreCase) &&
-                                    (nombreColumna.Equals("diagnostico", StringComparison.OrdinalIgnoreCase) || nombreColumna.Equals("observaciones", StringComparison.OrdinalIgnoreCase)))
-                                {
-                                    valor = Encriptacion.DesencriptarAES(valor?.ToString());
-                                }
-                                else if (nombreTabla.Equals("Producto", StringComparison.OrdinalIgnoreCase) &&
-                                    (nombreColumna.Equals("Nombre", StringComparison.OrdinalIgnoreCase) || nombreColumna.Equals("Descripcion", StringComparison.OrdinalIgnoreCase) || nombreColumna.Equals("Imagen", StringComparison.OrdinalIgnoreCase)))
-                                {
-                                    valor = Encriptacion.DesencriptarAES(valor?.ToString());
-                                }
-                                if (nombreTabla.Equals("Compra", StringComparison.OrdinalIgnoreCase) &&
-                                    (nombreColumna.Equals("TitularTarjeta", StringComparison.OrdinalIgnoreCase) || nombreColumna.Equals("Ultimos4", StringComparison.OrdinalIgnoreCase)))
-                                    valor = Encriptacion.DesencriptarAES(valor?.ToString());
+                                valor = Encriptacion.DescifrarCampo(nombreTabla, nombreColumna, valor);
                                 fila.ValoresCampos.Add(valor);
                             }
                         }

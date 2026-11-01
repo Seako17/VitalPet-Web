@@ -1,4 +1,5 @@
 ﻿using FGF_Finanzas.Capas.BE;
+using FGF_Finanzas.Capas.Servicios;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -17,18 +18,24 @@ namespace FGF_Finanzas.Capas.DAL
 
             SqlDataAdapter adapter = new SqlDataAdapter(query, _conexion);
             adapter.Fill(dt);
+            dt = Encriptacion.DescifrarFechas(dt, "fechaHora");
+            Encriptacion.DescifrarTabla(dt, "Evento");
             return dt;
         }
         public void AgregarEvento(BEEvento evento)
         {
-            DataTable dt = ObtenerEventos();
-            dt.Rows.Add(new object[] { 1,evento.usuario.DNI, evento.fechaHora, evento.modulo, evento.evento, evento.criticidad });
-
-            SqlDataAdapter adapter = new SqlDataAdapter("Select * from Evento", _conexion);
-
-            SqlCommandBuilder cb = new SqlCommandBuilder(adapter);
-
-            adapter.Update(dt);
+            using (var con = new SqlConnection(_conexion))
+            using (var cmd = new SqlCommand(@"INSERT Evento(dni,fechaHora,modulo,evento,criticidad)
+                VALUES(@Dni,@Fecha,@Modulo,@Evento,@Criticidad)", con))
+            {
+                cmd.Parameters.AddWithValue("@Dni", evento.usuario.DNI);
+                cmd.Parameters.AddWithValue("@Fecha", Encriptacion.CifrarFecha(evento.fechaHora));
+                cmd.Parameters.AddWithValue("@Modulo", Encriptacion.EncriptarAES(evento.modulo));
+                cmd.Parameters.AddWithValue("@Evento", Encriptacion.EncriptarAES(evento.evento));
+                cmd.Parameters.AddWithValue("@Criticidad", evento.criticidad);
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
         }
     }
 }

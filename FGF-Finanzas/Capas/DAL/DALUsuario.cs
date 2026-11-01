@@ -199,6 +199,7 @@ namespace FGF_Finanzas.Capas.DAL
 
             SqlDataAdapter adapter = new SqlDataAdapter(query, _conexion);
             adapter.Fill(dt);
+            Encriptacion.DescifrarTabla(dt, "Rol");
             return dt;
         }
     }

@@ -29,8 +29,8 @@ namespace FGF_Finanzas.Capas.DAL
                     familia = new Familia
                     {
                         Id = Convert.ToInt32(reader["id_familia"]),
-                        Nombre = reader["nombre"].ToString(),
-                        Descripcion = reader["descripcion"].ToString()
+                        Nombre = Encriptacion.DesencriptarAES(reader["nombre"].ToString()),
+                        Descripcion = Encriptacion.DesencriptarAES(reader["descripcion"].ToString())
                     };
                 }
             }
@@ -65,12 +65,13 @@ namespace FGF_Finanzas.Capas.DAL
                     lista.Add(new Familia
                     {
                         Id = Convert.ToInt32(reader["id_familia"]),
-                        Nombre = reader["nombre"].ToString(),
-                        Descripcion = reader["descripcion"].ToString()
+                        Nombre = Encriptacion.DesencriptarAES(reader["nombre"].ToString()),
+                        Descripcion = Encriptacion.DesencriptarAES(reader["descripcion"].ToString())
                     });
                 }
             }
 
+            lista.Sort((a, b) => StringComparer.CurrentCultureIgnoreCase.Compare(a.Nombre, b.Nombre));
             return lista;
         }
         public List<Familia> ListarPorRol(Rol rol)
@@ -100,12 +101,13 @@ namespace FGF_Finanzas.Capas.DAL
                     lista.Add(new Familia
                     {
                         Id = Convert.ToInt32(reader["id_familia"]),
-                        Nombre = reader["nombre"].ToString(),
-                        Descripcion = reader["descripcion"].ToString()
+                        Nombre = Encriptacion.DesencriptarAES(reader["nombre"].ToString()),
+                        Descripcion = Encriptacion.DesencriptarAES(reader["descripcion"].ToString())
                     });
                 }
             }
 
+            lista.Sort((a, b) => StringComparer.CurrentCultureIgnoreCase.Compare(a.Nombre, b.Nombre));
             return lista;
         }
         public List<Familia> ObtenerFamilias()
@@ -127,12 +129,13 @@ namespace FGF_Finanzas.Capas.DAL
                     lista.Add(new Familia
                     {
                         Id = Convert.ToInt32(reader["id_familia"]),
-                        Nombre = reader["nombre"].ToString(),
-                        Descripcion = reader["descripcion"].ToString()
+                        Nombre = Encriptacion.DesencriptarAES(reader["nombre"].ToString()),
+                        Descripcion = Encriptacion.DesencriptarAES(reader["descripcion"].ToString())
                     });
                 }
             }
 
+            lista.Sort((a, b) => StringComparer.CurrentCultureIgnoreCase.Compare(a.Nombre, b.Nombre));
             return lista;
         }
         public void AgregarFamilia(Familia familia)
@@ -143,8 +146,8 @@ namespace FGF_Finanzas.Capas.DAL
 
                 SqlCommand cmd = new SqlCommand(query, conexion);
 
-                cmd.Parameters.AddWithValue("@nombre", familia.Nombre);
-                cmd.Parameters.AddWithValue("@descripcion", string.IsNullOrWhiteSpace(familia.Descripcion) ? (object)DBNull.Value : familia.Descripcion);
+                cmd.Parameters.AddWithValue("@nombre", Encriptacion.EncriptarAES(familia.Nombre));
+                cmd.Parameters.AddWithValue("@descripcion", string.IsNullOrWhiteSpace(familia.Descripcion) ? (object)DBNull.Value : Encriptacion.EncriptarAES(familia.Descripcion));
 
                 conexion.Open();
                 cmd.ExecuteNonQuery();
@@ -153,17 +156,7 @@ namespace FGF_Finanzas.Capas.DAL
 
         public bool ExisteFamilia(string nombre)
         {
-            using (SqlConnection conexion = new SqlConnection(_conexion))
-            {
-                string query = @"SELECT COUNT(*) FROM Familia WHERE LOWER(nombre) = LOWER(@nombre)";
-
-                SqlCommand cmd = new SqlCommand(query, conexion);
-                cmd.Parameters.AddWithValue("@nombre", nombre);
-
-                conexion.Open();
-
-                return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
-            }
+            return ObtenerFamilias().Exists(x => x.Nombre.Equals(nombre, StringComparison.OrdinalIgnoreCase));
         }
 
         public bool ExistePermisoEnFamilia(Familia familia, Permiso permiso)
@@ -341,12 +334,13 @@ namespace FGF_Finanzas.Capas.DAL
                     lista.Add(new Familia
                     {
                         Id = Convert.ToInt32(reader["id_familia"]),
-                        Nombre = reader["nombre"].ToString(),
-                        Descripcion = reader["descripcion"].ToString()
+                        Nombre = Encriptacion.DesencriptarAES(reader["nombre"].ToString()),
+                        Descripcion = Encriptacion.DesencriptarAES(reader["descripcion"].ToString())
                     });
                 }
             }
 
+            lista.Sort((a, b) => StringComparer.CurrentCultureIgnoreCase.Compare(a.Nombre, b.Nombre));
             return lista;
         }
         public List<Familia> ObtenerFamiliasRaiz()
@@ -372,12 +366,13 @@ namespace FGF_Finanzas.Capas.DAL
                     lista.Add(new Familia
                     {
                         Id = Convert.ToInt32(reader["id_familia"]),
-                        Nombre = reader["nombre"].ToString(),
-                        Descripcion = reader["descripcion"].ToString()
+                        Nombre = Encriptacion.DesencriptarAES(reader["nombre"].ToString()),
+                        Descripcion = Encriptacion.DesencriptarAES(reader["descripcion"].ToString())
                     });
                 }
             }
 
+            lista.Sort((a, b) => StringComparer.CurrentCultureIgnoreCase.Compare(a.Nombre, b.Nombre));
             return lista;
         }
     }

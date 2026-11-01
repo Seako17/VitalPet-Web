@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FGF_Finanzas.Capas.Servicios;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -30,7 +31,7 @@ namespace FGF_Finanzas.Capas.DAL
                 {
                     while (reader.Read())
                     {
-                        diccionario[reader["ControlId"].ToString()] = reader["Texto"].ToString();
+                        diccionario[reader["ControlId"].ToString()] = Encriptacion.DesencriptarAES(reader["Texto"].ToString());
                     }
                 }
             }
@@ -53,10 +54,11 @@ namespace FGF_Finanzas.Capas.DAL
                         lista.Add(new BEIdioma(
                             Convert.ToInt32(reader["IdIdioma"]),
                             reader["Codigo"].ToString(),
-                            reader["Nombre"].ToString()));
+                            Encriptacion.DesencriptarAES(reader["Nombre"].ToString())));
                     }
                 }
             }
+            lista.Sort((a, b) => StringComparer.CurrentCultureIgnoreCase.Compare(a.Nombre, b.Nombre));
             return lista;
         }
 
@@ -76,7 +78,7 @@ namespace FGF_Finanzas.Capas.DAL
                         return new BEIdioma(
                             Convert.ToInt32(reader["IdIdioma"]),
                             reader["Codigo"].ToString(),
-                            reader["Nombre"].ToString());
+                            Encriptacion.DesencriptarAES(reader["Nombre"].ToString()));
                     }
                 }
             }
@@ -148,6 +150,7 @@ namespace FGF_Finanzas.Capas.DAL
                     adapter.Fill(dt);
                 }
             }
+            Encriptacion.DescifrarTabla(dt, "Traduccion");
             return dt;
         }
 
@@ -161,7 +164,7 @@ namespace FGF_Finanzas.Capas.DAL
             using (var cmd = new SqlCommand(query, con))
             {
                 cmd.Parameters.AddWithValue("@Codigo", idioma.Codigo);
-                cmd.Parameters.AddWithValue("@Nombre", idioma.Nombre);
+                cmd.Parameters.AddWithValue("@Nombre", Encriptacion.EncriptarAES(idioma.Nombre));
                 con.Open();
                 return Convert.ToInt32(cmd.ExecuteScalar());
             }
@@ -199,7 +202,7 @@ namespace FGF_Finanzas.Capas.DAL
             using (var con = new SqlConnection(_conexion))
             using (var cmd = new SqlCommand(query, con))
             {
-                cmd.Parameters.AddWithValue("@Texto", traduccion.Texto);
+                cmd.Parameters.AddWithValue("@Texto", Encriptacion.EncriptarAES(traduccion.Texto));
                 cmd.Parameters.AddWithValue("@IdIdioma", traduccion.IdIdioma);
                 cmd.Parameters.AddWithValue("@IdEtiqueta", traduccion.IdEtiqueta);
                 con.Open();
