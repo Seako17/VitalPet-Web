@@ -1,4 +1,5 @@
 ﻿using FGF_Finanzas.Capas.BE;
+using FGF_Finanzas.Capas.Servicios;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -17,18 +18,24 @@ namespace FGF_Finanzas.Capas.DAL
 
             SqlDataAdapter adapter = new SqlDataAdapter(query, _conexion);
             adapter.Fill(dt);
+            dt = Encriptacion.DescifrarFechas(dt, "fechaNacimiento");
+            Encriptacion.DescifrarTabla(dt, "Mascota");
             return dt;
         }
         public void AgregarMascota(BEMascota mascota)
         {
-            DataTable dt = ObtenerMascotas();
-            dt.Rows.Add(new object[] { 1, mascota.usuario.DNI, mascota.nombre, mascota.especie, mascota.raza, mascota.fechaNacimiento });
-
-            SqlDataAdapter adapter = new SqlDataAdapter("Select * from Mascota", _conexion);
-
-            SqlCommandBuilder cb = new SqlCommandBuilder(adapter);
-
-            adapter.Update(dt);
+            using (var con = new SqlConnection(_conexion))
+            using (var cmd = new SqlCommand(@"INSERT Mascota(dni,nombre,especie,raza,fechaNacimiento)
+                VALUES(@Dni,@Nombre,@Especie,@Raza,@Fecha)", con))
+            {
+                cmd.Parameters.AddWithValue("@Dni", mascota.usuario.DNI);
+                cmd.Parameters.AddWithValue("@Nombre", Encriptacion.EncriptarAES(mascota.nombre));
+                cmd.Parameters.AddWithValue("@Especie", Encriptacion.EncriptarAES(mascota.especie));
+                cmd.Parameters.AddWithValue("@Raza", Encriptacion.EncriptarAES(mascota.raza));
+                cmd.Parameters.AddWithValue("@Fecha", Encriptacion.CifrarFecha(mascota.fechaNacimiento));
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
         }
 
 

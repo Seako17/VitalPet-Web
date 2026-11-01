@@ -1,0 +1,9 @@
+.mis-consultas { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
+.mis-consultas .eventos__filtros { margin: 0 0 20px; }
+.mis-consultas .table td { white-space: normal; overflow-wrap: anywhere; }
+.mis-consultas .table a { display: inline-block; margin: 4px 10px 4px 0; color: #18516a; }
+.mis-consultas .btn-filtro { text-decoration: none; display: inline-block; }
+.mensaje-consulta { display: block; margin-bottom: 15px; color: #343434; }
+.detalle-consulta { background: white; padding: 20px; border-radius: 10px; }
+.detalle-consulta h3 { color: #333; }
+.diagnostico { white-space: pre-wrap; overflow-wrap: anywhere; }

@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <generado automáticamente>
 //     Este código fue generado por una herramienta.
 //
@@ -31,6 +31,26 @@ namespace FGF_Finanzas
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
+        protected global::System.Web.UI.ScriptManager smPrincipal;
+
+        /// <summary>
+        /// Control lnkLogin.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink lnkLogin;
+        protected global::System.Web.UI.WebControls.HyperLink lnkMarketplace;
+
+        /// <summary>
+        /// Control lnkRegistro.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink lnkRegistro;
 
         /// <summary>
         /// Control Admin.
@@ -42,6 +62,15 @@ namespace FGF_Finanzas
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl Admin;
 
         /// <summary>
+        /// Control lnkAdmin.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink lnkAdmin;
+
+        /// <summary>
         /// Control Cliente.
         /// </summary>
         /// <remarks>
@@ -51,13 +80,79 @@ namespace FGF_Finanzas
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl Cliente;
 
         /// <summary>
-        /// Control WebMaster.
+        /// Control lnkMascotas.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl WebMaster;
+        protected global::System.Web.UI.WebControls.HyperLink lnkMascotas;
+
+        /// <summary>
+        /// Control Atencion.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Atencion;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Informes;
+        protected global::System.Web.UI.WebControls.HyperLink lnkInformes;
+
+        /// <summary>
+        /// Control lnkAtenderConsultas.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink lnkAtenderConsultas;
+
+        /// <summary>
+        /// Control dropdownList.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl dropdownList;
+
+        /// <summary>
+        /// Control lblMenuConsultas.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblMenuConsultas;
+
+        /// <summary>
+        /// Control lnkNuevaConsulta.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink lnkNuevaConsulta;
+
+        /// <summary>
+        /// Control lnkMisConsultas.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink lnkMisConsultas;
+
+        /// <summary>
+        /// Control lnkCambiarPass.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink lnkCambiarPass;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl itemCambiarPass;
 
         /// <summary>
         /// Control LogoutBtn.
@@ -67,6 +162,25 @@ namespace FGF_Finanzas
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button LogoutBtn;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl itemCerrarSesion;
+
+        /// <summary>
+        /// Control lblIdiomaSeleccionado.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblIdiomaSeleccionado;
+
+        /// <summary>
+        /// Control rptIdiomas.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater rptIdiomas;
 
         /// <summary>
         /// Control MainContent.

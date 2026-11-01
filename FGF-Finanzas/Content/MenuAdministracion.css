@@ -1,0 +1,9 @@
+.sidebar ul li.opcion-sin-permiso,
+.sidebar ul li.opcion-sin-permiso:hover,
+.sidebar ul li.opcion-sin-permiso a,
+.sidebar ul li.opcion-sin-permiso:hover a,
+.sidebar ul li.opcion-sin-permiso span {
+    color: #9b948a !important;
+    cursor: not-allowed !important;
+    font-weight: normal !important;
+}

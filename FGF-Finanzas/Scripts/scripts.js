@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
         mobileMenu.addEventListener("click", function () {
             navMenu.classList.toggle("active");
             mobileMenu.classList.toggle("active");
+            mobileMenu.setAttribute("aria-expanded", navMenu.classList.contains("active") ? "true" : "false");
         });
     }
 });
@@ -43,3 +44,52 @@ function mostrarAlerta(mensaje, tipo) {
         }, 5000);
     }
 }
+
+function toggleDropdown(event) {
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    var dropdown = event.currentTarget ? event.currentTarget.parentElement : null;
+    if (!dropdown) {
+        dropdown = event.target ? event.target.closest('.dropdown') : null;
+    }
+    if (!dropdown) {
+        return;
+    }
+    dropdown.classList.toggle('open');
+}
+
+document.addEventListener('click', function (e) {
+    var target = e.target;
+    if (!(target instanceof Node)) {
+        return;
+    }
+
+    var dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach(function (dropdown) {
+        if (!dropdown.contains(target)) {
+            dropdown.classList.remove('open');
+        }
+    });
+
+    var dropdownIdioma = document.getElementById('detailsIdioma');
+    if (dropdownIdioma && !dropdownIdioma.contains(target)) {
+        dropdownIdioma.removeAttribute('open');
+    }
+});
+
+function abrirSelectorXML() {
+    document.getElementById('fuUsuarios').click();
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const archivo = document.getElementById('fuUsuarios');
+    const confirmar = document.getElementById('btnProcesarImportacion');
+
+    if (!archivo || !confirmar) return;
+
+    archivo.addEventListener('change', function () {
+        confirmar.style.display = archivo.files.length > 0 ? 'inline-block' : 'none';
+    });
+});

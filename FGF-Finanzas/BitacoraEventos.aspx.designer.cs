@@ -13,6 +13,7 @@ namespace FGF_Finanzas
 
     public partial class BitacoraEventos
     {
+        protected global::System.Web.UI.WebControls.HyperLink lnkMenuProductos;
 
         /// <summary>
         /// Control GridViewEventos.

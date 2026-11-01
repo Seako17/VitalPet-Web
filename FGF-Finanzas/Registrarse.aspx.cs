@@ -1,5 +1,6 @@
 ﻿using FGF_Finanzas.Capas.BE;
 using FGF_Finanzas.Capas.BLL;
+using FGF_Finanzas.Capas.Servicios;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -10,9 +11,10 @@ using System.Web.UI.WebControls;
 
 namespace FGF_Finanzas
 {
-    public partial class Registrarse : System.Web.UI.Page
+    public partial class Registrarse : BasePage
     {
         BLLUsuario bllUsuario = new BLLUsuario();
+        BLLRol bllRol = new BLLRol();
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -20,6 +22,7 @@ namespace FGF_Finanzas
 
         protected void CreateUser_Click(object sender, EventArgs e)
         {
+            LimpiarMensajeVisible(lblError);
             if (!Page.IsValid) return;
             try
             {
@@ -27,13 +30,13 @@ namespace FGF_Finanzas
                 var apellido = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Apellido.Text.ToLower()).Trim();
 
                 bllUsuario.ValidarUsuario(DniUsuario.Text, UserName.Text.Trim(), nombre, apellido, Password.Text, ConfirmPassword.Text);
-                BEUsuario usuario = new BEUsuario(DniUsuario.Text, nombre, apellido, UserName.Text.Trim(), Password.Text, Email.Text, "Cliente");
+                BEUsuario usuario = new BEUsuario(DniUsuario.Text, nombre, apellido, UserName.Text.Trim(), Password.Text, Email.Text, bllRol.ObtenerCompleto(new Rol(2)));
                 bllUsuario.AgregarUsuario(usuario);
                 Response.Redirect("~/Login.aspx");
             }
             catch (Exception ex)
             {
-                lblError.Text = ex.Message;
+                MostrarErrorVisible(lblError, ex);
             }
         }
     }
