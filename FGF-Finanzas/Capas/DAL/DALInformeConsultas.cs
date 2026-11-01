@@ -1,4 +1,4 @@
-using FGF_Finanzas.Capas.BE;
+﻿using FGF_Finanzas.Capas.BE;
 using FGF_Finanzas.Capas.Servicios;
 using System;
 using System.Data;
@@ -13,8 +13,12 @@ namespace FGF_Finanzas.Capas.DAL
             var tabla = new DataTable();
             using (var con = new SqlConnection(_conexion))
             using (var adapter = new SqlDataAdapter(@"SELECT u.dni, u.nombre, u.apellido FROM Usuario u
-                JOIN Rol r ON r.id_rol = u.rol WHERE r.nombre = 'Veterinario'
-                OR EXISTS(SELECT 1 FROM Consulta c WHERE c.DNI_Veterinario = u.dni)", con)) adapter.Fill(tabla);
+                JOIN Rol r ON r.id_rol = u.rol WHERE r.nombre = @Rol
+                OR EXISTS(SELECT 1 FROM Consulta c WHERE c.DNI_Veterinario = u.dni)", con))
+            {
+                adapter.SelectCommand.Parameters.AddWithValue("@Rol", Encriptacion.EncriptarAES("Veterinario"));
+                adapter.Fill(tabla);
+            }
             tabla.Columns.Add("NombreCompleto", typeof(string));
             foreach (DataRow fila in tabla.Rows)
                 fila["NombreCompleto"] = Encriptacion.DesencriptarAES(fila["nombre"].ToString()) + " " + Encriptacion.DesencriptarAES(fila["apellido"].ToString());
@@ -44,7 +48,7 @@ namespace FGF_Finanzas.Capas.DAL
                         cmd.Parameters.AddWithValue("@Mes", informe.Mes);
                         cmd.Parameters.AddWithValue("@Dni", (object)informe.DniVeterinario ?? DBNull.Value);
                         cmd.Parameters.AddWithValue("@Nombre", (object)Encriptacion.EncriptarAES(informe.NombreVeterinario) ?? DBNull.Value);
-                        cmd.Parameters.AddWithValue("@Generado", informe.Generado);
+                        cmd.Parameters.AddWithValue("@Generado", Encriptacion.CifrarFecha(informe.Generado));
                         cmd.Parameters.AddWithValue("@Usuario", dniUsuario);
                         informe.Id = (int)cmd.ExecuteScalar();
                     }
@@ -80,10 +84,12 @@ namespace FGF_Finanzas.Capas.DAL
         {
             var tabla = new DataTable();
             using (var con = new SqlConnection(_conexion))
-            using (var adapter = new SqlDataAdapter("SELECT IdInforme,Anio,Mes,NombreVeterinario,Generado FROM InformeConsultas ORDER BY Generado DESC,IdInforme DESC", con)) adapter.Fill(tabla);
+            using (var adapter = new SqlDataAdapter("SELECT IdInforme,Anio,Mes,NombreVeterinario,Generado FROM InformeConsultas ", con)) adapter.Fill(tabla);
+            tabla = Encriptacion.DescifrarFechas(tabla, "Generado");
             foreach (DataRow fila in tabla.Rows)
                 fila["NombreVeterinario"] = Encriptacion.DesencriptarAES(fila["NombreVeterinario"].ToString());
-            return tabla;
+            tabla.DefaultView.Sort = "Generado DESC,IdInforme DESC";
+            return tabla.DefaultView.ToTable();
         }
 
         public BEInformeConsultas Obtener(int id)
@@ -100,7 +106,7 @@ namespace FGF_Finanzas.Capas.DAL
                         if (!reader.Read()) return null;
                         informe = new BEInformeConsultas { Id = id, Anio = (int)reader["Anio"], Mes = (int)reader["Mes"],
                             DniVeterinario = reader["DniVeterinario"] as string,
-                            NombreVeterinario = reader["NombreVeterinario"] == DBNull.Value ? null : Encriptacion.DesencriptarAES(reader["NombreVeterinario"].ToString()), Generado = (DateTime)reader["Generado"] };
+                            NombreVeterinario = reader["NombreVeterinario"] == DBNull.Value ? null : Encriptacion.DesencriptarAES(reader["NombreVeterinario"].ToString()), Generado = Encriptacion.DescifrarFecha(reader["Generado"]) };
                     }
                 }
                 using (var cmd = new SqlCommand("SELECT * FROM InformeConsultasDetalle WHERE IdInforme=@Id ORDER BY Atendidos DESC,NombreVeterinario", con))

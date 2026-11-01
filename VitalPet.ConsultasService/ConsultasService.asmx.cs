@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -145,8 +145,11 @@ namespace VitalPet.ConsultasService
             {
                 con.Open();
                 ValidarUsuario(con, null, dni, claveUsuario);
-                return LeerTabla(con, null, "Mascotas", "SELECT id_mascota AS IdMascota, nombre AS Nombre FROM Mascota WHERE dni = @Dni ORDER BY nombre",
+                DataTable mascotas = LeerTabla(con, null, "Mascotas", "SELECT id_mascota AS IdMascota, nombre AS Nombre FROM Mascota WHERE dni = @Dni",
                     new SqlParameter("@Dni", dni));
+                foreach (DataRow fila in mascotas.Rows) fila["Nombre"] = Cifrado.Descifrar(fila["Nombre"].ToString());
+                mascotas.DefaultView.Sort = "Nombre";
+                return mascotas.DefaultView.ToTable();
             }
         }
 
@@ -378,7 +381,7 @@ namespace VitalPet.ConsultasService
         {
             return LeerTabla(con, transaccion, "Veterinarios", @"SELECT u.dni, u.nombre, u.apellido
                 FROM Usuario u INNER JOIN Rol r ON r.id_rol = u.rol
-                WHERE u.bloqueado = 0 AND r.nombre = @Rol", new SqlParameter("@Rol", "Veterinario"));
+                WHERE u.bloqueado = 0 AND r.nombre = @Rol", new SqlParameter("@Rol", Cifrado.Cifrar("Veterinario")));
         }
 
         private static void ValidarMascota(SqlConnection con, SqlTransaction transaccion, string dni, int idMascota)
@@ -444,7 +447,7 @@ namespace VitalPet.ConsultasService
                 nueva["motivo"] = Cifrado.Descifrar(fila["motivo"].ToString());
                 nueva["estado"] = Cifrado.Descifrar(fila["estado"].ToString());
                 nueva["diagnostico"] = Cifrado.Descifrar(fila["diagnostico"].ToString());
-                nueva["nombreMascota"] = fila["nombreMascota"];
+                nueva["nombreMascota"] = Cifrado.Descifrar(fila["nombreMascota"].ToString());
                 nueva["nombreVeterinario"] = Cifrado.Descifrar(fila["nombre"].ToString()) + " " + Cifrado.Descifrar(fila["apellido"].ToString());
                 nueva["puedeCancelar"] = nueva["estado"].ToString() == "Agendada" && (DateTime)nueva["fechaHora"] > ahora;
                 nueva["pendienteDeRegistro"] = nueva["estado"].ToString() == "Agendada" && (DateTime)nueva["fechaHora"] < ahora;
@@ -466,11 +469,12 @@ namespace VitalPet.ConsultasService
         private static void RegistrarEvento(SqlConnection con, SqlTransaction transaccion, string dni, string evento)
         {
             using (SqlCommand cmd = new SqlCommand(@"INSERT INTO Evento (dni, fechaHora, modulo, evento, criticidad)
-                VALUES (@Dni, @Fecha, 'Consultas', @Evento, 4)", con, transaccion))
+                VALUES (@Dni, @Fecha, @Modulo, @Evento, 4)", con, transaccion))
             {
                 cmd.Parameters.AddWithValue("@Dni", dni);
-                cmd.Parameters.AddWithValue("@Fecha", DateTime.Now);
-                cmd.Parameters.AddWithValue("@Evento", evento);
+                cmd.Parameters.AddWithValue("@Fecha", Cifrado.Cifrar(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fffffff", CultureInfo.InvariantCulture)));
+                cmd.Parameters.AddWithValue("@Modulo", Cifrado.Cifrar("Consultas"));
+                cmd.Parameters.AddWithValue("@Evento", Cifrado.Cifrar(evento));
                 cmd.ExecuteNonQuery();
             }
         }

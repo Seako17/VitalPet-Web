@@ -29,7 +29,7 @@ namespace FGF_Finanzas.Capas.DAL
                     {
                         Id = Convert.ToInt32(reader["id_permiso"]),
                         Nombre = reader["nombre"].ToString(),
-                        Descripcion = reader["descripcion"].ToString(),
+                        Descripcion = Encriptacion.DesencriptarAES(reader["descripcion"].ToString()),
                     };
                     lista.Add(permiso);
                 }
@@ -66,7 +66,7 @@ namespace FGF_Finanzas.Capas.DAL
                     {
                         Id = Convert.ToInt32(reader["id_permiso"]),
                         Nombre = reader["nombre"].ToString(),
-                        Descripcion = reader["descripcion"].ToString()
+                        Descripcion = Encriptacion.DesencriptarAES(reader["descripcion"].ToString())
                     });
                 }
             }
@@ -100,7 +100,7 @@ namespace FGF_Finanzas.Capas.DAL
                     {
                         Id = Convert.ToInt32(reader["id_permiso"]),
                         Nombre = reader["nombre"].ToString(),
-                        Descripcion = reader["descripcion"].ToString()
+                        Descripcion = Encriptacion.DesencriptarAES(reader["descripcion"].ToString())
                     });
                 }
             }

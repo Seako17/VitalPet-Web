@@ -30,8 +30,8 @@ namespace FGF_Finanzas.Capas.DAL
                     rol = new Rol
                     {
                         Id = Convert.ToInt32(reader["id_rol"]),
-                        Nombre = reader["nombre"].ToString(),
-                        Descripcion = reader["descripcion"].ToString()
+                        Nombre = Encriptacion.DesencriptarAES(reader["nombre"].ToString()),
+                        Descripcion = Encriptacion.DesencriptarAES(reader["descripcion"].ToString())
                     };
                 }
             }
@@ -61,31 +61,19 @@ namespace FGF_Finanzas.Capas.DAL
                     lista.Add(new Rol
                     {
                         Id = Convert.ToInt32(reader["id_rol"]),
-                        Nombre = reader["nombre"].ToString(),
-                        Descripcion = reader["descripcion"].ToString()
+                        Nombre = Encriptacion.DesencriptarAES(reader["nombre"].ToString()),
+                        Descripcion = Encriptacion.DesencriptarAES(reader["descripcion"].ToString())
                     });
                 }
             }
 
+            lista.Sort((a, b) => StringComparer.CurrentCultureIgnoreCase.Compare(a.Nombre, b.Nombre));
             return lista;
         }
 
         public bool ExisteRol(string nombre)
         {
-            using (SqlConnection conexion = new SqlConnection(_conexion))
-            {
-                string query =
-                    @"SELECT COUNT(*)
-                      FROM Rol
-                      WHERE LOWER(nombre) = LOWER(@nombre)";
-
-                SqlCommand cmd = new SqlCommand(query, conexion);
-                cmd.Parameters.AddWithValue("@nombre", nombre);
-
-                conexion.Open();
-
-                return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
-            }
+            return ObtenerRoles().Exists(x => x.Nombre.Equals(nombre, StringComparison.OrdinalIgnoreCase));
         }
 
         public void AgregarRol(Rol rol)
@@ -98,13 +86,13 @@ namespace FGF_Finanzas.Capas.DAL
 
                 SqlCommand cmd = new SqlCommand(query, conexion);
 
-                cmd.Parameters.AddWithValue("@nombre", rol.Nombre);
+                cmd.Parameters.AddWithValue("@nombre", Encriptacion.EncriptarAES(rol.Nombre));
 
                 cmd.Parameters.AddWithValue(
                     "@descripcion",
                     string.IsNullOrWhiteSpace(rol.Descripcion)
                         ? (object)DBNull.Value
-                        : rol.Descripcion
+                        : Encriptacion.EncriptarAES(rol.Descripcion)
                 );
 
                 conexion.Open();
