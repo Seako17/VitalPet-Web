@@ -384,44 +384,11 @@ namespace FGF_Finanzas
             
         }
 
-        private void ValidarUsuariosImportados(DataTable dt)
-        {
-            if (!dt.Columns.Contains("DNI"))
-            {
-                throw new Exception("El XML no contiene la columna idUsuario.");
-            }
-
-            var idsDuplicados = dt.AsEnumerable()
-                .GroupBy(row => row["DNI"].ToString().Trim(), StringComparer.OrdinalIgnoreCase)
-                .Where(g => !string.IsNullOrWhiteSpace(g.Key) && g.Count() > 1)
-                .Select(g => g.Key)
-                .ToList();
-
-            if (idsDuplicados.Any())
-            {
-                throw new Exception("El XML contiene DNI duplicados: " + string.Join(", ", idsDuplicados) + ".");
-            }
-
-        }
-
-        private void MostrarAlerta(string mensaje)
-        {
-            string script = "alert('" + HttpUtility.JavaScriptStringEncode(mensaje) + "');";
-
-            ScriptManager.RegisterStartupScript(
-                this,
-                GetType(),
-                Guid.NewGuid().ToString(),
-                script,
-                true
-            );
-        }
-
         protected void btnProcesarImportacion_Click(object sender, EventArgs e)
         {
             if (!fuUsuarios.HasFile)
             {
-                MostrarAlerta("Seleccione un archivo XML.");
+                MostrarAlerta(ObtenerError("ERR_XML_SELECCIONAR"), "error");
                 return;
             }
 
@@ -429,7 +396,7 @@ namespace FGF_Finanzas
 
             if (!extension.Equals(".xml", StringComparison.OrdinalIgnoreCase))
             {
-                MostrarAlerta("El archivo debe tener formato XML.");
+                MostrarAlerta(ObtenerError("ERR_XML_EXTENSION"), "error");
                 return;
             }
 
@@ -441,20 +408,22 @@ namespace FGF_Finanzas
 
                 if (dt.Rows.Count == 0)
                 {
-                    MostrarAlerta("El archivo XML no contiene usuarios.");
+                    MostrarAlerta(ObtenerError("ERR_XML_VACIO"), "error");
                     return;
                 }
 
-                ValidarUsuariosImportados(dt);
-
                 bllUsuario.ImportarUsuarios(dt);
 
-                MostrarAlerta("El archivo se importó correctamente. Registros: " + dt.Rows.Count);
+                MostrarAlerta(ObtenerMensaje("MSG_XML_IMPORTADO", dt.Rows.Count));
                 CargarGrillaUsuarios();
+            }
+            catch (System.Xml.XmlException)
+            {
+                MostrarAlerta(ObtenerError("ERR_XML_INVALIDO"), "error");
             }
             catch (Exception ex)
             {
-                MostrarAlerta("Error al importar el archivo: " + ex.Message);
+                MostrarAlerta(TraducirError(ex, "ERR_XML_IMPORTAR"), "error");
             }
         }
     }
