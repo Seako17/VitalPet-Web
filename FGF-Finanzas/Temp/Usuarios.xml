@@ -1,0 +1,51 @@
+<?xml version="1.0" standalone="yes"?>
+<DocumentElement>
+  <Usuarios>
+    <dni>12345678</dni>
+    <nombre>John</nombre>
+    <apellido>Stefanini</apellido>
+    <usuario>John</usuario>
+    <contraseña>6bc8852a5f9a657cd09c38a31a9f59ae3d7e5b822a2b7da66f4e75abfba144a5</contraseña>
+    <intento>0</intento>
+    <bloqueado>true</bloqueado>
+    <mail>JohnStefanini@gmail.com</mail>
+    <rol>Cliente</rol>
+    <DV_Horizontal>0EB938915F75AEA703B5CDB5A6C2A585FFBCC5E1A97CB152CAA6814191455E780</DV_Horizontal>
+  </Usuarios>
+  <Usuarios>
+    <dni>45823327</dni>
+    <nombre>Lucas</nombre>
+    <apellido>Gallardo</apellido>
+    <usuario>Galla1980</usuario>
+    <contraseña>91c214f1a754f35b3195a85a89db40ad9b7123efc6843c6fbe49ea412c8b8cbd</contraseña>
+    <intento>0</intento>
+    <bloqueado>false</bloqueado>
+    <mail>lucasgalla1980@gmail.com</mail>
+    <rol>Web Master</rol>
+    <DV_Horizontal>0AA7F3706595026AFB133C26EFCF918D4422762F98611CF860B59AF97DCC7745E</DV_Horizontal>
+  </Usuarios>
+  <Usuarios>
+    <dni>46030516</dni>
+    <nombre>Marco</nombre>
+    <apellido>Fridrich</apellido>
+    <usuario>marcofreed17</usuario>
+    <contraseña>045f2e76f7311199b6bb0f1333064a0342e14e150de466904ceaf8c51443e249</contraseña>
+    <intento>0</intento>
+    <bloqueado>false</bloqueado>
+    <mail>marcofridrich14@gmail.com</mail>
+    <rol>Admin</rol>
+    <DV_Horizontal>0A3B5A2E3C827D9A6EDAB3A9A426055ECF214FB9EC4BF337DA7AD94319016BB0</DV_Horizontal>
+  </Usuarios>
+  <Usuarios>
+    <dni>46208842</dni>
+    <nombre>Joaquin</nombre>
+    <apellido>Felix</apellido>
+    <usuario>JoacoFelix12</usuario>
+    <contraseña>1626173001ce87be578a1694838f96363ab1529ec0774eee7a092e93ec05532f</contraseña>
+    <intento>0</intento>
+    <bloqueado>false</bloqueado>
+    <mail>joaquinsfelix03@gmail.com</mail>
+    <rol>Cliente</rol>
+    <DV_Horizontal>3C8B2B0647924579E95E0D0FBCE1CBD16CFC00F95B8BE18429853A1124639A94</DV_Horizontal>
+  </Usuarios>
+</DocumentElement>
